@@ -1,0 +1,25 @@
+---
+id: EAP8-lab
+name: EAP 8 migration and OpenShift lab (Version 2023-02-06)
+
+vars:
+  ROUTE_SUBDOMAIN:
+  MASTER_URL:
+  CONSOLE_URL:
+  CHE_URL:
+  KEYCLOAK_URL:
+  CHE_USER_NAME: userNN
+  CHE_USER_PASSWORD: passNN
+  OPENSHIFT_USER_NAME: userNN
+  OPENSHIFT_USER_PASSWORD: passNN
+
+modules:
+  activate:
+  - intro
+  - jboss7
+  - servermigrate
+  - codeanalysis
+  - openrewrite
+  - eap8
+  - eap-maven-plugin
+  - openshift

@@ -1,0 +1,79 @@
+= EAP 7 to EAP 8 migration workshop
+:experimental:
+:imagesdir: images
+
+This workshop is designed to guide you through the process of migrating a JBoss EAP 7.4 server to JBoss EAP 8-Beta.  The workshop covers the following areas:
+
+* Configure a JBoss 7.4 instance to connect to an external database
+* Build and deploy a JBoss EAP application to a running instance of JBoss EAP 7.4
+* Use the server migration tool to migrate a JBoss EAP 7.4 server configuration to JBoss EAP 8-Beta
+* Use the MTR to identify code changes required to migrate an application from JBoss EAP 7.4 to JBoss EAP 8-Beta
+* Use openrewrite to automate some of the code changes identified by the MTR
+* Build, deploy and test the application on JBoss EAP 8-Beta
+* Add the eap-maven-plugin to enable the application to be deployed on OpenShift
+* Test the eap-maven-plugin in local environment
+* Build application image in OpenShift
+* Deploy application image to OpenShift using the EAP operator
+
+== First Step: Set Your Username!
+
+Look in the box at the top of your screen. Is your username set already? If so it will look like this:
+
+image::alreadyset.png[Set User ID above, 700]
+
+If your username is properly set, then you can move on. **If not, in the above box, enter the user ID you were assigned** like this:
+
+image::setuser.png[Set User ID above, 700]
+
+This will customize the links and copy/paste code for this workshop. If you accidently type the wrong username, just click the green recycle icon to reset it.
+
+== Click-to-Copy
+
+You will see various code and command blocks throughout these exercises which can be copy/pasted directly by clicking anywhere on the block of text:
+
+[source,java,role="copypaste"]
+----
+/* A sample Java snippet that you can copy/paste by clicking */
+public class CopyMeDirectly {
+    public static void main(String[] args) {
+        System.out.println("You can copy this whole class with a click!");
+    }
+}
+----
+
+Simply click once and the whole block is copied to your clipboard, ready to be pasted with kbd:[CTRL+V] (or kbd:[Command+V] on Mac OS).
+
+There are also Linux shell commands that can also be copied and pasted into a Terminal in your Development Environment:
+
+[source,sh,role="copypaste"]
+----
+echo "This is a bash shell command that you can copy/paste by clicking"
+----
+
+## Access Your Development Environment
+
+You will be using Red Hat CodeReady Workspaces, an online IDE based on https://www.eclipse.org/che/[CodeReady Workspaces^]. **Changes to files are auto-saved every few seconds**, so you don't need to explicitly save changes.
+
+To get started, {{ CHE_URL }}[access the CodeReady Workspaces instance^] and log in using the username and password you've been assigned:
+
+* *Username*: `{{ USER_ID }}`
+* *Password*: `{{ CHE_USER_PASSWORD }}`
+
+image::che-login.png[login,800]
+
+Once you log in, you’ll be placed on your personal dashboard. Click on the name of
+the pre-created workspace on the left, as shown below (the name will be different depending on your assigned number).
+
+image::crw-landing.png[cdw, 800]
+
+You can also click on the name of the workspace in the center, and then click on the green {{ USER_ID}}-namespace that says _Open_ on the top right hand side of the screen:
+
+image::crw-landing-start.png[cdw, 800]
+
+After a minute or two, you’ll be placed in the workspace:
+
+image::che-workspace.png[cdw, 800]
+
+Users of Eclipse, IntelliJ IDEA or Visual Studio Code will see a familiar layout: a project/file browser on the left, a code editor on the right, and a terminal at the bottom. You'll use all of these during the course of this workshop, so keep this browser tab open throughout. **If things get weird, you can simply reload the browser tab to refresh the view.**
+
+Ready? Let's go!

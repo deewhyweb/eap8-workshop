@@ -1,0 +1,10 @@
+- command: update
+  path: spec 
+  value:
+    identityProviders:
+      - name: htpassidp
+        type: HTPasswd
+        mappingMethod: claim 
+        htpasswd:
+          fileData:
+            name: workshop-user-secret

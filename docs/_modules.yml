@@ -1,0 +1,17 @@
+modules:
+  intro:
+    name: Lab Instructions
+  jboss7:
+    name: Configure and deploy to JBoss EAP 7.4
+  servermigrate:
+    name: Migrate server configuration to EAP 8
+  codeanalysis:
+    name: Perform code analysis with the Migration toolkit for runtimes
+  openrewrite:
+    name: Automate code changes with openrewrite
+  eap8:
+    name: Build and deploy application to EAP 88
+  eap-maven-plugin:
+    name: Add  and test the eap-maven-plugin
+  openshift:
+    name: Build and deploy application to OpenShift
