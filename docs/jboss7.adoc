@@ -1,3 +1,144 @@
-= Traditional app deployment on JBoss 7.4
+= Deployment of a sample application on JBoss EAP 7.4 
 :experimental:
 :imagesdir: images
+
+In this section we're going to deploy an application to JBoss EAP 7.4. which uses an external database.
+The application is the JBoss EAP Kitchensink app, modified slightly to use a PostgreSQL database.  We've already provisioned a database in your dev spaces environment with the following connection details.
+
+* Hostname: 127.0.0.1
+* Port: 5432
+* User name: postgresUser
+* Password: postgresPW
+* Database name: postgresDB
+
+So the first thing we're going to do is deploy JBoss EAP 7.4 and configure a connection to the PostgreSQL database. We're going to perform these steps from the dev spaces environment we logged into in the previous section.  Access your dev spaces environment with this {{ CHE_URL }}[link^].
+
+Access the terminal in dev spaces by clicking on "Menu" -> "Terminal" -> "New Terminal"
+
+image::open-terminal.png[open-terminal,800]
+
+You will find a JBoss EAP 7.4 archive in the "/shared" folder.  From the terminal enter the following commands:
+
+[source,sh,role="copypaste"]
+----
+cd /shared
+----
+
+[source,sh,role="copypaste"]
+----
+unzip jboss-eap-7.4.0.zip 
+----
+
+Once the jboss-eap-7.4.0.zip file has finished unzipping run the following command to set the EAP_HOME environment variable
+
+[source,sh,role="copypaste"]
+----
+export  EAP_HOME=/shared/jboss-eap-7.4
+----
+
+We can now add the PostgreSQL module and drivers.
+
+Make a folder srtucture in EAP_HOME/modules with:
+
+[source,sh,role="copypaste"]
+----
+mkdir -p $EAP_HOME/modules/org/postgresql/main
+----
+
+Copy the postgreSQL driver from the shared folder
+
+[source,sh,role="copypaste"]
+----
+cp /shared/postgresql-42.6.0.jar $EAP_HOME/modules/org/postgresql/main
+----
+
+Make a modules.xml file in $EAP_HOME/modules/org/postgresql/main referencing the postgreSQL driver.
+[source,sh,role="copypaste"]
+----
+cat << EOF > $EAP_HOME/modules/org/postgresql/main/module.xml
+<?xml version="1.0" ?>
+<module xmlns="urn:jboss:module:1.1" name="org.postgresql">
+  <resources>
+    <resource-root path="postgresql-42.6.0.jar"/>
+  </resources>
+  <dependencies>
+    <module name="javaee.api"/>
+    <module name="sun.jdk"/>
+    <module name="ibm.jdk"/>
+    <module name="javax.api"/>
+    <module name="javax.transaction.api"/>
+  </dependencies>
+</module>
+EOF
+----
+
+Set the HOSTNAME environment variable
+
+[source,sh,role="copypaste"]
+----
+export HOSTNAME=eap
+----
+
+Start JBoss EAP 7.4
+[source,sh,role="copypaste"]
+----
+$EAP_HOME/bin/standalone.sh -b 0.0.0.0
+----
+
+Once JBoss EAP 7.4 has started, open up a second terminal by clicking on "Menu" -> "Terminal" -> "New Terminal"
+
+Enter the following commands to launch the jboss-cli
+
+[source,sh,role="copypaste"]
+----
+export  EAP_HOME=/shared/jboss-eap-7.4
+----
+
+[source,sh,role="copypaste"]
+----
+$EAP_HOME/bin/jboss-cli.sh --connect
+----
+
+Run the following commands in the JBoss CLI to add the postgreSQL datsource and connection information:
+[source,sh,role="copypaste"]
+----
+/subsystem=datasources/jdbc-driver=postgresql:add(driver-name=postgresql,driver-module-name=org.postgresql)
+----
+
+[source,sh,role="copypaste"]
+----
+data-source add --name=postgresql --jndi-name=java:/jdbc/postgresql --driver-name=postgresql --connection-url=jdbc:postgresql://127.0.0.1:5432/postgresDB --user-name=postgresUser --password=postgresPW
+----
+
+We are now ready to deploy our JBoss EAP 7.4 application, run the following commands to build the app and deploy to our JBoss EAP 7.4 instance:
+
+[source,sh,role="copypaste"]
+----
+cd /projects/jboss7-quickstarts/sample-app
+----
+
+[source,sh,role="copypaste"]
+----
+mvn clean install wildfly:deploy
+----
+
+Once the build has completed you should see the app was successfully deployed in the JBoss EAP 7.4 logs.  Switch back to the first terminal (using the selection on the right side of the terminal)
+
+image::terminal-switch.png[terminal-switch,800]
+
+You should see the application has been successfully deployed with the following in the logs
+
+----
+[org.jboss.as.server] (management-handler-thread - 1) WFLYSRV0010: Deployed "ROOT.war" (runtime-name : "ROOT.war")
+----
+
+You should now be able to access the kitchensink application by copying the url from the public endpoint and pasting it into your browser:
+
+image::public-endpoint.png[public-endpoint,200]
+
+The kitchensink application should load as follows
+
+image::kitchen-sink.png[public-endpoint,800]
+
+We've noow successfully deployed our sample application to JBoss EAP 7.4 connecting to an external PostgreSQL database.
+
