@@ -33,7 +33,7 @@ Once the jboss-eap-7.4.0.zip file has finished unzipping run the following comma
 
 [source,sh,role="copypaste"]
 ----
-export  EAP_HOME=/shared/jboss-eap-7.4
+export EAP_HOME=/shared/jboss-eap-7.4
 ----
 
 We can now add the PostgreSQL module and drivers.
@@ -91,7 +91,7 @@ Enter the following commands to launch the jboss-cli
 
 [source,sh,role="copypaste"]
 ----
-export  EAP_HOME=/shared/jboss-eap-7.4
+export EAP_HOME=/shared/jboss-eap-7.4
 ----
 
 [source,sh,role="copypaste"]
@@ -107,7 +107,7 @@ Run the following commands in the JBoss CLI to add the postgreSQL datsource and 
 
 [source,sh,role="copypaste"]
 ----
-data-source add --name=postgresql --jndi-name=java:/jdbc/postgresql --driver-name=postgresql --connection-url=jdbc:postgresql://127.0.0.1:5432/postgresDB --user-name=postgresUser --password=postgresPW
+data-source add --name=postgresql --jndi-name=java:jboss/datasources/KSINK --driver-name=postgresql --connection-url=jdbc:postgresql://127.0.0.1:5432/postgresDB --user-name=postgresUser --password=postgresPW
 ----
 
 We are now ready to deploy our JBoss EAP 7.4 application, run the following commands to build the app and deploy to our JBoss EAP 7.4 instance:
@@ -132,7 +132,7 @@ You should see the application has been successfully deployed with the following
 [org.jboss.as.server] (management-handler-thread - 1) WFLYSRV0010: Deployed "ROOT.war" (runtime-name : "ROOT.war")
 ----
 
-You should now be able to access the kitchensink application by copying the url from the public endpoint and pasting it into your browser:
+You will now be able to access the kitchensink application by copying the url from the public endpoint and pasting it into your browser:
 
 image::public-endpoint.png[public-endpoint,200]
 
@@ -140,5 +140,5 @@ The kitchensink application should load as follows
 
 image::kitchen-sink.png[public-endpoint,800]
 
-We've noow successfully deployed our sample application to JBoss EAP 7.4 connecting to an external PostgreSQL database.
+We've now successfully deployed our sample application to JBoss EAP 7.4 connecting to an external PostgreSQL database.
 

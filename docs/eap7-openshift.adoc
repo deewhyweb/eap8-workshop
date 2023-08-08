@@ -1,3 +1,86 @@
-= Traditional app deployment on JBoss 7.4
+= EAP 7.4 application deployment on OpenShift
 :experimental:
 :imagesdir: images
+
+
+
+Access the OpenShift console by clicking on the following {{ CONSOLE_URL }}[link^] 
+
+Login with the following credentials:
+
+* *Username*: `{{ USER_ID }}`
+* *Password*: `{{ CHE_USER_PASSWORD }}`
+
+Create a new project called "eap"
+
+Within this project, add a postgres database by Clicking on "+Add" and selecting "Database" from the Developer catalog.
+
+From the Developer catalog, select the "PostgreSQL" template and fill out the form details as shown below.
+
+image::postgresql-template.png[postgresql-template,800]
+
+Click on "Create" to create the postgreSQL database instance.
+
+[source,yaml,role="copypaste"]
+----
+image:
+  tag: latest
+build:
+  enabled: true
+  mode: s2i
+  uri: 'http://simple-gitea.gitea.svc.cluster.local:3000/user1/jboss7-quickstarts.git'
+  ref: main
+  contextDir: sample-app
+  output:
+    kind: ImageStreamTag
+  env:
+    - name: MAVEN_ARGS_APPEND
+      value: '-Dcom.redhat.xpaas.repo.jbossorg'
+    - name: GALLEON_PROVISION_FEATURE_PACKS
+      value: "org.jboss.eap:eap-datasources-galleon-pack:7.4.0.GA-redhat-00003"
+    - name: GALLEON_PROVISION_LAYERS
+      value: "cloud-server,h2-driver,postgresql-datasource,jsf"
+    - name: POSTGRESQL_DRIVER_VERSION
+      value: 42.6.0
+  triggers: {}
+  s2i:
+    version: latest
+    arch: amd64
+    jdk: '11'
+    amd64:
+      jdk8:
+        builderImage: registry.redhat.io/jboss-eap-7/eap74-openjdk8-openshift-rhel7
+        runtimeImage: registry.redhat.io/jboss-eap-7/eap74-openjdk8-runtime-openshift-rhel7
+      jdk11:
+        builderImage: registry.redhat.io/jboss-eap-7/eap74-openjdk11-openshift-rhel8
+        runtimeImage: registry.redhat.io/jboss-eap-7/eap74-openjdk11-runtime-openshift-rhel8
+deploy:
+  enabled: false
+----
+
+Create config map
+
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: eap-config
+data:
+  POSTGRESQL_DATASOURCE: KSINK
+  POSTGRESQL_PASSWORD: postgresPW
+  POSTGRESQL_URL: 'jdbc:postgresql://postgresql:5432/postgresDB'
+  POSTGRESQL_USER: postgresUser
+
+
+
+EAP CR
+
+apiVersion: wildfly.org/v1alpha1
+kind: WildFlyServer
+metadata:
+  name: kitchen-sink
+spec:
+  applicationImage: 'eap74:latest'
+  envFrom:
+    - configMapRef:
+        name: eap-config
+  replicas: 1
