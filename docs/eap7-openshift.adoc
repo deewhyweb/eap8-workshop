@@ -2,7 +2,7 @@
 :experimental:
 :imagesdir: images
 
-
+We're now going to go through the process of deploying this application on OpenShift.  We're going to do this using the OpenShift console.  
 
 Access the OpenShift console by clicking on the following {{ CONSOLE_URL }}[link^] 
 
@@ -13,13 +13,47 @@ Login with the following credentials:
 
 Create a new project called "eap"
 
-Within this project, add a postgres database by Clicking on "+Add" and selecting "Database" from the Developer catalog.
+Within this project, add a PostgreSQL database by Clicking on "+Add" and selecting "Database" from the Developer catalog.
 
 From the Developer catalog, select the "PostgreSQL" template and fill out the form details as shown below.
 
 image::postgresql-template.png[postgresql-template,800]
+[source,sh]
+----
+* User name: postgresUser
+* Password: postgresPW
+* Database name: postgresDB
+----
 
 Click on "Create" to create the postgreSQL database instance.
+
+When we deploy our EAP application on OpenShift we need to add the PostgreSQL datasource and driver as we did in the previous exercise.  In this example we're going to make use the of the https://github.com/jbossas/eap-datasources-galleon-pack[Eap datasources galleon feature pack^]  .  This feature pack provides a "postgresql-datasource" layer which will install and configure the postgreSQL datasource for us.
+
+We're going to use Helm to build our OpenShift EAP Image.  Within the Helm config we're going to you you'll notice build environment variables defining the following
+
+* GALLEON_PROVISION_FEATURE_PACKS: org.jboss.eap:eap-datasources-galleon-pack:7.4.0.GA-redhat-00003
+
+This adds the eap-datasources galleaon pack for EAP 7.4
+
+* GALLEON_PROVISION_LAYERS: cloud-server,h2-driver,postgresql-datasource,jsf
+
+This adds the required layers to support our application including the postgres-datasource and jsf (java server faces) layers
+
+* POSTGRESQL_DRIVER_VERSION: 42.6.0
+
+This defines the version of the PostgreSQL driver to deploy
+
+Click on "+Add" again and this time select "Helm Chart" from the Developer Catalog
+
+Filter by "eap" to locate the "JBoss EAP 7.4" Helm chart.
+
+image::helm-charts.png[helm-charts,800]
+
+Click on "JBoss EAP 7.4", and click on "Create"
+
+From the "Create Helm Release" page, select the "YAML view"
+
+Paste the following YAML to create the EAP 7.4 builds.
 
 [source,yaml,role="copypaste"]
 ----
@@ -28,7 +62,7 @@ image:
 build:
   enabled: true
   mode: s2i
-  uri: 'http://simple-gitea.gitea.svc.cluster.local:3000/user1/jboss7-quickstarts.git'
+  uri: 'http://simple-gitea.gitea.svc.cluster.local:3000/{{ USER_ID }}/jboss7-quickstarts.git'
   ref: main
   contextDir: sample-app
   output:
@@ -58,22 +92,34 @@ deploy:
   enabled: false
 ----
 
-Create config map
+Click on "Create" and then select "Builds" from the left menu.  You should see two builds created as shown below:
 
+image::build-configs.png[build-configs,800]
+
+It will take a few minutes for these builds to complete.  While this is happening we can go ahead and create a config map and then deploy using the EAP Operator.
+
+To create the config map, click on "ConfigMaps" on the left menu and click on "Create ConfigMap".  From the "Create ConfigMap" page, select "YAML view" and paste the following text:
+
+[source,yaml,role="copypaste"]
+----
 kind: ConfigMap
 apiVersion: v1
 metadata:
   name: eap-config
 data:
   POSTGRESQL_DATASOURCE: KSINK
-  POSTGRESQL_PASSWORD: postgresPW
-  POSTGRESQL_URL: 'jdbc:postgresql://postgresql:5432/postgresDB'
-  POSTGRESQL_USER: postgresUser
+  POSTGRESQL_HOST: postgresql
+  POSTGRESQL_PORT: 5432
+----
 
+Finally, we can use the EAP Operator to deploy our EAP image.  CLick on "+Add" again and then select "Operator Backed" from the Developer Catalog.  
 
+image::operator-backed.png[operator-backed,800]
 
-EAP CR
+From the list of operator backed options, click on "WildFlyServer", and click on "Create".  From the "Create WildFlyServer" page, select "YAML view" and paste the following:
 
+[source,yaml,role="copypaste"]
+----
 apiVersion: wildfly.org/v1alpha1
 kind: WildFlyServer
 metadata:
@@ -83,4 +129,34 @@ spec:
   envFrom:
     - configMapRef:
         name: eap-config
+  env:
+    # Credentials to connect to the PostgreSQL databases
+    - name: POSTGRESQL_DATABASE
+      valueFrom:
+        secretKeyRef:
+          key: database-name
+          name: postgresql
+    - name: POSTGRESQL_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          key: database-password
+          name: postgresql
+    - name: POSTGRESQL_USER
+      valueFrom:
+        secretKeyRef:
+          key: database-user
+          name: postgresql
   replicas: 1
+----
+
+Click on "Create" to create the WildFlyServer custmo resource.
+
+Click on the "Topology" link on the left menu to view the deployed applications:
+
+image::topology-view.png[topology-view,800]
+
+You should be able to view the application landing page by clicking on the external link icon.
+
+image::kitchen-sink.png[kitchen-sink,800]
+
+Our application is now successfully deployed on OpenShift.  Next, we're going to deploy an instance of JBoss EAP 8 and migrate our application.

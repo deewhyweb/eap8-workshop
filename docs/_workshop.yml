@@ -19,7 +19,5 @@ modules:
   - jboss7
   - eap7-openshift
   - provision-eap8
-  - code-changes
   - deploy-to-eap8
-  - migrate-eap8-openshift
   - deploy-eap8-openshift
