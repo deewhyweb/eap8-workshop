@@ -1,4 +1,41 @@
-= Traditional app deployment on JBoss 7.4
+= Migrate application from JBoss EAP 7.4 to JBoss EAP 8
 :experimental:
 :imagesdir: images
 
+To perform code analysis of our JBoss EAP 7.4 application, we will use the latest version of the Migration Toolkit for Runtimes. 
+
+cd /shared
+
+unzip  mtr-1.1.0.GA-web-console.zip
+
+cd mtr-web-distribution-1.1.0.GA-redhat-00003
+
+export HOSTNAME=eap
+
+./run_windup.sh -b 0.0.0.0
+
+image::mtr-1.png[migration,800]
+From the MTR landing page, click on Create Project.
+
+Enter a project name (e.g., eap7-eap8) and click on Next.
+
+Then, we need to locate the application source code
+
+/projects/jboss7-quickstarts/sample-app
+
+image::mtr-2.png[migration,800]
+
+Set the target to "eap8"
+image::mtr-3.png[migration,800]
+
+Select the packages
+image::mtr-4.png[migration,800]
+
+Skip through the remaining screens
+
+image::mtr-5.png[migration,800]
+
+Click on "Save and Run"
+
+
+./bin/windup-cli --openrewrite "-DactiveRecipes=org.jboss.windup.JavaxToJakarta" "-Drewrite.configLocation=/shared/mtr-cli-1.1.0.GA-redhat-00003/rules/openrewrite/jakarta/javax/imports/rewrite.yml" --input /projects/jboss7-quickstarts/sample-app --goal run

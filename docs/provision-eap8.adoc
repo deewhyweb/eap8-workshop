@@ -47,7 +47,7 @@ Set the EAP_HOME environment variable as follows:
 
 [source,sh,role="copypaste"]
 ----
-export EAP_HOME=/shared/jboss-eap-8.0.0.Beta
+export EAP_HOME=/shared/jboss-eap-8.0 
 ----
 
 Now we can move on to the migration from JBoss EAP 7.4 to JBoss EAP 8.0 Beta.
@@ -67,7 +67,7 @@ unzip jboss-eap-8.0.0.Beta-server-migration.zip
 
 [source,sh,role="copypaste"]
 ----
-cd jboss-eap-8.0.0.Beta-server-migration
+cd jboss-server-migration
 ----
 
 Run the following command:
@@ -79,178 +79,52 @@ Run the following command:
 
 The server migration tool will ask a series of questions during the migration process:
 
-
-----
-----------------------------------------------------------
-
-----  JBoss Server Migration Tool  -----------------------
-
-----------------------------------------------------------
-
-
-Retrieving servers...
-
- INFO  SOURCE server name: JBoss EAP, version: 7.4.0.GA.
-
- INFO  TARGET server name: JBoss EAP, version: 8.0.0.Beta.
-
-
-----------------------------------------------------------
-
-----------------------------------------------------------
-
-
-Server migration starting...
-
-
- INFO  --- Migrating modules requested by environment...
-
-
- INFO  No modules to migrate.
-
-
-Migrate the source's standalone server?
-
-yes/no?
-
-
+image::mig1.png[migration,1150]
 Choose yes to migrate the standalone configuration.
 
- INFO  --- Migrating standalone server...
-
-
- INFO  Source's standalone content migrated.
-
-
- INFO  Source's standalone configurations found: [standalone-full-ha.xml, standalone-full.xml, standalone-ha.xml, standalone-load-balancer.xml, standalone.xml]
-
-
-Migrate all configurations?
-
-yes/no? 
+image::mig2.png[migration,1150]
 Choose no. We want to select the configurations to migrate.
 
-Migrate configuration standalone-full-ha.xml ?
-
-yes/no? 
+image::mig3.png[migration,1150]
 Choose no. We don’t want to migrate standalone-full-ha.xml.
 
-Migrate configuration standalone-full.xml ?
-
-yes/no? 
+image::mig4.png[migration,1150]
 Choose no. We don’t want to migrate standalone-full.xml
 
-Migrate configuration standalone-ha.xml ?
-
-yes/no? 
+image::mig5.png[migration,1150]
 Choose no. We don’t want to migrate standalone-ha.xml.
 
-Migrate configuration standalone-load-balancer.xml ?
-
-yes/no? 
+image::mig6.png[migration,1150]
 Choose no. We don’t want to migrate standalone-load-balancer.xml.
 
-Migrate configuration standalone.xml ?
-
-yes/no? 
+image::mig7.png[migration,1150] 
 Choose yes. We want to migrate standalone.xml.
 
- INFO  Migrating standalone configuration standalone.xml...
-
- WARN  Migration of legacy security domain jboss-web-policy's authorization is not supported and will be ignored.
-
- WARN  Migration of legacy security domain jaspitest's authentication-jaspi is not supported and will be ignored.
-
- WARN  Migration of legacy security domain jboss-ejb-policy's authorization is not supported and will be ignored.
-
- INFO  Legacy security XML configuration retrieved.
-
- INFO  Unsupported extensions removed: [org.jboss.as.security]
-
- INFO  Unsupported subsystems removed: [urn:jboss:domain:security:2.0]
-
- INFO  Referenced paths migrated.
-
- INFO  Legacy security realms removed from XML configuration.
-
-WARNING: An illegal reflective access operation has occurred
-
-WARNING: Illegal reflective access by org.wildfly.extension.elytron.SSLDefinitions (jar:file:/home/philip/Downloads/wildfly-ee-dist-8.0.0.Beta-redhat-00002/jboss-eap-8.0/modules/system/layers/base/org/wildfly/extension/elytron/main/wildfly-elytron-integration-jakarta-19.0.0.Beta16-redhat-00004.jar!/) to method com.sun.net.ssl.internal.ssl.Provider.isFIPS()
-
-WARNING: Please consider reporting this to the maintainers of org.wildfly.extension.elytron.SSLDefinitions
-
-WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations
-
-WARNING: All illegal access operations will be denied in a future release
-
- INFO  Legacy security realm ManagementRealm migrated to Elytron.
-
- INFO  Legacy security realm ApplicationRealm migrated to Elytron.
-
- INFO  Legacy security domain other migrated to Elytron.
-
-
-Migrate the source's managed domain?
-
-yes/no?
+image::mig8.png[migration,1150]
 Choose no. We are not using a managed domain.
 
-Server migration done.
-
-
- INFO  
-
-----------------------------------------------------------------------------------------------------------
-
- Task Summary
-
-----------------------------------------------------------------------------------------------------------
-
-
- server .......................................................................................... SUCCESS
-
-  standalone ..................................................................................... SUCCESS
-
-   contents.standalone.migrate-content-dir ....................................................... SUCCESS
-
-    contents.standalone.migrate-content(path=7d/975dfd92d3b7a35f48054ad2190bdf7ebbeb3b/content) .. SUCCESS
-
-    contents.standalone.migrate-content(path=b5/fe70630a477a851f755cc04eb5cc3030bb02db/content) .. SUCCESS
-
-    contents.standalone.migrate-content(path=92/2cdbb0d087989ad5e6ecbd3c0123a34def19b7/content) .. SUCCESS
-
-    contents.standalone.migrate-content(path=14/99d19995fc5835cb1c07eed113447b4fb46c4e/content) .. SUCCESS
-
-    contents.standalone.migrate-content(path=3d/25c8107fcc4cf82f234dcf6ad5b8e926e7ec18/content) .. SUCCESS
-
-    contents.standalone.migrate-content(path=45/9834b7318bd81b320829432fdef5a77bf93a19/content) .. SUCCESS
-
-    contents.standalone.migrate-content(path=38/c53e35a6ab9d8a40016a5429f7115ff94e3ce7/content) .. SUCCESS
-
-   standalone-configurations ..................................................................... SUCCESS
-
-    standalone-configuration(source=standalone.xml) .............................................. SUCCESS
-
-
-----------------------------------------------------------------------------------------------------------
-
- Migration Result: SUCCESS
-
-----------------------------------------------------------------------------------------------------------
-
+image::mig9.png[migration,1150]
 
 Once this operation completes, we can start our JBoss EAP 8.0 server with the following command from the JBoss EAP installation folder:
 
 [source,sh,role="copypaste"]
 ----
-$EAP_HOME/bin/standalone.sh
+$EAP_HOME/bin/standalone.sh -b 0.0.0.0
 ----
 
-When the server has started successfully, we can test our configuration with the following commands:
+When the server has started successfully, we can test our configuration with the following commands.
+
+Open a new terminal window and enter:
 
 [source,sh,role="copypaste"]
 ----
-./jboss-cli.sh --connect
+export EAP_HOME=/shared/jboss-eap-8.0 
+----
+
+
+[source,sh,role="copypaste"]
+----
+$EAP_HOME/bin/jboss-cli.sh --connect
 ----
 
 [source,sh,role="copypaste"]
@@ -258,4 +132,67 @@ When the server has started successfully, we can test our configuration with the
 /subsystem=datasources:installed-drivers-list
 ----
 
-The output should show the MySQL driver as follows:
+The output should show the PostgreSQL driver as follows:
+[source]
+----
+{
+    "outcome" => "success",
+    "result" => [
+        {
+            "driver-name" => "postgresql",
+            "deployment-name" => undefined,
+            "driver-module-name" => "org.postgresql",
+            "module-slot" => "main",
+            "driver-datasource-class-name" => "",
+            "driver-xa-datasource-class-name" => "",
+            "datasource-class-info" => undefined,
+            "driver-class-name" => "org.postgresql.Driver",
+            "driver-major-version" => 42,
+            "driver-minor-version" => 6,
+            "jdbc-compliant" => false
+        },
+        {
+            "driver-name" => "h2",
+            "deployment-name" => undefined,
+            "driver-module-name" => "com.h2database.h2",
+            "module-slot" => "main",
+            "driver-datasource-class-name" => "",
+            "driver-xa-datasource-class-name" => "org.h2.jdbcx.JdbcDataSource",
+            "datasource-class-info" => [{"org.h2.jdbcx.JdbcDataSource" => {
+                "URL" => "java.lang.String",
+                "description" => "java.lang.String",
+                "loginTimeout" => "int",
+                "password" => "java.lang.String",
+                "url" => "java.lang.String",
+                "user" => "java.lang.String"
+            }}],
+            "driver-class-name" => "org.h2.Driver",
+            "driver-major-version" => 2,
+            "driver-minor-version" => 1,
+            "jdbc-compliant" => true
+        }
+    ]
+}
+----
+
+We can also test our datasource connection with the following JBoss CLI command:
+
+[source,sh,role="copypaste"]
+----
+/subsystem=datasources/data-source=postgresql:test-connection-in-pool
+----
+
+A successful connection should result in the following response:
+[source]
+----
+{
+
+    "outcome" => "success",
+
+    "result" => [true]
+
+}
+----
+We can now be confident our application will have the required drivers and data sources present.
+
+JBoss EAP 8.0-Beta is now successfully deployed and the server configuration migrated from JBoss EAP 7.4

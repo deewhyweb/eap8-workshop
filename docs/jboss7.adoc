@@ -110,6 +110,8 @@ Run the following commands in the JBoss CLI to add the postgreSQL datsource and 
 data-source add --name=postgresql --jndi-name=java:jboss/datasources/KSINK --driver-name=postgresql --connection-url=jdbc:postgresql://127.0.0.1:5432/postgresDB --user-name=postgresUser --password=postgresPW
 ----
 
+// exit
+
 We are now ready to deploy our JBoss EAP 7.4 application, run the following commands to build the app and deploy to our JBoss EAP 7.4 instance:
 
 [source,sh,role="copypaste"]
