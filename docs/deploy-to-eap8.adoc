@@ -9,7 +9,6 @@ To perform code analysis of our JBoss EAP 7.4 application, we will use the lates
 cd /shared
 ----
 
-
 [source,sh,role="copypaste"]
 ----
 unzip  mtr-1.1.0.GA-web-console.zip
@@ -27,10 +26,11 @@ export HOSTNAME=eap
 
 [source,sh,role="copypaste"]
 ----
-./run_windup.sh -b 0.0.0.0
+./run_windup.sh -Djboss.http.port=8090 -b 0.0.0.0
 ----
 
 image::mtr-1.png[migration,800]
+
 From the MTR landing page, click on Create Project.
 
 Enter a project name (e.g., eap7-eap8) and click on Next.
@@ -70,6 +70,36 @@ You'll see from this report an estimation of 84 story points to migrate from JBo
 
 You can click through the various tabs of the report to view the details.  For example, clicking on the "Issues" tab will show the details of the changes required.
 
+image::mtr-8.png[migration,800]
+
+== Using the Migration Toolkit for Runtimes VS Code extension
+
+First we need to unzip the Migratio Toolkit for Runtimes CLI tool
+
+[source,sh,role="copypaste"]
+----
+cd /shared
+----
+
+[source,sh,role="copypaste"]
+----
+unzip mtr-1.1.0.GA-cli-offline.zip 
+----
+
+Add the VS-Code Migration Toolkit for Runtimes extension 
+
+image::mtr-vscode.png[migration,800]
+
+Configure the MTR VS-Code extension as follows
+
+image::mtr-vscode-2.png[migration,800]
+
+Perform code analysis
+
+????
+
+
+
 == Automating code changes
 
 A large portion of the mandatory changes are related to the namespace change from javax to jakarta.
@@ -80,6 +110,61 @@ To run OpenRewrite against our application code, run the following command:
 
 [source,sh,role="copypaste"]
 ----
-/shared/mtr-web-distribution-1.1.0.GA-redhat-00003/bin/windup-cli --openrewrite "-DactiveRecipes=org.jboss.windup.JavaxToJakarta" "-Drewrite.configLocation=/shared/mtr-cli-1.1.0.GA-redhat-00003/rules/openrewrite/jakarta/javax/imports/rewrite.yml" --input /projects/jboss7-quickstarts/sample-app --goal run
+/shared/mtr-cli-1.1.0.GA-redhat-00003/bin/windup-cli --openrewrite "-DactiveRecipes=org.jboss.windup.JavaxToJakarta" "-Drewrite.configLocation=/shared/mtr-cli-1.1.0.GA-redhat-00003/rules/openrewrite/jakarta/javax/imports/rewrite.yml" --input /projects/jboss7-quickstarts/sample-app --goal run
 ----
 
+== Remaining file changes
+
+Other than the namespace changes, the migration toolkit for runtimes report identified changes in the following files:
+
+* pom.xml
+* persistence.xml
+* faces-config.xml
+
+We can go through the changes as detailed in the report, or copy these files from a pre-prepared EAP 8 version of the app in the /projects/jboss7-quickstarts/sample-app-eap8 folder by running the following commands.
+
+[source,sh,role="copypaste"]
+----
+cp /projects/jboss7-quickstarts/sample-app-eap8/pom.xml /projects/jboss7-quickstarts/sample-app
+----
+
+[source,sh,role="copypaste"]
+----
+cp /projects/jboss7-quickstarts/sample-app-eap8/src/main/resources/META-INF/persistence.xml /projects/jboss7-quickstarts/sample-app/src/main/resources/META-INF/
+----
+
+[source,sh,role="copypaste"]
+----
+cp /projects/jboss7-quickstarts/sample-app-eap8/src/main/webapp/WEB-INF/faces-config.xml /projects/jboss7-quickstarts/sample-app/src/main/webapp/WEB-INF
+----
+
+We can now deploy our JBoss EAP 8-Beta application
+
+Shut down the Migration Toolkit for Runtimes
+
+[source,sh,role="copypaste"]
+----
+export EAP_HOME=/shared/jboss-eap-8.0 
+----
+
+[source,sh,role="copypaste"]
+----
+$EAP_HOME/bin/standalone.sh -b 0.0.0.0
+----
+
+In a second terminal enter the following from the /projects/jboss7-quickstarts/sample-app folder
+
+[source,sh,role="copypaste"]
+----
+mvn clean install wildfly:deploy
+----
+
+You will now be able to access the kitchensink application by copying the url from the public endpoint and pasting it into your browser:
+
+image::public-endpoint.png[public-endpoint,200]
+
+The kitchensink application should load as follows
+
+image::kitchen-sink.png[public-endpoint,800]
+
+We've now successfully deployed our sample application to JBoss EAP 8-Beta connecting to an external PostgreSQL database.
