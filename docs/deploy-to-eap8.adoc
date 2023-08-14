@@ -4,15 +4,31 @@
 
 To perform code analysis of our JBoss EAP 7.4 application, we will use the latest version of the Migration Toolkit for Runtimes. 
 
+[source,sh,role="copypaste"]
+----
 cd /shared
+----
 
+
+[source,sh,role="copypaste"]
+----
 unzip  mtr-1.1.0.GA-web-console.zip
+----
 
+[source,sh,role="copypaste"]
+----
 cd mtr-web-distribution-1.1.0.GA-redhat-00003
+----
 
+[source,sh,role="copypaste"]
+----
 export HOSTNAME=eap
+----
 
+[source,sh,role="copypaste"]
+----
 ./run_windup.sh -b 0.0.0.0
+----
 
 image::mtr-1.png[migration,800]
 From the MTR landing page, click on Create Project.
@@ -21,7 +37,10 @@ Enter a project name (e.g., eap7-eap8) and click on Next.
 
 Then, we need to locate the application source code
 
+[source,sh,role="copypaste"]
+----
 /projects/jboss7-quickstarts/sample-app
+----
 
 image::mtr-2.png[migration,800]
 
@@ -37,5 +56,30 @@ image::mtr-5.png[migration,800]
 
 Click on "Save and Run"
 
+Once the report has been generated you will see the analysis results as shown below
 
-./bin/windup-cli --openrewrite "-DactiveRecipes=org.jboss.windup.JavaxToJakarta" "-Drewrite.configLocation=/shared/mtr-cli-1.1.0.GA-redhat-00003/rules/openrewrite/jakarta/javax/imports/rewrite.yml" --input /projects/jboss7-quickstarts/sample-app --goal run
+image::mtr-6.png[migration,800]
+
+Click on the report icon (highlighted in the image) to view the report.
+
+The report results will be shown as below 
+
+image::mtr-7.png[migration,800]
+
+You'll see from this report an estimation of 84 story points to migrate from JBoss EAP 7.4 to JBoss EAP 8-Beta.
+
+You can click through the various tabs of the report to view the details.  For example, clicking on the "Issues" tab will show the details of the changes required.
+
+== Automating code changes
+
+A large portion of the mandatory changes are related to the namespace change from javax to jakarta.
+
+The migration toolkit for runtimes provides https://docs.openrewrite.org/[OpenRewrite, window="_blank"] rules to automate these changes.  
+
+To run OpenRewrite against our application code, run the following command:
+
+[source,sh,role="copypaste"]
+----
+/shared/mtr-web-distribution-1.1.0.GA-redhat-00003/bin/windup-cli --openrewrite "-DactiveRecipes=org.jboss.windup.JavaxToJakarta" "-Drewrite.configLocation=/shared/mtr-cli-1.1.0.GA-redhat-00003/rules/openrewrite/jakarta/javax/imports/rewrite.yml" --input /projects/jboss7-quickstarts/sample-app --goal run
+----
+
