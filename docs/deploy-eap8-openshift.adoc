@@ -128,6 +128,7 @@ We can also see the inclusion of four layers in our pom.xml file snippet:
 * postgresql-datasource: Adds support for postgresql database drivers, requires the eap-datasources-galleon-pack feature pack.
 * ejb: Adds support for Jakarta Enterprise Beans, excluding the IIOP protocol.
 * jsf: Adds support for Jakarta Server Faces.
+* h2-driver: Adds support for the h2 database driver
 
 The addition of datasources feature pack and postgresql-datasource layer will instruct the eap-maven-plugin to install and configure a data source to connect to a PostgreSQL database. If we look at the documentation for the PostgresSQL layer, we can see the need for a POSTGRESQL_DRIVER_VERSION build time environment variable. This build time environment variable is mandatory and tells the eap-maven-plugin which version of the PostgreSQL driver to install.
 
@@ -150,12 +151,13 @@ mvn clean package -Popenshift
 ----
 This command does many things, such as:
 
-Build the Java application.
-Provision a {{ EAP8_VERSION }} server with all the capabilities that the application requires.
+* Build the Java application.
+* Provision a {{ EAP8_VERSION }} server with all the capabilities that the application requires.
 Deploy the application in the server.
+
 You can then run the application from the ./target/server folder because the build artifact is already deployed to the server. This is a big difference from the JBoss EAP 7 workflow, where users have to package their app and then deploy it in a running JBoss EAP.
 
-Before we start our {{ EAP8_VERSION }} instance, we will need runtime environment variables to configure the connection to our local instance of PostgreSQL. These should match the variables passed to our PostgreSQL container by our podman run command from the prerequisites section:
+Before we start our {{ EAP8_VERSION }} instance, we will need runtime environment variables to configure the connection to our local instance of PostgreSQL. 
 
 [source,sh,role="copypaste"]
 ----
