@@ -4,11 +4,54 @@
 
 To build and deploy this application on OpenShift, the only change we need to make is to the Maven pom.xml file. This involves adding the eap-maven-plugin, which takes care of all the provisioning and configuration required to build an instance of {{ EAP8_VERSION }} to run our application.
 
+Add this after the repositories tag
+
+[source,xml,role="copypaste"]
+----
+   <pluginRepositories>
+        <!-- keep this repository the first -->
+        <pluginRepository>
+            <id>jboss-public-maven-repository</id>
+            <name>JBoss Public Maven Repository</name>
+            <url>https://repository.jboss.org/nexus/content/groups/public/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </pluginRepository>
+        <pluginRepository>
+            <id>redhat-ga-maven-repository</id>
+            <name>Red Hat GA Maven Repository</name>
+            <url>https://maven.repository.redhat.com/ga/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </pluginRepository>
+        <pluginRepository>
+            <id>redhat-ea-maven-repository</id>
+            <name>Red Hat Early Access Maven Repository</name>
+            <url>https://maven.repository.redhat.com/earlyaccess/all/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
+----
+
 Open the pom.xml file and add the following before the closing tag:
 
 [source,xml,role="copypaste"]
 ----
-<profile>
+<profiles>
+    <profile>
         <id>openshift</id>
         <build>
             <plugins>
@@ -48,6 +91,7 @@ Open the pom.xml file and add the following before the closing tag:
                             <layer>postgresql-datasource</layer>
                             <layer>ejb</layer>
                             <layer>jsf</layer>
+                            <layer>h2-driver</layer>
                         </layers>
                         <filename>ROOT.war</filename>
                     </configuration>
@@ -62,6 +106,7 @@ Open the pom.xml file and add the following before the closing tag:
             </plugins>
         </build>
     </profile>
+<profiles>
 ----
 
 If we examine the pom.xml snippet, we can see the inclusion of three feature packs:
@@ -117,14 +162,14 @@ Before we start our {{ EAP8_VERSION }} instance, we will need runtime environmen
 export POSTGRESQL_DATABASE=postgresDB \
 && export POSTGRESQL_USER=postgresUser \
 && export POSTGRESQL_PASSWORD=postgresPW \
-&& export POSTGRESQL_DATASOURCE=postgresql \
+&& export POSTGRESQL_DATASOURCE=KSINK \
 && export POSTGRESQL_SERVICE_HOST=127.0.0.1
 ----
 We can now run our application deployed in {{ EAP8_VERSION }} with the following command:
 
 [source,sh,role="copypaste"]
 ----
-./target/server/bin/standalone.sh
+./target/server/bin/standalone.sh -b 0.0.0.0
 ----
 
 You will now be able to access the kitchensink application by copying the url from the public endpoint and pasting it into your browser:
@@ -143,15 +188,18 @@ Click on Add+.
 
 Select Helm Chart from the developer catalog.
 
-Enter eap8 in the Filter by keyword field as shown below:
+Enter eap in the Filter by keyword field as shown below:
+
+image::helm-charts.png[migration,800]
 
 Select the JBoss EAP 8 Helm chart from the catalog.
 
+Click on "Create".
 
-Select Eap8.
-Click on Install Helm Chart.
 Switch to YAML view.
+
 Delete the existing content.
+
 Paste the following YAML:
 
 [source,yaml,role="copypaste"]
@@ -159,7 +207,7 @@ Paste the following YAML:
 build:
  uri: 'http://simple-gitea.gitea.svc.cluster.local:3000/{{ USER_ID }}/jboss7-quickstarts.git'
  ref: main
- contextDir: sample-app-eap8-ocp
+ contextDir: sample-app
  env:
    - name: POSTGRESQL_DRIVER_VERSION
      value: '42.5.1'
@@ -183,22 +231,20 @@ deploy:
          key: database-password
          name: postgresql
    - name: POSTGRESQL_DATASOURCE
-     value: postgresql
+     value: KSINK
    - name: POSTGRESQL_SERVICE_HOST
      value: postgresql
 ----
 
 Note: There are a few things to point out in this Helm configuration. We have defined a build time variable POSTGRESQL_DRIVER_VERSION to determine how the PostgreSQL driver version is passed to the eap-maven-plugin when S2I builds the application image. Runtime environment variables (such as user credentials) are read from a secret created when the database is instantiated. So application configuration can be safely stored in Git without any sensitive information.
 
-
-
-
-
 Two build-configs are created by this Helm chart: an artifacts build and a runtime build. When the second build is complete, the application will be deployed. The application is running when the pod donut around the JBoss EAP logo is dark blue (i.e., the pods are in a running state).
 
 It will take a while to build and deploy the application. To monitor the progress, follow these steps.
 
 Go to Builds. 
+
+image::eap8-builds.png[migration,800]
 
 Select eap8-build-artifacts.
 
@@ -208,4 +254,4 @@ Click on eap8-build-artifacts-1 to view the logs of the active build.
 
 Once the builds are complete, you will be able to click the Open URL icon of the eap8 deployment to view the running application.
 
-
+image::eap8-ocp.png[migration,800]
