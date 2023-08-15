@@ -26,14 +26,14 @@ cd /shared
 
 [source,sh,role="copypaste"]
 ----
-unzip jboss-eap-7.4.0.zip 
+unzip {{ JBOSS7_ARCHIVE }} 
 ----
 
 Once the jboss-eap-7.4.0.zip file has finished unzipping run the following command to set the EAP_HOME environment variable
 
 [source,sh,role="copypaste"]
 ----
-export EAP_HOME=/shared/jboss-eap-7.4
+export EAP_HOME=/shared/{{ JBOSS7_DIR }}
 ----
 
 We can now add the PostgreSQL module and drivers.
@@ -91,7 +91,7 @@ Enter the following commands to launch the jboss-cli
 
 [source,sh,role="copypaste"]
 ----
-export EAP_HOME=/shared/jboss-eap-7.4
+export EAP_HOME=/shared/{{ JBOSS7_DIR }}
 ----
 
 [source,sh,role="copypaste"]

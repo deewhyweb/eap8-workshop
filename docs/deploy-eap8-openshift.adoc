@@ -2,7 +2,7 @@
 :experimental:
 :imagesdir: images
 
-To build and deploy this application on OpenShift, the only change we need to make is to the Maven pom.xml file. This involves adding the eap-maven-plugin, which takes care of all the provisioning and configuration required to build an instance of JBoss EAP 8 Beta to run our application.
+To build and deploy this application on OpenShift, the only change we need to make is to the Maven pom.xml file. This involves adding the eap-maven-plugin, which takes care of all the provisioning and configuration required to build an instance of {{ EAP8_VERSION }} to run our application.
 
 Open the pom.xml file and add the following before the closing tag:
 
@@ -88,7 +88,7 @@ The addition of datasources feature pack and postgresql-datasource layer will in
 
 == Test the application locally
 
-Once this configuration is added, we can now test our application locally using the eap-maven-plugin to provision a JBoss EAP server. Before we do this, we need to set a few environment variables.
+Once this configuration is added, we can now test our application locally using the eap-maven-plugin to provision a {{ EAP8_VERSION }} server. Before we do this, we need to set a few environment variables.
 
 As we mentioned in the previous section, we need to tell the eap-maven-plugin which version of the PostgreSQL driver to install with the POSTGRESQL_DRIVER_VERSION environment variable.
 
@@ -97,7 +97,7 @@ As we mentioned in the previous section, we need to tell the eap-maven-plugin wh
 export POSTGRESQL_DRIVER_VERSION=42.2.19
 ----
 
-We can provision our local instance of JBoss EAP with the required feature pack and layers with the following command:
+We can provision our local instance of {{ EAP8_VERSION }} with the required feature pack and layers with the following command:
 
 [source,sh,role="copypaste"]
 ----
@@ -106,11 +106,11 @@ mvn clean package -Popenshift
 This command does many things, such as:
 
 Build the Java application.
-Provision a JBoss EAP server with all the capabilities that the application requires.
+Provision a {{ EAP8_VERSION }} server with all the capabilities that the application requires.
 Deploy the application in the server.
 You can then run the application from the ./target/server folder because the build artifact is already deployed to the server. This is a big difference from the JBoss EAP 7 workflow, where users have to package their app and then deploy it in a running JBoss EAP.
 
-Before we start our JBoss EAP instance, we will need runtime environment variables to configure the connection to our local instance of PostgreSQL. These should match the variables passed to our PostgreSQL container by our podman run command from the prerequisites section:
+Before we start our {{ EAP8_VERSION }} instance, we will need runtime environment variables to configure the connection to our local instance of PostgreSQL. These should match the variables passed to our PostgreSQL container by our podman run command from the prerequisites section:
 
 [source,sh,role="copypaste"]
 ----
@@ -120,7 +120,7 @@ export POSTGRESQL_DATABASE=postgresDB \
 && export POSTGRESQL_DATASOURCE=postgresql \
 && export POSTGRESQL_SERVICE_HOST=127.0.0.1
 ----
-We can now run our application deployed in JBoss EAP with the following command:
+We can now run our application deployed in {{ EAP8_VERSION }} with the following command:
 
 [source,sh,role="copypaste"]
 ----
@@ -137,7 +137,7 @@ image::kitchen-sink.png[public-endpoint,800]
 
 == Deploy the application to OpenShift
 
-We can now deploy our EAP 8 Beta application with Helm.
+We can now deploy our {{ EAP8_VERSION }} application with Helm.
 
 Click on Add+.
 

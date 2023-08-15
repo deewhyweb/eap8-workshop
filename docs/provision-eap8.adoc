@@ -2,7 +2,7 @@
 :experimental:
 :imagesdir: images
 
-JBoss EAP 8.0 will provide support for https://jakarta.ee/release/10/[Jakarta EE 10]. Jakarta EE 10 brings a huge change to Jakarta EE compared to the Jakarta EE 8 specifications supported by EAP 7. JBoss EAP 8 also introduces changes in the following areas:
+{{ EAP8_VERSION }} will provide support for https://jakarta.ee/release/10/[Jakarta EE 10]. Jakarta EE 10 brings a huge change to Jakarta EE compared to the Jakarta EE 8 specifications supported by EAP 7. {{ EAP8_VERSION }} also introduces changes in the following areas:
 
 * Removal of Picketbox: This has been deprecated since the release of JBoss EAP 6.4. Any legacy security configurations must be migrated to the Elytron security subsystem. EAP users who have already migrated to Elytron don't need to make any changes.
 * Removal of PicketLink: This has been deprecated since the release of JBoss EAP 6.4. Leveraging RH SSO is recommended for the single sign-on functionality previously offered with PicketLink.
@@ -19,17 +19,17 @@ Refer to the https://access.redhat.com/documentation/en-us/red_hat_jboss_enterpr
 
 Moving applications from JBoss EAP 7.4 to JBoss EAP 8.0 Beta will require code changes due to the move from Jakarta EE 8 to Jakarta EE 10 (e.g., converting from the “javax” namespace to “jakarta” namespace). These changes are documented in this https://access.redhat.com/articles/6980265[article]. To help our customers with this migration effort we've updated our tools: the https://developers.redhat.com/products/mta/download[Migration Toolkit for Applications], including the Migration Toolkit for Runtimes (MTR, for non-OpenShift projects) and the JBoss EAP Server Migration tool. 
 
-In this section we're going to use the JBoss EAP Server Migration tool migrate the server configuration from JBoss EAP 7.4 to JBoss EAP 8-Beta
+In this section we're going to use the JBoss EAP Server Migration tool migrate the server configuration from JBoss EAP 7.4 to {{ EAP8_VERSION }}
 
-We now have a running instance of our application running in JBoss EAP 7.4 ready to migrate to JBoss EAP 8.0 Beta. Before starting the migration, shut down the JBoss EAP 7.4 server and create an environment variable pointing to the JBoss EAP 7.4 deployment.
+We now have a running instance of our application running in JBoss EAP 7.4 ready to migrate to {{ EAP8_VERSION }}. Before starting the migration, shut down the JBoss EAP 7.4 server and create an environment variable pointing to the JBoss EAP 7.4 deployment.
 
 [source,sh,role="copypaste"]
 ----
-export EAP_PREVIOUS_HOME=/shared/jboss-eap-7.4
+export EAP_PREVIOUS_HOME=/shared/{{ EAP7_DIR }}
 ----
 
 
-You will find a JBoss EAP 8-Beta archive in the "/shared" folder.  From the terminal enter the following commands:
+You will find a {{ EAP8_VERSION }} archive in the "/shared" folder.  From the terminal enter the following commands:
 
 [source,sh,role="copypaste"]
 ----
@@ -38,7 +38,7 @@ cd /shared
 
 [source,sh,role="copypaste"]
 ----
-unzip jboss-eap-8.0.0.Beta.zip 
+unzip {{ JBOSS8_ARCHIVE }} 
 ----
 
 Extract the distribution into a local folder (e.g., ~/jboss-eap-8).  
@@ -47,13 +47,13 @@ Set the EAP_HOME environment variable as follows:
 
 [source,sh,role="copypaste"]
 ----
-export EAP_HOME=/shared/jboss-eap-8.0 
+export EAP_HOME=/shared/{{ JBOSS8_DIR }} 
 ----
 
-Now we can move on to the migration from JBoss EAP 7.4 to JBoss EAP 8.0 Beta.
+Now we can move on to the migration from JBoss EAP 7.4 to {{ EAP8_VERSION }}.
 
 ## Server configuration changes
-When we deployed our application to JBoss EAP 7.4, we made some changes to the server configuration to add a module and driver to connect to MySQL. We must ensure these modules and drivers are in place and working correctly in our JBoss EAP 8-Beta server. We can use the JBoss EAP server migration tool to perform this migration for us.  
+When we deployed our application to JBoss EAP 7.4, we made some changes to the server configuration to add a module and driver to connect to MySQL. We must ensure these modules and drivers are in place and working correctly in our {{ EAP8_VERSION }} server. We can use the JBoss EAP server migration tool to perform this migration for us.  
 
 [source,sh,role="copypaste"]
 ----
@@ -62,12 +62,12 @@ cd /shared
 
 [source,sh,role="copypaste"]
 ----
-unzip jboss-eap-8.0.0.Beta-server-migration.zip
+unzip {{ SERVER_MIGRATION_ARCHIVE }}
 ----
 
 [source,sh,role="copypaste"]
 ----
-cd jboss-server-migration
+cd {{ SERVER_MIGRATION_DIR }}
 ----
 
 Run the following command:
@@ -105,7 +105,7 @@ Choose no. We are not using a managed domain.
 
 image::mig9.png[migration,1150]
 
-Once this operation completes, we can start our JBoss EAP 8.0 server with the following command from the JBoss EAP installation folder:
+Once this operation completes, we can start our {{ EAP8_VERSION }} server with the following command from the JBoss EAP installation folder:
 
 [source,sh,role="copypaste"]
 ----
@@ -118,7 +118,7 @@ Open a new terminal window and enter:
 
 [source,sh,role="copypaste"]
 ----
-export EAP_HOME=/shared/jboss-eap-8.0 
+export EAP_HOME=/shared/{{ JBOSS8_DIR }} 
 ----
 
 
@@ -195,4 +195,4 @@ A successful connection should result in the following response:
 ----
 We can now be confident our application will have the required drivers and data sources present.
 
-JBoss EAP 8.0-Beta is now successfully deployed and the server configuration migrated from JBoss EAP 7.4
+{{ EAP8_VERSION }} is now successfully deployed and the server configuration migrated from JBoss EAP 7.4

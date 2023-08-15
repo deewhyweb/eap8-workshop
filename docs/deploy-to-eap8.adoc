@@ -1,6 +1,8 @@
-= Migrate application from JBoss EAP 7.4 to JBoss EAP 8
+= Migrate application from JBoss EAP 7.4 to {{ EAP8_VERSION }}
 :experimental:
 :imagesdir: images
+
+{{ EAP8_VERSION }} introduces breaking changes to application written for JBoss EAP 7.4.  
 
 To perform code analysis of our JBoss EAP 7.4 application, we will use the latest version of the Migration Toolkit for Runtimes. 
 
@@ -11,12 +13,12 @@ cd /shared
 
 [source,sh,role="copypaste"]
 ----
-unzip  mtr-1.1.0.GA-web-console.zip
+unzip  {{ MTR_ARCHIVE }}
 ----
 
 [source,sh,role="copypaste"]
 ----
-cd mtr-web-distribution-1.1.0.GA-redhat-00003
+cd {{ MTR_DIR }}
 ----
 
 [source,sh,role="copypaste"]
@@ -66,7 +68,7 @@ The report results will be shown as below
 
 image::mtr-7.png[migration,800]
 
-You'll see from this report an estimation of 84 story points to migrate from JBoss EAP 7.4 to JBoss EAP 8-Beta.
+You'll see from this report an estimation of 84 story points to migrate from JBoss EAP 7.4 to {{ EAP8_VERSION }}.
 
 You can click through the various tabs of the report to view the details.  For example, clicking on the "Issues" tab will show the details of the changes required.
 
@@ -83,7 +85,7 @@ cd /shared
 
 [source,sh,role="copypaste"]
 ----
-unzip mtr-1.1.0.GA-cli-offline.zip 
+unzip {{ MTR_CLI_ARCHIVE }} 
 ----
 
 Add the VS-Code Migration Toolkit for Runtimes extension 
@@ -94,10 +96,17 @@ Configure the MTR VS-Code extension as follows
 
 image::mtr-vscode-2.png[migration,800]
 
-Perform code analysis
+To perform the code analysis, click on the start button as shown below
 
-????
+image::mtr-vscode-3.png[migration,400]
 
+Once the analysis is complete, you should see a file hierachy in the left hand window.  CLicking on a file will open up the editor showing where the issues are with the file.
+
+image::mtr-vscode-4.png[migration,800]
+
+You can make the edits directly in the file as indicated, or in some cases you can right click on the file and select "Apply all quickfixes"
+
+image::mtr-vscode-5.png[migration,400]
 
 
 == Automating code changes
@@ -110,7 +119,7 @@ To run OpenRewrite against our application code, run the following command:
 
 [source,sh,role="copypaste"]
 ----
-/shared/mtr-cli-1.1.0.GA-redhat-00003/bin/windup-cli --openrewrite "-DactiveRecipes=org.jboss.windup.JavaxToJakarta" "-Drewrite.configLocation=/shared/mtr-cli-1.1.0.GA-redhat-00003/rules/openrewrite/jakarta/javax/imports/rewrite.yml" --input /projects/jboss7-quickstarts/sample-app --goal run
+/shared/{{ MTR_CLI_DIR }}/bin/windup-cli --openrewrite "-DactiveRecipes=org.jboss.windup.JavaxToJakarta" "-Drewrite.configLocation=/shared/mtr-cli-1.1.0.GA-redhat-00003/rules/openrewrite/jakarta/javax/imports/rewrite.yml" --input /projects/jboss7-quickstarts/sample-app --goal run
 ----
 
 == Remaining file changes
@@ -121,7 +130,7 @@ Other than the namespace changes, the migration toolkit for runtimes report iden
 * persistence.xml
 * faces-config.xml
 
-We can go through the changes as detailed in the report, or copy these files from a pre-prepared EAP 8 version of the app in the /projects/jboss7-quickstarts/sample-app-eap8 folder by running the following commands.
+We can go through the changes as detailed in the report, or copy these files from a pre-prepared {{ EAP8_VERSION }} version of the app in the /projects/jboss7-quickstarts/sample-app-eap8 folder by running the following commands.
 
 [source,sh,role="copypaste"]
 ----
@@ -138,13 +147,13 @@ cp /projects/jboss7-quickstarts/sample-app-eap8/src/main/resources/META-INF/pers
 cp /projects/jboss7-quickstarts/sample-app-eap8/src/main/webapp/WEB-INF/faces-config.xml /projects/jboss7-quickstarts/sample-app/src/main/webapp/WEB-INF
 ----
 
-We can now deploy our JBoss EAP 8-Beta application
+We can now deploy our {{ EAP8_VERSION }} application
 
 Shut down the Migration Toolkit for Runtimes
 
 [source,sh,role="copypaste"]
 ----
-export EAP_HOME=/shared/jboss-eap-8.0 
+export EAP_HOME=/shared/{{ JBOSS8_DIR }}  
 ----
 
 [source,sh,role="copypaste"]
@@ -167,4 +176,4 @@ The kitchensink application should load as follows
 
 image::kitchen-sink.png[public-endpoint,800]
 
-We've now successfully deployed our sample application to JBoss EAP 8-Beta connecting to an external PostgreSQL database.
+We've now successfully deployed our sample application to {{ EAP8_VERSION }} connecting to an external PostgreSQL database.
