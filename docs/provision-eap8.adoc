@@ -109,7 +109,7 @@ Once this operation completes, we can start our {{ EAP8_VERSION }} server with t
 
 [source,sh,role="copypaste"]
 ----
-$EAP_HOME/bin/standalone.sh -b 0.0.0.0
+$EAP_HOME/bin/standalone.sh -Djboss.http.port=8100 -b 0.0.0.0
 ----
 
 When the server has started successfully, we can test our configuration with the following commands.

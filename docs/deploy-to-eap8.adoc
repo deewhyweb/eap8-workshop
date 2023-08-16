@@ -47,9 +47,11 @@ Then, we need to locate the application source code
 image::mtr-2.png[migration,800]
 
 Set the target to "eap8"
+
 image::mtr-3.png[migration,800]
 
 Select the packages
+
 image::mtr-4.png[migration,800]
 
 Skip through the remaining screens
@@ -158,7 +160,7 @@ export EAP_HOME=/shared/{{ JBOSS8_DIR }}
 
 [source,sh,role="copypaste"]
 ----
-$EAP_HOME/bin/standalone.sh -b 0.0.0.0
+$EAP_HOME/bin/standalone.sh -Djboss.http.port=8100 -b 0.0.0.0
 ----
 
 In a second terminal enter the following from the /projects/jboss7-quickstarts/sample-app folder

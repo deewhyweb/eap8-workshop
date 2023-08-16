@@ -171,7 +171,7 @@ We can now run our application deployed in {{ EAP8_VERSION }} with the following
 
 [source,sh,role="copypaste"]
 ----
-./target/server/bin/standalone.sh -b 0.0.0.0
+./target/server/bin/standalone.sh -Djboss.http.port=8100  -b 0.0.0.0
 ----
 
 You will now be able to access the kitchensink application by copying the url from the public endpoint and pasting it into your browser:
