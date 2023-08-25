@@ -11,7 +11,11 @@ The application is the JBoss EAP Kitchensink app, modified slightly to use a Pos
 * Password: postgresPW
 * Database name: postgresDB
 
-So the first thing we're going to do is deploy JBoss EAP 7.4 and configure a connection to the PostgreSQL database. We're going to perform these steps from the dev spaces environment we logged into in the previous section.  Access your dev spaces environment with this {{ CHE_URL }}[link^].
+We've also provisioned an instance of keycloak.  This instance is available at: 
+
+http://{{ USER_ID }}-jboss-workshop-keycloak.{{ ROUTE_SUBDOMAIN }}[keycloak, window="_blank"]
+
+Next, we're going to do is deploy JBoss EAP 7.4 and configure a connection to the PostgreSQL database. We're going to perform these steps from the dev spaces environment we logged into in the previous section.  Access your dev spaces environment with this {{ CHE_URL }}[link^].
 
 Access the terminal in dev spaces by clicking on "Menu" -> "Terminal" -> "New Terminal"
 
@@ -85,6 +89,13 @@ Start JBoss EAP 7.4
 $EAP_HOME/bin/standalone.sh -b 0.0.0.0
 ----
 
+You will see some prompts popping up on the right hand side of VS-Code.  One of them should prompt you to access the eap7 process endpoint.
+
+image::open-eap7-endpoint.png[open-eap7-endpoint,400]
+
+Click on "Open In New Tab" to access the EAP 7 landing page.
+
+
 Once JBoss EAP 7.4 has started, open up a second terminal by clicking on "Menu" -> "Terminal" -> "New Terminal"
 
 Enter the following commands to launch the jboss-cli
@@ -110,7 +121,10 @@ Run the following commands in the JBoss CLI to add the postgreSQL datsource and 
 data-source add --name=postgresql --jndi-name=java:jboss/datasources/KSINK --driver-name=postgresql --connection-url=jdbc:postgresql://127.0.0.1:5432/postgresDB --user-name=postgresUser --password=postgresPW
 ----
 
-// exit
+[source,sh,role="copypaste"]
+----
+exit
+----
 
 We are now ready to deploy our JBoss EAP 7.4 application, run the following commands to build the app and deploy to our JBoss EAP 7.4 instance:
 
@@ -134,13 +148,32 @@ You should see the application has been successfully deployed with the following
 [org.jboss.as.server] (management-handler-thread - 1) WFLYSRV0010: Deployed "ROOT.war" (runtime-name : "ROOT.war")
 ----
 
-You will now be able to access the kitchensink application by copying the url from the public endpoint and pasting it into your browser:
+You will now be able to access the kitchensink application. If you opened a tab previously showing the EAP 7 landing page, you can refresh this page. Otherwise you can open the app by copying the url from the public endpoint and pasting it into your browser:
 
-image::public-endpoint.png[public-endpoint,200]
+image::public-endpoint.png[public-endpoint,276]
 
-The kitchensink application should load as follows
+The kitchensink application should load as follows:
 
 image::kitchen-sink.png[public-endpoint,800]
 
 We've now successfully deployed our sample application to JBoss EAP 7.4 connecting to an external PostgreSQL database.
 
+Before we move onto deploying to {{ EAP8_VERSION }} we're going to undeploy the kitchensink application
+
+Switch back to the second terminal and enter the following commands
+
+
+[source,sh,role="copypaste"]
+----
+$EAP_HOME/bin/jboss-cli.sh --connect
+----
+
+[source,sh,role="copypaste"]
+----
+undeploy ROOT.war
+----
+
+[source,sh,role="copypaste"]
+----
+exit
+----

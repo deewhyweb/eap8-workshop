@@ -23,9 +23,11 @@ In this section we're going to use the JBoss EAP Server Migration tool migrate t
 
 We now have a running instance of our application running in JBoss EAP 7.4 ready to migrate to {{ EAP8_VERSION }}. Before starting the migration, shut down the JBoss EAP 7.4 server and create an environment variable pointing to the JBoss EAP 7.4 deployment.
 
+If JBoss EAP 7.4 is still running, switch to this tab and press CTRL + C to stop the server
+
 [source,sh,role="copypaste"]
 ----
-export EAP_PREVIOUS_HOME=/shared/{{ EAP7_DIR }}
+export EAP_PREVIOUS_HOME=/shared/{{ JBOSS7_DIR }}
 ----
 
 
@@ -111,6 +113,12 @@ Once this operation completes, we can start our {{ EAP8_VERSION }} server with t
 ----
 $EAP_HOME/bin/standalone.sh -Djboss.http.port=8100 -b 0.0.0.0
 ----
+
+You will see some prompts popping up on the right hand side of VS-Code.  One of them should prompt you to access the eap8 process endpoint.
+
+image::open-eap8-endpoint.png[open-eap8-endpoint,400]
+
+Click on "Open In New Tab" to access the EAP 8 landing page.
 
 When the server has started successfully, we can test our configuration with the following commands.
 

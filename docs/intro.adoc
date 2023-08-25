@@ -76,4 +76,17 @@ image::devspaces-start.png[devspaces-start, 800]
 
 Users of Eclipse, IntelliJ IDEA or Visual Studio Code will see a familiar layout: a project/file browser on the left, a code editor on the right, and a terminal at the bottom. You'll use all of these during the course of this workshop, so keep this browser tab open throughout. **If things get weird, you can simply reload the browser tab to refresh the view.**
 
+=== Running terminal commands
+
+
+
+=== Configuring GIT
+
+
+[source,sh,role="copypaste"]
+----
+ git config --global user.email "{{ USER_ID }}@example.com"
+ git config --global user.name "{{ USER_ID }}"
+----
+
 Ready? Let's go!

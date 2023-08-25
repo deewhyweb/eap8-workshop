@@ -9,7 +9,7 @@ docker run -it -p 8080:8080 --rm -v /Users/philiphayes/projects/eap8-workshop/do
 -e LOG_TO_STDOUT='true' \
 -e MASTER_URL='https://api.cluster-blr-f777.blr-f777.example.opentlc.com:6443' \
 -e OPENSHIFT_USER_PASSWORD='openshift' \
--e ROUTE_SUBDOMAIN='apps.cluster-blr-f777.blr-f777.example.opentlc.com' \
+-e ROUTE_SUBDOMAIN='apps.cluster-kg45v.kg45v.sandbox2868.opentlc.com' \
 -e WORKSHOPS_URLS="file:///app-data/_workshop.yml" \
 -e EAP8_VERSION="JBoss EAP 8-Beta" \
 -e JBOSS7_ARCHIVE="jboss-eap-7.4.0.zip" \

@@ -6,6 +6,8 @@
 
 To perform code analysis of our JBoss EAP 7.4 application, we will use the latest version of the Migration Toolkit for Runtimes. 
 
+If {{ EAP8_VERSION }} is still running, switch to this terminal window and enter CTRL+C to exit.
+
 [source,sh,role="copypaste"]
 ----
 cd /shared
@@ -31,6 +33,8 @@ export HOSTNAME=eap
 ./run_windup.sh -Djboss.http.port=8090 -b 0.0.0.0
 ----
 
+Once the Migration toolkit for application has started, you can open the landing page by clicking on the following link http://{{ USER_ID }}-jboss-workshop-mtr.{{ ROUTE_SUBDOMAIN }}
+
 image::mtr-1.png[migration,800]
 
 From the MTR landing page, click on Create Project.
@@ -43,6 +47,8 @@ Then, we need to locate the application source code
 ----
 /projects/jboss7-quickstarts/sample-app
 ----
+
+Put a tick in the box next to "Directory contains the application's source code or an exploded Java application archive"
 
 image::mtr-2.png[migration,800]
 
@@ -75,6 +81,7 @@ You'll see from this report an estimation of 84 story points to migrate from JBo
 You can click through the various tabs of the report to view the details.  For example, clicking on the "Issues" tab will show the details of the changes required.
 
 image::mtr-8.png[migration,800]
+
 
 == Using the Migration Toolkit for Runtimes VS Code extension
 

@@ -106,7 +106,7 @@ Open the pom.xml file and add the following before the closing tag:
             </plugins>
         </build>
     </profile>
-<profiles>
+</profiles>
 ----
 
 If we examine the pom.xml snippet, we can see the inclusion of three feature packs:
@@ -181,6 +181,10 @@ image::public-endpoint.png[public-endpoint,200]
 The kitchensink application should load as follows
 
 image::kitchen-sink.png[public-endpoint,800]
+
+We can now push our code changes to Git.
+
+// TODO add instructions for pushing to Git
 
 == Deploy the application to OpenShift
 

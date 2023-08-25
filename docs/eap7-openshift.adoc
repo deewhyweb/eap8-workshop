@@ -109,7 +109,7 @@ metadata:
 data:
   POSTGRESQL_DATASOURCE: KSINK
   POSTGRESQL_HOST: postgresql
-  POSTGRESQL_PORT: 5432
+  POSTGRESQL_PORT: '5432'
 ----
 
 Finally, we can use the EAP Operator to deploy our EAP image.  CLick on "+Add" again and then select "Operator Backed" from the Developer Catalog.  
