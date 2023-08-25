@@ -88,7 +88,7 @@ image::mig2.png[migration,1150]
 Choose no. We want to select the configurations to migrate.
 
 image::mig3.png[migration,1150]
-Choose no. We don’t want to migrate standalone-full-ha.xml.
+Choose yes. We want to migrate standalone-full-ha.xml.
 
 image::mig4.png[migration,1150]
 Choose no. We don’t want to migrate standalone-full.xml
@@ -100,7 +100,7 @@ image::mig6.png[migration,1150]
 Choose no. We don’t want to migrate standalone-load-balancer.xml.
 
 image::mig7.png[migration,1150] 
-Choose yes. We want to migrate standalone.xml.
+Choose no. We don't want to migrate standalone.xml.
 
 image::mig8.png[migration,1150]
 Choose no. We are not using a managed domain.
@@ -111,14 +111,11 @@ Once this operation completes, we can start our {{ EAP8_VERSION }} server with t
 
 [source,sh,role="copypaste"]
 ----
-$EAP_HOME/bin/standalone.sh -Djboss.http.port=8100 -b 0.0.0.0
+$EAP_HOME/bin/standalone.sh  -c standalone-full-ha.xml  -Djboss.http.port=8100 -b 0.0.0.0
 ----
 
-You will see some prompts popping up on the right hand side of VS-Code.  One of them should prompt you to access the eap8 process endpoint.
+You should now be able to access the EAP 8 landing page by clicking http://{{ USER_ID }}-jboss-workshop-eap8.{{ ROUTE_SUBDOMAIN }}[here, window="_blank"]
 
-image::open-eap8-endpoint.png[open-eap8-endpoint,400]
-
-Click on "Open In New Tab" to access the EAP 8 landing page.
 
 When the server has started successfully, we can test our configuration with the following commands.
 

@@ -232,6 +232,6 @@ image::topology-view.png[topology-view,800]
 
 You should be able to view the application landing page by clicking on the external link icon.
 
-image::kitchen-sink.png[kitchen-sink,800]
+image::coolstore.png[kitchen-sink,800]
 
 Our application is now successfully deployed on OpenShift.  Next, we're going to deploy an instance of JBoss EAP 8 and migrate our application.

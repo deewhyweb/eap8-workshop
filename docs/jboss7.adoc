@@ -84,7 +84,7 @@ export HOSTNAME=eap
 Start JBoss EAP 7.4
 [source,sh,role="copypaste"]
 ----
-$EAP_HOME/bin/standalone.sh  -c standalone-full-ha.xml -b 0.0.0.0
+$EAP_HOME/bin/standalone.sh -c standalone-full-ha.xml -b 0.0.0.0
 ----
 
 You will now be able to access the JBoss EAP 7 landing page http://{{ USER_ID }}-jboss-workshop-eap7.{{ ROUTE_SUBDOMAIN }}[here, window="_blank"]

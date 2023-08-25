@@ -45,7 +45,7 @@ Then, we need to locate the application source code
 
 [source,sh,role="copypaste"]
 ----
-/projects/jboss7-quickstarts/sample-app
+/projects/workshop/coolstore
 ----
 
 Put a tick in the box next to "Directory contains the application's source code or an exploded Java application archive"
@@ -128,7 +128,7 @@ To run OpenRewrite against our application code, run the following command:
 
 [source,sh,role="copypaste"]
 ----
-/shared/{{ MTR_CLI_DIR }}/bin/windup-cli --openrewrite "-DactiveRecipes=org.jboss.windup.JavaxToJakarta" "-Drewrite.configLocation=/shared/mtr-cli-1.1.0.GA-redhat-00003/rules/openrewrite/jakarta/javax/imports/rewrite.yml" --input /projects/jboss7-quickstarts/sample-app --goal run
+/shared/{{ MTR_CLI_DIR }}/bin/windup-cli --openrewrite "-DactiveRecipes=org.jboss.windup.JavaxToJakarta" "-Drewrite.configLocation=/shared/mtr-cli-1.1.0.GA-redhat-00003/rules/openrewrite/jakarta/javax/imports/rewrite.yml" --input /projects/workshop/coolstore --goal run
 ----
 
 == Remaining file changes
@@ -143,17 +143,12 @@ We can go through the changes as detailed in the report, or copy these files fro
 
 [source,sh,role="copypaste"]
 ----
-cp /projects/jboss7-quickstarts/sample-app-eap8/pom.xml /projects/jboss7-quickstarts/sample-app
+cp /projects/workshop/coolstore-eap8/pom.xml /projects/workshop/coolstore
 ----
 
 [source,sh,role="copypaste"]
 ----
-cp /projects/jboss7-quickstarts/sample-app-eap8/src/main/resources/META-INF/persistence.xml /projects/jboss7-quickstarts/sample-app/src/main/resources/META-INF/
-----
-
-[source,sh,role="copypaste"]
-----
-cp /projects/jboss7-quickstarts/sample-app-eap8/src/main/webapp/WEB-INF/faces-config.xml /projects/jboss7-quickstarts/sample-app/src/main/webapp/WEB-INF
+cp /projects/workshop/coolstore-eap8/src/main/resources/META-INF/persistence.xml /projects/workshop/coolstore/src/main/resources/META-INF/
 ----
 
 We can now deploy our {{ EAP8_VERSION }} application
@@ -167,22 +162,20 @@ export EAP_HOME=/shared/{{ JBOSS8_DIR }}
 
 [source,sh,role="copypaste"]
 ----
-$EAP_HOME/bin/standalone.sh -Djboss.http.port=8100 -b 0.0.0.0
+$EAP_HOME/bin/standalone.sh  -c standalone-full-ha.xml -Djboss.http.port=8100 -b 0.0.0.0
 ----
 
 In a second terminal enter the following from the /projects/jboss7-quickstarts/sample-app folder
 
 [source,sh,role="copypaste"]
 ----
-mvn clean install wildfly:deploy
+mvn clean package
 ----
 
-You will now be able to access the kitchensink application by copying the url from the public endpoint and pasting it into your browser:
+You will now be able to access the application by by clicking http://{{ USER_ID }}-jboss-workshop-eap8.{{ ROUTE_SUBDOMAIN }}[here, window="_blank"]
 
-image::public-endpoint.png[public-endpoint,200]
+The coolstore application should load as follows
 
-The kitchensink application should load as follows
-
-image::kitchen-sink.png[public-endpoint,800]
+image::coolstore.png[public-endpoint,800]
 
 We've now successfully deployed our sample application to {{ EAP8_VERSION }} connecting to an external PostgreSQL database.
