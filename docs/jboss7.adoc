@@ -11,11 +11,9 @@ The application is the JBoss EAP Kitchensink app, modified slightly to use a Pos
 * Password: postgresPW
 * Database name: postgresDB
 
-We've also provisioned an instance of keycloak.  This instance is available at: 
+We've also provisioned an instance of keycloak.  This instance is available here: https://keycloak-sso.{{ ROUTE_SUBDOMAIN }}[keycloak, window="_blank"]
 
-http://{{ USER_ID }}-jboss-workshop-keycloak.{{ ROUTE_SUBDOMAIN }}[keycloak, window="_blank"]
-
-Next, we're going to do is deploy JBoss EAP 7.4 and configure a connection to the PostgreSQL database. We're going to perform these steps from the dev spaces environment we logged into in the previous section.  Access your dev spaces environment with this {{ CHE_URL }}[link^].
+First, we're going to do is deploy JBoss EAP 7.4 and configure a connection to the PostgreSQL database. We're going to perform these steps from the dev spaces environment we logged into in the previous section.  Access your dev spaces environment with this {{ CHE_URL }}[link^].
 
 Access the terminal in dev spaces by clicking on "Menu" -> "Terminal" -> "New Terminal"
 
@@ -86,14 +84,10 @@ export HOSTNAME=eap
 Start JBoss EAP 7.4
 [source,sh,role="copypaste"]
 ----
-$EAP_HOME/bin/standalone.sh -b 0.0.0.0
+$EAP_HOME/bin/standalone.sh  -c standalone-full-ha.xml -b 0.0.0.0
 ----
 
-You will see some prompts popping up on the right hand side of VS-Code.  One of them should prompt you to access the eap7 process endpoint.
-
-image::open-eap7-endpoint.png[open-eap7-endpoint,400]
-
-Click on "Open In New Tab" to access the EAP 7 landing page.
+You will now be able to access the JBoss EAP 7 landing page http://{{ USER_ID }}-jboss-workshop-eap7.{{ ROUTE_SUBDOMAIN }}[here, window="_blank"]
 
 
 Once JBoss EAP 7.4 has started, open up a second terminal by clicking on "Menu" -> "Terminal" -> "New Terminal"
@@ -118,7 +112,24 @@ Run the following commands in the JBoss CLI to add the postgreSQL datsource and 
 
 [source,sh,role="copypaste"]
 ----
-data-source add --name=postgresql --jndi-name=java:jboss/datasources/KSINK --driver-name=postgresql --connection-url=jdbc:postgresql://127.0.0.1:5432/postgresDB --user-name=postgresUser --password=postgresPW
+data-source add --name=postgresql --jndi-name=java:jboss/datasources/CoolstoreDS --driver-name=postgresql --connection-url=jdbc:postgresql://127.0.0.1:5432/postgresDB --user-name=postgresUser --password=postgresPW
+----
+
+[source,sh,role="copypaste"]
+----
+jms-topic add --topic-address=topic.orders --entries=/orders
+----
+
+
+
+[source,sh,role="copypaste"]
+----
+/subsystem=messaging-activemq/server=default:write-attribute(name=cluster-password, value=password)
+----
+
+[source,sh,role="copypaste"]
+----
+reload
 ----
 
 [source,sh,role="copypaste"]
@@ -126,39 +137,56 @@ data-source add --name=postgresql --jndi-name=java:jboss/datasources/KSINK --dri
 exit
 ----
 
+Next, we need to set the url of our Red Hat SSO application.  In the IDE, open the file: coolstore/src/main/webapp/keycloak.json and edit the contents so they look like the following:
+
+[source,json,role="copypaste"]
+----
+{
+    "realm": "eap",
+    "auth-server-url": "https://keycloak-sso.{{ ROUTE_SUBDOMAIN }}/auth",
+    "ssl-required": "external",
+    "resource": "eap-app",
+    "public-client": true,
+    "confidential-port": 0
+}
+----
+
 We are now ready to deploy our JBoss EAP 7.4 application, run the following commands to build the app and deploy to our JBoss EAP 7.4 instance:
 
 [source,sh,role="copypaste"]
 ----
-cd /projects/jboss7-quickstarts/sample-app
+cd /projects/workshop/coolstore
 ----
 
 [source,sh,role="copypaste"]
 ----
-mvn clean install wildfly:deploy
+mvn clean package
 ----
 
-Once the build has completed you should see the app was successfully deployed in the JBoss EAP 7.4 logs.  Switch back to the first terminal (using the selection on the right side of the terminal)
-
-image::terminal-switch.png[terminal-switch,800]
-
-You should see the application has been successfully deployed with the following in the logs
-
+[source,sh,role="copypaste"]
 ----
-[org.jboss.as.server] (management-handler-thread - 1) WFLYSRV0010: Deployed "ROOT.war" (runtime-name : "ROOT.war")
+$EAP_HOME/bin/jboss-cli.sh --connect
 ----
 
-You will now be able to access the kitchensink application. If you opened a tab previously showing the EAP 7 landing page, you can refresh this page. Otherwise you can open the app by copying the url from the public endpoint and pasting it into your browser:
 
-image::public-endpoint.png[public-endpoint,276]
+Run the following command to deploy the application:
 
-The kitchensink application should load as follows:
 
-image::kitchen-sink.png[public-endpoint,800]
+[source,sh,role="copypaste"]
+----
+deploy ./target/ROOT.war
+----
+
+
+You will now be able to access the coolstore application http://{{ USER_ID }}-jboss-workshop-eap7.{{ ROUTE_SUBDOMAIN }}[here, window="_blank"]
+
+The coolstore application should load as follows:
+
+image::coolstore.png[coolstore,800]
 
 We've now successfully deployed our sample application to JBoss EAP 7.4 connecting to an external PostgreSQL database.
 
-Before we move onto deploying to {{ EAP8_VERSION }} we're going to undeploy the kitchensink application
+Before we move onto deploying to {{ EAP8_VERSION }} we're going to undeploy the coolstore application
 
 Switch back to the second terminal and enter the following commands
 

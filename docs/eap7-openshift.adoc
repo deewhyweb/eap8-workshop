@@ -11,7 +11,9 @@ Login with the following credentials:
 * *Username*: `{{ USER_ID }}`
 * *Password*: `{{ CHE_USER_PASSWORD }}`
 
-Create a new project called "eap"
+Switch to the project called "{{ USER_ID }}-project"
+
+## Deploy a PostgreSQL database
 
 Within this project, add a PostgreSQL database by Clicking on "+Add" and selecting "Database" from the Developer catalog.
 
@@ -27,6 +29,65 @@ image::postgresql-template.png[postgresql-template,800]
 
 Click on "Create" to create the postgreSQL database instance.
 
+## Deploy an AMQ broker instance
+
+Our application will require an external message queue.  We'll use the AMQ Broker operator to deploy and configure an AMQ broker instance
+
+Click on "+Add" and select "Operator Backed"
+
+From the list below, select "ActiveMQ Artemis"
+
+image::operator-backed.png[operator-backed,800]
+
+From the next screen, click on "Create" and then paste the following YAML into the "YAML view" editor
+
+
+[source,yaml,role="copypaste"]
+----
+apiVersion: broker.amq.io/v1beta1
+kind: ActiveMQArtemis
+metadata:
+  name: eap74-amq7
+spec:
+  acceptors:
+    - name: my-acceptor
+      port: 61616
+      protocols: 'core'
+  deploymentPlan:
+    image: placeholder
+    jolokiaAgentEnabled: false
+    journalType: nio
+    managementRBACEnabled: true
+    messageMigration: false
+    persistenceEnabled: false
+    requireLogin: false
+    size: 2
+  console:
+    expose: true
+----
+
+Next, we're going to create an "AMQ Artemis Address"
+
+Click on "+Add" again, select "Operator Backed" and then choose "AMQ Artermis Address"
+
+From the next screen, click on "Create" and then paste the following YAML into the "YAML view" editor
+
+
+[source,yaml,role="copypaste"]
+----
+apiVersion: broker.amq.io/v1beta1
+kind: ActiveMQArtemisAddress
+metadata:
+  name: artemis-address-topic
+spec:
+  addressName: topic.orders
+  queueName: topic/orders
+  routingType: multicast
+----
+
+## Deploying the application to OpenShift
+
+
 When we deploy our EAP application on OpenShift we need to add the PostgreSQL datasource and driver as we did in the previous exercise.  In this example we're going to make use the of the https://github.com/jbossas/eap-datasources-galleon-pack[Eap datasources galleon feature pack^]  .  This feature pack provides a "postgresql-datasource" layer which will install and configure the postgreSQL datasource for us.
 
 We're going to use Helm to build our OpenShift EAP Image.  Within the Helm config we're going to you you'll notice build environment variables defining the following
@@ -35,9 +96,9 @@ We're going to use Helm to build our OpenShift EAP Image.  Within the Helm confi
 
 This adds the eap-datasources galleaon pack for EAP 7.4
 
-* GALLEON_PROVISION_LAYERS: cloud-server,h2-driver,postgresql-datasource,jsf
+* GALLEON_PROVISION_LAYERS: cloud-server,web-clustering,postgresql-datasource,ejb
 
-This adds the required layers to support our application including the postgres-datasource and jsf (java server faces) layers
+This adds the required layers to support our application including the postgres-datasource, web-clustering, and ejb layers
 
 * POSTGRESQL_DRIVER_VERSION: 42.6.0
 
@@ -64,7 +125,7 @@ build:
   mode: s2i
   uri: 'http://simple-gitea.gitea.svc.cluster.local:3000/{{ USER_ID }}/jboss7-quickstarts.git'
   ref: main
-  contextDir: sample-app
+  contextDir: coolstore
   output:
     kind: ImageStreamTag
   env:
@@ -73,7 +134,7 @@ build:
     - name: GALLEON_PROVISION_FEATURE_PACKS
       value: "org.jboss.eap:eap-datasources-galleon-pack:7.4.0.GA-redhat-00003"
     - name: GALLEON_PROVISION_LAYERS
-      value: "cloud-server,h2-driver,postgresql-datasource,jsf"
+      value: "cloud-server,ejb,postgresql-datasource,web-clustering"
     - name: POSTGRESQL_DRIVER_VERSION
       value: 42.6.0
   triggers: {}
@@ -106,10 +167,18 @@ kind: ConfigMap
 apiVersion: v1
 metadata:
   name: eap-config
-data:
-  POSTGRESQL_DATASOURCE: KSINK
-  POSTGRESQL_HOST: postgresql
-  POSTGRESQL_PORT: '5432'
+data: 
+  # Configuration to connnect to PostgreSQL
+  POSTGRESQL_DATABASE: postgresDB
+  POSTGRESQL_DATASOURCE: CoolstoreDS
+  POSTGRESQL_SERVICE_HOST: postgresql
+
+  # Configuration to connect to AMQ Broker
+  MQ_SERVICE_PREFIX_MAPPING: eap74-amq7=MQ
+  EAP74_AMQ_TCP_SERVICE_HOST: eap74-amq7-hdls-svc
+  EAP74_AMQ_TCP_SERVICE_PORT: "61616"
+  MQ_TOPICS: orders
+  AMQ_JNDI: java:/eap74-amq7/ConnectionFactory
 ----
 
 Finally, we can use the EAP Operator to deploy our EAP image.  CLick on "+Add" again and then select "Operator Backed" from the Developer Catalog.  
@@ -123,19 +192,16 @@ From the list of operator backed options, click on "WildFlyServer", and click on
 apiVersion: wildfly.org/v1alpha1
 kind: WildFlyServer
 metadata:
-  name: kitchen-sink
+  name: eap74
 spec:
-  applicationImage: 'eap74:latest'
+  applicationImage: eap74:latest
+  replicas: 1
   envFrom:
     - configMapRef:
         name: eap-config
   env:
     # Credentials to connect to the PostgreSQL databases
-    - name: POSTGRESQL_DATABASE
-      valueFrom:
-        secretKeyRef:
-          key: database-name
-          name: postgresql
+    # and AMQ Broker are taken from their secrets
     - name: POSTGRESQL_PASSWORD
       valueFrom:
         secretKeyRef:
@@ -146,10 +212,19 @@ spec:
         secretKeyRef:
           key: database-user
           name: postgresql
-  replicas: 1
+    - name: MQ_USERNAME
+      valueFrom:
+        secretKeyRef:
+          key: AMQ_USER
+          name: eap74-amq7-credentials-secret
+    - name: MQ_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          key: AMQ_PASSWORD
+          name: eap74-amq7-credentials-secret
 ----
 
-Click on "Create" to create the WildFlyServer custmo resource.
+Click on "Create" to create the WildFlyServer custom resource.
 
 Click on the "Topology" link on the left menu to view the deployed applications:
 
