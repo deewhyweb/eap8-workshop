@@ -186,6 +186,10 @@ image::coolstore.png[coolstore,800]
 
 We've now successfully deployed our sample application to JBoss EAP 7.4 connecting to an external PostgreSQL database.
 
+//TODO login to SSO
+
+image::rhsso-login.png[rhsso-login,800]
+
 Before we move onto deploying to {{ EAP8_VERSION }} we're going to undeploy the coolstore application
 
 Switch back to the second terminal and enter the following commands

@@ -4,6 +4,48 @@
 
 We're now going to go through the process of deploying this application on OpenShift.  We're going to do this using the OpenShift console.  
 
+Before we deploy the application to OpenShift we need to verify the keycloak configuration and push our changes to out gitea account.
+
+In the IDE, open the file: coolstore/src/main/webapp/keycloak.json and ensure the contents are as follows:
+
+[source,json,role="copypaste"]
+----
+{
+    "realm": "eap",
+    "auth-server-url": "https://keycloak-sso.{{ ROUTE_SUBDOMAIN }}/auth",
+    "ssl-required": "external",
+    "resource": "eap-app",
+    "public-client": true,
+    "confidential-port": 0
+}
+----
+
+Click on the "Source Control" icon in the IDE, you should see the following:
+
+image::git-1.png[source-contol]
+
+Enter a commit message in the message field and click on the "Commit" button.
+
+You will be prompted to stage files to the commit
+
+image::git-2.png[stage-files]
+
+Click on "Yes" and then click on "Sync Changes" to push your changes to gitea
+
+You will be prompted to enter a username:
+
+image::git-3.png[git-username]
+
+Enter `{{ USER_ID }}`
+
+You will then be prompted for a password:
+
+Enter `{{ CHE_USER_PASSWORD }}`
+
+Your changes will be pushed to gitea.
+
+## Deploying on OpenShift
+
 Access the OpenShift console by clicking on the following {{ CONSOLE_URL }}[link^] 
 
 Login with the following credentials:

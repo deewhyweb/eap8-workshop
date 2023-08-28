@@ -164,14 +164,14 @@ Before we start our {{ EAP8_VERSION }} instance, we will need runtime environmen
 export POSTGRESQL_DATABASE=postgresDB \
 && export POSTGRESQL_USER=postgresUser \
 && export POSTGRESQL_PASSWORD=postgresPW \
-&& export POSTGRESQL_DATASOURCE=KSINK \
+&& export POSTGRESQL_DATASOURCE=CoolstoreDS \
 && export POSTGRESQL_SERVICE_HOST=127.0.0.1
 ----
 We can now run our application deployed in {{ EAP8_VERSION }} with the following command:
 
 [source,sh,role="copypaste"]
 ----
-./target/server/bin/standalone.sh -Djboss.http.port=8100  -b 0.0.0.0
+./target/server/bin/standalone.sh -c standalone-full-ha.xml -Djboss.http.port=8100  -b 0.0.0.0
 ----
 
 You will now be able to access the kitchensink application by copying the url from the public endpoint and pasting it into your browser:
@@ -184,7 +184,6 @@ image::kitchen-sink.png[public-endpoint,800]
 
 We can now push our code changes to Git.
 
-// TODO add instructions for pushing to Git
 
 == Deploy the application to OpenShift
 
@@ -213,33 +212,38 @@ Paste the following YAML:
 build:
  uri: 'http://simple-gitea.gitea.svc.cluster.local:3000/{{ USER_ID }}/jboss7-quickstarts.git'
  ref: main
- contextDir: sample-app
+ contextDir: coolstore
  env:
    - name: POSTGRESQL_DRIVER_VERSION
-     value: '42.5.1'
+     value: '42.6.0'
 deploy:
  replicas: 1
+ envFrom:
+    - configMapRef:
+        name: eap-config
  env:
-   # Env vars to connect to PostgreSQL DB
-   - name: POSTGRESQL_DATABASE
-     valueFrom:
-       secretKeyRef:
-         key: database-name
-         name: postgresql
-   - name: POSTGRESQL_USER
-     valueFrom:
-       secretKeyRef:
-         key: database-user
-         name: postgresql
-   - name: POSTGRESQL_PASSWORD
-     valueFrom:
-       secretKeyRef:
-         key: database-password
-         name: postgresql
-   - name: POSTGRESQL_DATASOURCE
-     value: KSINK
-   - name: POSTGRESQL_SERVICE_HOST
-     value: postgresql
+    # Credentials to connect to the PostgreSQL databases
+    # and AMQ Broker are taken from their secrets
+    - name: POSTGRESQL_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          key: database-password
+          name: postgresql
+    - name: POSTGRESQL_USER
+      valueFrom:
+        secretKeyRef:
+          key: database-user
+          name: postgresql
+    - name: MQ_USERNAME
+      valueFrom:
+        secretKeyRef:
+          key: AMQ_USER
+          name: eap74-amq7-credentials-secret
+    - name: MQ_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          key: AMQ_PASSWORD
+          name: eap74-amq7-credentials-secret
 ----
 
 Note: There are a few things to point out in this Helm configuration. We have defined a build time variable POSTGRESQL_DRIVER_VERSION to determine how the PostgreSQL driver version is passed to the eap-maven-plugin when S2I builds the application image. Runtime environment variables (such as user credentials) are read from a secret created when the database is instantiated. So application configuration can be safely stored in Git without any sensitive information.

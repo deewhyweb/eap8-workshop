@@ -2,14 +2,14 @@
 
 cd /home/phayes/projects/eap8-workshop/docs
 podman run -it -p 8080:8080 --rm -v /home/phayes/projects/eap8-workshop/docs:/app-data:Z \
--e CHE_URL='https://devspaces.apps.cluster-j7zjw.j7zjw.sandbox616.opentlc.com/' \
+-e CHE_URL='https://devspaces.apps.cluster-jlg4t.jlg4t.sandbox1668.opentlc.com/' \
 -e CHE_USER_PASSWORD='openshift' \
--e CONSOLE_URL='https://console-openshift-console.apps.cluster-j7zjw.j7zjw.sandbox616.opentlc.com' \
+-e CONSOLE_URL='https://console-openshift-console.apps.cluster-jlg4t.jlg4t.sandbox1668.opentlc.com' \
 -e CONTENT_URL_PREFIX="file:///app-data/" \
 -e LOG_TO_STDOUT='true' \
--e MASTER_URL='https://api.cluster-j7zjw.j7zjw.sandbox616.opentlc.com:6443' \
+-e MASTER_URL='https://api.cluster-jlg4t.jlg4t.sandbox1668.opentlc.com:6443' \
 -e OPENSHIFT_USER_PASSWORD='openshift' \
--e ROUTE_SUBDOMAIN='apps.cluster-j7zjw.j7zjw.sandbox616.opentlc.com' \
+-e ROUTE_SUBDOMAIN='apps.cluster-jlg4t.jlg4t.sandbox1668.opentlc.com' \
 -e WORKSHOPS_URLS="file:///app-data/_workshop.yml" \
 -e EAP8_VERSION="JBoss EAP 8-Beta" \
 -e JBOSS7_ARCHIVE="jboss-eap-7.4.0.zip" \

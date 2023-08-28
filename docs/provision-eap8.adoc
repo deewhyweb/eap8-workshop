@@ -116,6 +116,8 @@ $EAP_HOME/bin/standalone.sh  -c standalone-full-ha.xml  -Djboss.http.port=8100 -
 
 You should now be able to access the EAP 8 landing page by clicking http://{{ USER_ID }}-jboss-workshop-eap8.{{ ROUTE_SUBDOMAIN }}[here, window="_blank"]
 
+image::eap8-landing.png[eap8-landing,1150]
+
 
 When the server has started successfully, we can test our configuration with the following commands.
 

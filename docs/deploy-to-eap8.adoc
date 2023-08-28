@@ -33,7 +33,7 @@ export HOSTNAME=eap
 ./run_windup.sh -Djboss.http.port=8090 -b 0.0.0.0
 ----
 
-Once the Migration toolkit for application has started, you can open the landing page by clicking on the following link http://{{ USER_ID }}-jboss-workshop-mtr.{{ ROUTE_SUBDOMAIN }}
+Once the Migration toolkit for application has started, you can open the landing page by clicking  http://{{ USER_ID }}-jboss-workshop-mtr.{{ ROUTE_SUBDOMAIN }}[here, window="_blank"]
 
 image::mtr-1.png[migration,800]
 
@@ -82,6 +82,8 @@ You can click through the various tabs of the report to view the details.  For e
 
 image::mtr-8.png[migration,800]
 
+We can now shutdown the MTR Console by switching back to the terminal window and hitting CTRL+C
+
 
 == Using the Migration Toolkit for Runtimes VS Code extension
 
@@ -105,6 +107,10 @@ Configure the MTR VS-Code extension as follows
 
 image::mtr-vscode-2.png[migration,800]
 
+/shared/mtr-cli-1.1.0.GA-redhat-00003/bin/windup-cli
+
+/projects/workshop/coolstore
+
 To perform the code analysis, click on the start button as shown below
 
 image::mtr-vscode-3.png[migration,400]
@@ -117,19 +123,13 @@ You can make the edits directly in the file as indicated, or in some cases you c
 
 image::mtr-vscode-5.png[migration,400]
 
+Open /projects/workshop/coolstore/src/main/java/com/redhat/coolstore/service/OrderServiceMDB.java/OrderServiceMDB.java and change
 
-== Automating code changes
+@ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Topic")
 
-A large portion of the mandatory changes are related to the namespace change from javax to jakarta.
+to 
 
-The migration toolkit for runtimes provides https://docs.openrewrite.org/[OpenRewrite, window="_blank"] rules to automate these changes.  
-
-To run OpenRewrite against our application code, run the following command:
-
-[source,sh,role="copypaste"]
-----
-/shared/{{ MTR_CLI_DIR }}/bin/windup-cli --openrewrite "-DactiveRecipes=org.jboss.windup.JavaxToJakarta" "-Drewrite.configLocation=/shared/mtr-cli-1.1.0.GA-redhat-00003/rules/openrewrite/jakarta/javax/imports/rewrite.yml" --input /projects/workshop/coolstore --goal run
-----
+@ActivationConfigProperty(propertyName = "destinationType", propertyValue = "jakarta.jms.Topic"),
 
 == Remaining file changes
 
