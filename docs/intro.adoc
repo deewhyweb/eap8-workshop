@@ -8,7 +8,7 @@ This workshop will guide you through the migration of an application from JBoss 
 * Deployment of a sample application on JBoss EAP 7.4 
 * Deploy sample JBoss EAP 7.4 application on OpenShift
 * Provision {{ EAP8_VERSION }} server
-* Perform code changes to migrate from EAP 7 to {{ EAP8_VERSION }}
+* Perform code changes to migrate the application from EAP 7 to {{ EAP8_VERSION }}
 * Migrate {{ EAP8_VERSION }} application to OpenShift
 * Deploy {{ EAP8_VERSION }} application to OpenShift
 
@@ -78,10 +78,15 @@ Users of Eclipse, IntelliJ IDEA or Visual Studio Code will see a familiar layout
 
 === Running terminal commands
 
+Throughout this workshop you will be running commands in the integrated terminal. 
 
+Access the terminal in dev spaces by clicking on "Menu" -> "Terminal" -> "New Terminal"
+
+image::open-terminal.png[open-terminal,800]
 
 === Configuring GIT
 
+We will be pushing code changes to a git repository we have provisioned for each user.  Before pushing to git you will need to set your git email and name.  To do this, from the integrated terminal, enter the following commands.
 
 [source,sh,role="copypaste"]
 ----
@@ -89,4 +94,4 @@ Users of Eclipse, IntelliJ IDEA or Visual Studio Code will see a familiar layout
  git config --global user.name "{{ USER_ID }}"
 ----
 
-Ready? Let's go!
+Ready? Let's go!s

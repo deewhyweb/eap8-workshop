@@ -2,8 +2,11 @@
 :experimental:
 :imagesdir: images
 
-In this section we're going to deploy an application to JBoss EAP 7.4. which uses an external database.
-The application is the JBoss EAP Kitchensink app, modified slightly to use a PostgreSQL database.  We've already provisioned a database in your dev spaces environment with the following connection details.
+In this section we're going to deploy an application to JBoss EAP 7.4.  The sample application we're providing can be found in the IDE in the Workshop/coolstore folder.
+
+The database requires two external dependencies, a connection to a PostgreSQL database and an instance of Red Hat SSO.
+
+We've provisioned a database in your dev spaces environment with the following connection details.
 
 * Hostname: 127.0.0.1
 * Port: 5432
@@ -11,15 +14,15 @@ The application is the JBoss EAP Kitchensink app, modified slightly to use a Pos
 * Password: postgresPW
 * Database name: postgresDB
 
-We've also provisioned an instance of keycloak.  This instance is available here: https://keycloak-sso.{{ ROUTE_SUBDOMAIN }}[keycloak, window="_blank"]
+We've also provisioned an instance of Red Hat SSO.  This instance is available here: https://keycloak-sso.{{ ROUTE_SUBDOMAIN }}[keycloak, window="_blank"]
 
-First, we're going to do is deploy JBoss EAP 7.4 and configure a connection to the PostgreSQL database. We're going to perform these steps from the dev spaces environment we logged into in the previous section.  Access your dev spaces environment with this {{ CHE_URL }}[link^].
+First, we're going to deploy JBoss EAP 7.4 and configure a connection to the PostgreSQL database. We're going to perform these steps from the dev spaces environment we logged into in the previous section.  Access your dev spaces environment with this {{ CHE_URL }}[link^].
 
 Access the terminal in dev spaces by clicking on "Menu" -> "Terminal" -> "New Terminal"
 
 image::open-terminal.png[open-terminal,800]
 
-You will find a JBoss EAP 7.4 archive in the "/shared" folder.  From the terminal enter the following commands:
+You will find a JBoss EAP 7.4 distribution archive in the "/shared" folder.  From the terminal enter the following commands:
 
 [source,sh,role="copypaste"]
 ----
@@ -115,6 +118,8 @@ Run the following commands in the JBoss CLI to add the postgreSQL datsource and 
 data-source add --name=postgresql --jndi-name=java:jboss/datasources/CoolstoreDS --driver-name=postgresql --connection-url=jdbc:postgresql://127.0.0.1:5432/postgresDB --user-name=postgresUser --password=postgresPW
 ----
 
+Our application uses message driven beans which require a jms topic and the activemq messaging subsystem enabled.  To configure these, enter the following commands.
+
 [source,sh,role="copypaste"]
 ----
 jms-topic add --topic-address=topic.orders --entries=/orders
@@ -151,7 +156,7 @@ Next, we need to set the url of our Red Hat SSO application.  In the IDE, open t
 }
 ----
 
-We are now ready to deploy our JBoss EAP 7.4 application, run the following commands to build the app and deploy to our JBoss EAP 7.4 instance:
+We are now ready to deploy our JBoss EAP 7.4 application, run the following commands to build the application:
 
 [source,sh,role="copypaste"]
 ----
@@ -186,19 +191,23 @@ image::coolstore.png[coolstore,800]
 
 We've now successfully deployed our sample application to JBoss EAP 7.4 connecting to an external PostgreSQL database.
 
-//TODO login to SSO
+You can test the SSO integration by clicking on the "Sign In" button on the top right hand corner of the screen.
+
+image::sign-in.png[sign-in,800]
+
+You should see the Red Hat SSO login screen
 
 image::rhsso-login.png[rhsso-login,800]
+
+You can login to SSO with the credentials
+
+* *Username*: `{{ USER_ID }}`
+* *Password*: openshift
 
 Before we move onto deploying to {{ EAP8_VERSION }} we're going to undeploy the coolstore application
 
 Switch back to the second terminal and enter the following commands
 
-
-[source,sh,role="copypaste"]
-----
-$EAP_HOME/bin/jboss-cli.sh --connect
-----
 
 [source,sh,role="copypaste"]
 ----

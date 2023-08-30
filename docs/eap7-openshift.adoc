@@ -165,7 +165,7 @@ image:
 build:
   enabled: true
   mode: s2i
-  uri: 'http://simple-gitea.gitea.svc.cluster.local:3000/{{ USER_ID }}/jboss7-quickstarts.git'
+  uri: 'http://simple-gitea.gitea.svc.cluster.local:3000/{{ USER_ID }}/workshop.git'
   ref: main
   contextDir: coolstore
   output:
@@ -223,7 +223,42 @@ data:
   AMQ_JNDI: java:/eap74-amq7/ConnectionFactory
 ----
 
-Finally, we can use the EAP Operator to deploy our EAP image.  CLick on "+Add" again and then select "Operator Backed" from the Developer Catalog.  
+We also need to create a service account with permissions to view the pods in the cluster, to enable clustering support.
+
+Click on the "Import YAML" button on the top right and paste the following:
+
+[source,yaml,role="copypaste"]
+----
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: coolstoresa
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: pod-viewer
+rules:
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["get", "watch", "list"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: pod-viewer
+
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: pod-viewer
+subjects:
+- kind: ServiceAccount
+  name: coolstoresa
+----
+
+
+Finally, we can use the EAP Operator to deploy our EAP image.  Click on "+Add" again and then select "Operator Backed" from the Developer Catalog.  
 
 image::operator-backed.png[operator-backed,800]
 
@@ -236,6 +271,7 @@ kind: WildFlyServer
 metadata:
   name: eap74
 spec:
+  serviceAccountName: coolstoresa
   applicationImage: eap74:latest
   replicas: 1
   envFrom:

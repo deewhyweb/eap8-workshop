@@ -2,11 +2,13 @@
 :experimental:
 :imagesdir: images
 
-{{ EAP8_VERSION }} introduces breaking changes to application written for JBoss EAP 7.4.  
+{{ EAP8_VERSION }} requires code changes to applications written for JBoss EAP 7.4. Due to the move from Jakarta 8 to Jakarta 10.  
 
 To perform code analysis of our JBoss EAP 7.4 application, we will use the latest version of the Migration Toolkit for Runtimes. 
 
 If {{ EAP8_VERSION }} is still running, switch to this terminal window and enter CTRL+C to exit.
+
+We have provisioned a zip distribution of the Migration Toolkit for Runtimes in the "/shared" folder.  To extract this and run this archive, follow these steps:
 
 [source,sh,role="copypaste"]
 ----
@@ -41,7 +43,7 @@ From the MTR landing page, click on Create Project.
 
 Enter a project name (e.g., eap7-eap8) and click on Next.
 
-Then, we need to locate the application source code
+Then, we need to locate the application source code, switch to the "Server Path" tab and enter:
 
 [source,sh,role="copypaste"]
 ----
@@ -76,7 +78,7 @@ The report results will be shown as below
 
 image::mtr-7.png[migration,800]
 
-You'll see from this report an estimation of 84 story points to migrate from JBoss EAP 7.4 to {{ EAP8_VERSION }}.
+You'll see from this report an estimation of 148 story points to migrate from JBoss EAP 7.4 to {{ EAP8_VERSION }}.
 
 You can click through the various tabs of the report to view the details.  For example, clicking on the "Issues" tab will show the details of the changes required.
 
@@ -84,10 +86,13 @@ image::mtr-8.png[migration,800]
 
 We can now shutdown the MTR Console by switching back to the terminal window and hitting CTRL+C
 
-
 == Using the Migration Toolkit for Runtimes VS Code extension
 
-First we need to unzip the Migratio Toolkit for Runtimes CLI tool
+To perform the required code changes, we're going to use the Migratio Toolkit for Runtimes VS Code extension.  To use this we will need to deploy the Migration Toolkit for Runtimes Command Line Tool.
+
+We have provided a zip distribution of the CLI tool in the "/shared" folder
+
+First we need to unzip the Migration Toolkit for Runtimes CLI tool
 
 [source,sh,role="copypaste"]
 ----
@@ -107,9 +112,12 @@ Configure the MTR VS-Code extension as follows
 
 image::mtr-vscode-2.png[migration,800]
 
-/shared/mtr-cli-1.1.0.GA-redhat-00003/bin/windup-cli
 
-/projects/workshop/coolstore
+* CLI location: /shared/mtr-cli-1.1.0.GA-redhat-00003/bin/windup-cli
+
+* Code location: /projects/workshop/coolstore
+
+Ensure "eap8" is select under "--target" 
 
 To perform the code analysis, click on the start button as shown below
 
@@ -123,33 +131,39 @@ You can make the edits directly in the file as indicated, or in some cases you c
 
 image::mtr-vscode-5.png[migration,400]
 
-Open /projects/workshop/coolstore/src/main/java/com/redhat/coolstore/service/OrderServiceMDB.java/OrderServiceMDB.java and change
+Once you've completed the namespace changes, there is one more minor code change to make:
 
+Open "/projects/workshop/coolstore/src/main/java/com/redhat/coolstore/service/OrderServiceMDB.java/OrderServiceMDB.java" and change
+
+[source,java]
+----
 @ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Topic")
+----
 
 to 
-
+[source,java,role="copypaste"]
+----
 @ActivationConfigProperty(propertyName = "destinationType", propertyValue = "jakarta.jms.Topic"),
+----
 
 == Remaining file changes
 
-Other than the namespace changes, the migration toolkit for runtimes report identified changes in the following files:
+Other than the namespace changes, the migration toolkit for runtimes report identified changes in the following file:
 
 * pom.xml
-* persistence.xml
-* faces-config.xml
 
-We can go through the changes as detailed in the report, or copy these files from a pre-prepared {{ EAP8_VERSION }} version of the app in the /projects/jboss7-quickstarts/sample-app-eap8 folder by running the following commands.
+We can go through the changes as detailed in the report, or copy these files from a pre-prepared {{ EAP8_VERSION }} version of the app in the /projects//sample-app-eap8 folder by running the following commands.
 
 [source,sh,role="copypaste"]
 ----
 cp /projects/workshop/coolstore-eap8/pom.xml /projects/workshop/coolstore
 ----
 
-[source,sh,role="copypaste"]
-----
-cp /projects/workshop/coolstore-eap8/src/main/resources/META-INF/persistence.xml /projects/workshop/coolstore/src/main/resources/META-INF/
-----
+// [source,sh,role="copypaste"]
+// ----
+// cp /projects/workshop/coolstore-eap8/src/main/resources/META-INF/persistence.xml /projects/workshop/coolstore/src/main/resources/META-INF/
+// ----
+
 
 We can now deploy our {{ EAP8_VERSION }} application
 
@@ -165,11 +179,25 @@ export EAP_HOME=/shared/{{ JBOSS8_DIR }}
 $EAP_HOME/bin/standalone.sh  -c standalone-full-ha.xml -Djboss.http.port=8100 -b 0.0.0.0
 ----
 
-In a second terminal enter the following from the /projects/jboss7-quickstarts/sample-app folder
+In a second terminal enter the following from the /projects//sample-app folder
 
 [source,sh,role="copypaste"]
 ----
 mvn clean package
+----
+
+[source,sh,role="copypaste"]
+----
+$EAP_HOME/bin/jboss-cli.sh --connect
+----
+
+
+Run the following command to deploy the application:
+
+
+[source,sh,role="copypaste"]
+----
+deploy ./target/ROOT.war
 ----
 
 You will now be able to access the application by by clicking http://{{ USER_ID }}-jboss-workshop-eap8.{{ ROUTE_SUBDOMAIN }}[here, window="_blank"]
