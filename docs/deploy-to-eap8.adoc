@@ -179,7 +179,7 @@ export EAP_HOME=/shared/{{ JBOSS8_DIR }}
 $EAP_HOME/bin/standalone.sh  -c standalone-full-ha.xml -Djboss.http.port=8100 -b 0.0.0.0
 ----
 
-In a second terminal enter the following from the /projects//sample-app folder
+In a second terminal enter the following from the /projects/workshop/coolstore folder
 
 [source,sh,role="copypaste"]
 ----

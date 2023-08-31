@@ -42,7 +42,7 @@ Now we can move on to the migration from JBoss EAP 7.4 to {{ EAP8_VERSION }}.
 
 ## Server configuration changes
 
-When we deployed our application to JBoss EAP 7.4, we made some changes to the server configuration to add a module and driver to connect to MySQL. We must ensure these modules and drivers are in place and working correctly in our {{ EAP8_VERSION }} server. We can use the JBoss EAP server migration tool to perform this migration for us.  
+When we deployed our application to JBoss EAP 7.4, we made some changes to the server configuration to add a module and driver to connect to PostgreSQL and to configure the message queue. We must ensure these modules and drivers are in place and working correctly in our {{ EAP8_VERSION }} server. We can use the JBoss EAP server migration tool to perform this migration for us.  
 
 We have provided a distribution archive for the server migration tool in the /shared folder.  To extract this, follow these steps:
 
