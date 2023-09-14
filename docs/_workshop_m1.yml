@@ -28,6 +28,7 @@ vars:
 modules:
   activate:
   - intro
+  - goals-m1
   - jboss7
   - provision-eap8
   - deploy-to-eap8

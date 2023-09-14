@@ -28,5 +28,6 @@ vars:
 modules:
   activate:
   - intro
+  - goals-m2
   - eap7-openshift
   - deploy-eap8-openshift

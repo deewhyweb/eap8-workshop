@@ -22,24 +22,7 @@ Access the terminal in dev spaces by clicking on "Menu" -> "Terminal" -> "New Te
 
 image::open-terminal.png[open-terminal,800]
 
-You will find a JBoss EAP 7.4 distribution archive in the "/shared" folder.  From the terminal enter the following commands:
-
-[source,sh,role="copypaste"]
-----
-cd /shared
-----
-
-[source,sh,role="copypaste"]
-----
-unzip {{ JBOSS7_ARCHIVE }} 
-----
-
-Once the jboss-eap-7.4.0.zip file has finished unzipping run the following command to set the EAP_HOME environment variable
-
-[source,sh,role="copypaste"]
-----
-export EAP_HOME=/shared/{{ JBOSS7_DIR }}
-----
+A JBoss 7.4 instance is already provisioned and available at: http://{{ USER_ID }}-jboss-workshop-eap7.{{ ROUTE_SUBDOMAIN }}[here, window="_blank"]
 
 We can now add the PostgreSQL module and drivers.
 
@@ -47,20 +30,20 @@ Make a folder srtucture in EAP_HOME/modules with:
 
 [source,sh,role="copypaste"]
 ----
-mkdir -p $EAP_HOME/modules/org/postgresql/main
+mkdir -p /shared//{{ JBOSS7_DIR }}/modules/org/postgresql/main
 ----
 
 Copy the postgreSQL driver from the shared folder
 
 [source,sh,role="copypaste"]
 ----
-cp /shared/postgresql-42.6.0.jar $EAP_HOME/modules/org/postgresql/main
+cp /shared/postgresql-42.6.0.jar /shared//{{ JBOSS7_DIR }}/modules/org/postgresql/main
 ----
 
 Make a modules.xml file in $EAP_HOME/modules/org/postgresql/main referencing the postgreSQL driver.
 [source,sh,role="copypaste"]
 ----
-cat << EOF > $EAP_HOME/modules/org/postgresql/main/module.xml
+cat << EOF > /shared/{{ JBOSS7_DIR }}/modules/org/postgresql/main/module.xml
 <?xml version="1.0" ?>
 <module xmlns="urn:jboss:module:1.1" name="org.postgresql">
   <resources>
@@ -77,34 +60,14 @@ cat << EOF > $EAP_HOME/modules/org/postgresql/main/module.xml
 EOF
 ----
 
-Set the HOSTNAME environment variable
+
+Enter the following commands to launch the jboss-cli and connect to JBoss 7.4
+
+
 
 [source,sh,role="copypaste"]
 ----
-export HOSTNAME=eap
-----
-
-Start JBoss EAP 7.4
-[source,sh,role="copypaste"]
-----
-$EAP_HOME/bin/standalone.sh -c standalone-full-ha.xml -b 0.0.0.0
-----
-
-You will now be able to access the JBoss EAP 7 landing page http://{{ USER_ID }}-jboss-workshop-eap7.{{ ROUTE_SUBDOMAIN }}[here, window="_blank"]
-
-
-Once JBoss EAP 7.4 has started, open up a second terminal by clicking on "Menu" -> "Terminal" -> "New Terminal"
-
-Enter the following commands to launch the jboss-cli
-
-[source,sh,role="copypaste"]
-----
-export EAP_HOME=/shared/{{ JBOSS7_DIR }}
-----
-
-[source,sh,role="copypaste"]
-----
-$EAP_HOME/bin/jboss-cli.sh --connect
+ /shared/{{ JBOSS7_DIR }}/bin/jboss-cli.sh --connect --controller=127.0.0.1:10090
 ----
 
 Run the following commands in the JBoss CLI to add the postgreSQL datsource and connection information:
@@ -124,8 +87,6 @@ Our application uses message driven beans which require a jms topic and the acti
 ----
 jms-topic add --topic-address=topic.orders --entries=/orders
 ----
-
-
 
 [source,sh,role="copypaste"]
 ----
@@ -170,9 +131,8 @@ mvn clean package
 
 [source,sh,role="copypaste"]
 ----
-$EAP_HOME/bin/jboss-cli.sh --connect
+/shared/{{ JBOSS7_DIR }}/bin/jboss-cli.sh --connect --controller=127.0.0.1:10090
 ----
-
 
 Run the following command to deploy the application:
 
@@ -181,7 +141,6 @@ Run the following command to deploy the application:
 ----
 deploy ./target/ROOT.war
 ----
-
 
 You will now be able to access the coolstore application http://{{ USER_ID }}-jboss-workshop-eap7.{{ ROUTE_SUBDOMAIN }}[here, window="_blank"]
 

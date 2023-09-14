@@ -1,0 +1,10 @@
+= Goals
+:experimental:
+:imagesdir: images
+
+== Workshop goals
+This workshop will guide you through the migration of an application from JBoss EAP 7 to {{ EAP8_VERSION }} on traditional environments. The workshop makes use of tools to perform server configuration migration and code analysis.  The workshop covers the following areas:
+
+* Deployment of a sample application on JBoss EAP 7.4 
+* Provision {{ EAP8_VERSION }} server
+* Perform code changes to migrate the application from EAP 7 to {{ EAP8_VERSION }}

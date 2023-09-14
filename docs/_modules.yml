@@ -1,4 +1,10 @@
 modules:
+  goals:
+    name: Lab goals
+  goals-m1:
+    name: Lab goals
+  goals-m2:
+    name: Lab goals
   intro:
     name: Lab Instructions
   jboss7:

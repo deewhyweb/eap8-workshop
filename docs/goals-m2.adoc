@@ -1,0 +1,10 @@
+= Goals
+:experimental:
+:imagesdir: images
+
+== Workshop goals
+This workshop will guide you through the migration of an application from JBoss EAP 7 to {{ EAP8_VERSION }} on OpenShift.   The workshop covers the following areas:
+
+* Deploy sample JBoss EAP 7.4 application on OpenShift
+* Migrate {{ EAP8_VERSION }} application to OpenShift
+* Deploy {{ EAP8_VERSION }} application to OpenShift

@@ -10,7 +10,7 @@ podman run -it -p 8080:8080 --rm -v /home/phayes/projects/eap8-workshop/docs:/ap
 -e MASTER_URL='https://api.cluster-sz5cp.sz5cp.sandbox2252.opentlc.com:6443' \
 -e OPENSHIFT_USER_PASSWORD='openshift' \
 -e ROUTE_SUBDOMAIN='apps.cluster-sz5cp.sz5cp.sandbox2252.opentlc.com' \
--e WORKSHOPS_URLS="file:///app-data/_workshop.yml" \
+-e WORKSHOPS_URLS="file:///app-data/_workshop_m1.yml" \
 -e EAP8_VERSION="JBoss EAP 8-Beta" \
 -e JBOSS7_ARCHIVE="jboss-eap-7.4.0.zip" \
 -e JBOSS7_DIR="jboss-eap-7.4" \
