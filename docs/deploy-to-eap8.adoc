@@ -6,7 +6,7 @@
 
 == Using the Migration Toolkit for Runtimes VS Code extension
 
-To perform the required code changes, we're going to use the Migratio Toolkit for Runtimes VS Code extension.  To use this we will need to deploy the Migration Toolkit for Runtimes Command Line Tool.
+To perform the required code changes, we're going to use the Migration Toolkit for Runtimes VS Code extension.  To use this we will need to deploy the Migration Toolkit for Runtimes Command Line Tool.
 
 We have provided a zip distribution of the CLI tool in the "/shared" folder
 

@@ -2,9 +2,9 @@
 :experimental:
 :imagesdir: images
 
-In this section we're going to deploy an application to JBoss EAP 7.4.  The sample application we're providing can be found in the IDE in the Workshop/coolstore folder.
+In this section we're going to deploy an application to JBoss EAP 7.4.  The sample application we're providing can be found in the IDE in the "workshop/coolstore" folder.
 
-The database requires two external dependencies, a connection to a PostgreSQL database and an instance of Red Hat SSO.
+The application requires two external dependencies, a connection to a PostgreSQL database and an instance of Red Hat SSO. The application also uses a message queue, for this example we will use the embedded message queue provided with JBoss EAP.
 
 We've provisioned a database in your dev spaces environment with the following connection details.
 
@@ -16,17 +16,19 @@ We've provisioned a database in your dev spaces environment with the following c
 
 We've also provisioned an instance of Red Hat SSO.  This instance is available here: https://keycloak-sso.{{ ROUTE_SUBDOMAIN }}[keycloak, window="_blank"]
 
-First, we're going to deploy JBoss EAP 7.4 and configure a connection to the PostgreSQL database. We're going to perform these steps from the dev spaces environment we logged into in the previous section.  Access your dev spaces environment with this {{ CHE_URL }}[link^].
+First, we're going to configure a connection to the PostgreSQL database. We're going to perform these steps from the dev spaces environment we logged into in the previous section.  Access your dev spaces environment with this {{ CHE_URL }}[link^].
 
 Access the terminal in dev spaces by clicking on "Menu" -> "Terminal" -> "New Terminal"
 
 image::open-terminal.png[open-terminal,800]
 
-A JBoss 7.4 instance is already provisioned and available at: http://{{ USER_ID }}-jboss-workshop-eap7.{{ ROUTE_SUBDOMAIN }}[here, window="_blank"]
+A JBoss 7.4 instance is already provisioned in the /shared/{{ JBOSS7_DIR }} folder and available at: http://{{ USER_ID }}-jboss-workshop-eap7.{{ ROUTE_SUBDOMAIN }}[here, window="_blank"]
+
+== Adding the PostgreSQL module, drivers and JMS topic
 
 We can now add the PostgreSQL module and drivers.
 
-Make a folder srtucture in EAP_HOME/modules with:
+Make a folder srtucture in EAP_HOME/modules with command:
 
 [source,sh,role="copypaste"]
 ----
@@ -60,10 +62,7 @@ cat << EOF > /shared/{{ JBOSS7_DIR }}/modules/org/postgresql/main/module.xml
 EOF
 ----
 
-
 Enter the following commands to launch the jboss-cli and connect to JBoss 7.4
-
-
 
 [source,sh,role="copypaste"]
 ----
@@ -102,6 +101,16 @@ reload
 ----
 exit
 ----
+
+If we login to the http://{{ USER_ID }}-jboss-workshop-eap7-console.{{ ROUTE_SUBDOMAIN }}[JBoss EAP 7.4 Admin console, window="_blank"] we should be able to see the postgresql datasource connection by navigating to "Configuration" -> "Subsystems" -> "Datasources & Drivers" -> "Datasources" -> "postgresql".  
+
+image::jboss7-console-datasource.png[datasource,800]
+
+We can also view the JMS topic we created by clicking http://{{ USER_ID }}-jboss-workshop-eap7-console.{{ ROUTE_SUBDOMAIN }}/console/index.html#messaging-server-destination;server=default[here, window="_blank"]
+
+and then selecting "JMS Topic".
+
+image::jboss7-console-jms.png[jms,800]
 
 Next, we need to set the url of our Red Hat SSO application.  In the IDE, open the file: coolstore/src/main/webapp/keycloak.json and edit the contents so they look like the following:
 

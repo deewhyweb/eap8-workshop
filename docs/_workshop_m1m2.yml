@@ -29,6 +29,7 @@ modules:
   activate:
   - intro
   - goals
+  - jboss-environments
   - jboss7
   - eap7-openshift
   - provision-eap8

@@ -1,0 +1,31 @@
+= JBoss EAP Environments
+:experimental:
+:imagesdir: images
+
+We've deployed two instances of JBoss EAP ready for you to deploy and migrate applications to.  These two environments consist of:
+
+* An instance of JBoss EAP 7.4
+* An instance of {{ EAP8_VERSION }}
+
+Details of these instances are as follows.
+
+[cols="1,1,1,1"]
+|===
+|Version|home directory|Front-end url|Admin console url
+
+|JBoss EAP 7.4
+|/shared/jboss-eap-7.4
+|http://{{ USER_ID }}-jboss-workshop-eap7.{{ ROUTE_SUBDOMAIN }}[link, window="_blank"]
+|http://{{ USER_ID }}-jboss-workshop-eap7-console.{{ ROUTE_SUBDOMAIN }}[link, window="_blank"]
+|{{ EAP8_VERSION }}
+|/shared/{{ JBOSS8_DIR }}
+|http://{{ USER_ID }}-jboss-workshop-eap8.{{ ROUTE_SUBDOMAIN }}[link, window="_blank"]
+|http://{{ USER_ID }}-jboss-workshop-eap8-console.{{ ROUTE_SUBDOMAIN }}[link, window="_blank"]
+|=== 
+
+You will be able to login to the JBoss EAP Admin consoles with the credentials:
+
+* username: admin
+* password: password
+
+Take some time to access these urls, and login to the admin consoles for both instances. 

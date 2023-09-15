@@ -29,6 +29,7 @@ modules:
   activate:
   - intro
   - goals-m1
+  - jboss-environments
   - jboss7
   - provision-eap8
   - deploy-to-eap8

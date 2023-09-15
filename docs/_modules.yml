@@ -12,8 +12,10 @@ modules:
   eap7-openshift:
     name: Deploy sample JBoss EAP 7.4 application on OpenShift
   provision-eap8:
-    name: Migrate JBoss EAP 7.4 server to JBoss EAP 8
+    name: Migrate JBoss EAP 7.4 server configuration to JBoss EAP 8
   deploy-to-eap8:
     name: Migrate application from JBoss EAP 7.4 to JBoss EAP 8
   deploy-eap8-openshift:
     name: Deploy EAP 8 application to OpenShift
+  jboss-environments:
+    name: JBoss EAP Environments

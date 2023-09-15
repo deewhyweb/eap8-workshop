@@ -62,7 +62,7 @@ image::mig3.png[migration,1150]
 Choose no. We don't want to migrate standalone-full-ha.xml.
 
 image::mig4.png[migration,1150]
-Choose yes. We want to migrate standalone-full.xml
+Choose <b>yes</b>. We want to migrate standalone-full.xml
 
 image::mig5.png[migration,1150]
 Choose no. We don’t want to migrate standalone-ha.xml.
@@ -78,11 +78,11 @@ Choose no. We are not using a managed domain.
 
 image::mig9.png[migration,1150]
 
-We can noe connect to JBoss EAP 8....  << TODO >>
+We can now connect to JBoss EAP 8 by running the following command
 
 [source,sh,role="copypaste"]
 ----
-/shared/jboss-eap-8.0/bin/jboss-cli.sh --connect --controller=127.0.0.1:10190
+/shared/{{ JBOSS8_DIR }}/bin/jboss-cli.sh --connect --controller=127.0.0.1:10190
 ----
 
 [source,sh,role="copypaste"]
@@ -133,7 +133,7 @@ The output should show the PostgreSQL driver as follows:
 }
 ----
 
-We can also test our datasource connection with the following JBoss CLI command:
+And test our datasource connection with the following JBoss CLI command:
 
 [source,sh,role="copypaste"]
 ----
@@ -151,6 +151,19 @@ A successful connection should result in the following response:
 
 }
 ----
+
+We can also login to the {{ EAP8_VERSION }} admin console http://{{ USER_ID }}-jboss-workshop-eap8-console.{{ ROUTE_SUBDOMAIN }}[here, window="_blank"]
+
+we should be able to see the postgresql datasource connection by navigating to "Configuration" -> "Subsystems" -> "Datasources & Drivers" -> "Datasources" -> "postgresql".  
+
+image::jboss8-console-datasource.png[datasource,800]
+
+We can also view the JMS topic we created by clicking http://{{ USER_ID }}-jboss-workshop-eap8-console.{{ ROUTE_SUBDOMAIN }}/console/index.html#messaging-server-destination;server=default[here, window="_blank"]
+
+and then selecting "JMS Topic".
+
+image::jboss8-console-jms.png[jms,800]
+
 We can now be confident our application will have the required drivers and data sources present.
 
 {{ EAP8_VERSION }} is now successfully deployed and the server configuration migrated from JBoss EAP 7.4
