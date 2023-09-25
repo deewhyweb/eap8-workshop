@@ -8,20 +8,6 @@ Moving applications from JBoss EAP 7.4 to {{ EAP8_VERSION }} will require code c
 
 In this section we're going to use the JBoss EAP Server Migration tool migrate the server configuration from JBoss EAP 7.4 to {{ EAP8_VERSION }}
 
-[source,sh,role="copypaste"]
-----
-export EAP_PREVIOUS_HOME=/shared/{{ JBOSS7_DIR }}
-----
-
-Set the EAP_HOME environment variable as follows:
-
-[source,sh,role="copypaste"]
-----
-export EAP_HOME=/shared/{{ JBOSS8_DIR }} 
-----
-
-Now we can move on to the migration from JBoss EAP 7.4 to {{ EAP8_VERSION }}.
-
 ## Server configuration changes
 
 When we deployed our application to JBoss EAP 7.4, we made some changes to the server configuration to add a module and driver to connect to PostgreSQL and to configure the message queue. We must ensure these modules and drivers are in place and working correctly in our {{ EAP8_VERSION }} server. We can use the JBoss EAP server migration tool to perform this migration for us.  
@@ -47,13 +33,13 @@ To run the server migration tool to migrate from our JBoss 7.4 instance to our {
 
 [source,sh,role="copypaste"]
 ----
-./jboss-server-migration.sh -s $EAP_PREVIOUS_HOME -t $EAP_HOME
+./jboss-server-migration.sh -s $EAP7_HOME -t $EAP8_HOME
 ----
 
 The server migration tool will ask a series of questions during the migration process:
 
 image::mig1.png[migration,1150]
-Choose yes to migrate the standalone configuration.
+Choose <b>yes</b> to migrate the standalone configuration.
 
 image::mig2.png[migration,1150]
 Choose no. We want to select the configurations to migrate.
@@ -82,7 +68,7 @@ We can now connect to JBoss EAP 8 by running the following command
 
 [source,sh,role="copypaste"]
 ----
-/shared/{{ JBOSS8_DIR }}/bin/jboss-cli.sh --connect --controller=127.0.0.1:10190
+$EAP8_HOME/bin/jboss-cli.sh --connect --controller=127.0.0.1:10190
 ----
 
 [source,sh,role="copypaste"]

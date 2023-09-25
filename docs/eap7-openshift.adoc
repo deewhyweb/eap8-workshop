@@ -83,7 +83,6 @@ image::operator-backed.png[operator-backed,800]
 
 From the next screen, click on "Create" and then paste the following YAML into the "YAML view" editor
 
-
 [source,yaml,role="copypaste"]
 ----
 apiVersion: broker.amq.io/v1beta1
@@ -128,7 +127,6 @@ spec:
 ----
 
 ## Deploying the application to OpenShift
-
 
 When we deploy our EAP application on OpenShift we need to add the PostgreSQL datasource and driver as we did in the previous exercise.  In this example we're going to make use the of the https://github.com/jbossas/eap-datasources-galleon-pack[Eap datasources galleon feature pack^]  .  This feature pack provides a "postgresql-datasource" layer which will install and configure the postgreSQL datasource for us.
 

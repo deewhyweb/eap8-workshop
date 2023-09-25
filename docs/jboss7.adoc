@@ -14,7 +14,7 @@ We've provisioned a database in your dev spaces environment with the following c
 * Password: postgresPW
 * Database name: postgresDB
 
-We've also provisioned an instance of Red Hat SSO.  This instance is available here: https://keycloak-sso.{{ ROUTE_SUBDOMAIN }}[keycloak, window="_blank"]
+We've also provisioned an instance of Red Hat SSO.  This instance is available https://keycloak-sso.{{ ROUTE_SUBDOMAIN }}[here, window="_blank"]
 
 First, we're going to configure a connection to the PostgreSQL database. We're going to perform these steps from the dev spaces environment we logged into in the previous section.  Access your dev spaces environment with this {{ CHE_URL }}[link^].
 
@@ -32,20 +32,20 @@ Make a folder srtucture in EAP_HOME/modules with command:
 
 [source,sh,role="copypaste"]
 ----
-mkdir -p /shared//{{ JBOSS7_DIR }}/modules/org/postgresql/main
+mkdir -p $EAP7_HOME/modules/org/postgresql/main
 ----
 
 Copy the postgreSQL driver from the shared folder
 
 [source,sh,role="copypaste"]
 ----
-cp /shared/postgresql-42.6.0.jar /shared//{{ JBOSS7_DIR }}/modules/org/postgresql/main
+cp /shared/postgresql-42.6.0.jar $EAP7_HOME/modules/org/postgresql/main
 ----
 
 Make a modules.xml file in $EAP_HOME/modules/org/postgresql/main referencing the postgreSQL driver.
 [source,sh,role="copypaste"]
 ----
-cat << EOF > /shared/{{ JBOSS7_DIR }}/modules/org/postgresql/main/module.xml
+cat << EOF > $EAP7_HOME/modules/org/postgresql/main/module.xml
 <?xml version="1.0" ?>
 <module xmlns="urn:jboss:module:1.1" name="org.postgresql">
   <resources>
@@ -66,7 +66,7 @@ Enter the following commands to launch the jboss-cli and connect to JBoss 7.4
 
 [source,sh,role="copypaste"]
 ----
- /shared/{{ JBOSS7_DIR }}/bin/jboss-cli.sh --connect --controller=127.0.0.1:10090
+ $EAP7_HOME/bin/jboss-cli.sh --connect --controller=127.0.0.1:10090
 ----
 
 Run the following commands in the JBoss CLI to add the postgreSQL datsource and connection information:
@@ -140,7 +140,7 @@ mvn clean package
 
 [source,sh,role="copypaste"]
 ----
-/shared/{{ JBOSS7_DIR }}/bin/jboss-cli.sh --connect --controller=127.0.0.1:10090
+$EAP7_HOME/bin/jboss-cli.sh --connect --controller=127.0.0.1:10090
 ----
 
 Run the following command to deploy the application:

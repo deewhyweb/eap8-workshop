@@ -30,9 +30,6 @@ Configure the MTR VS-Code extension as follows
 
 image::mtr-vscode-2.png[migration,800]
 
-
-* CLI location: /shared/mtr-cli-1.1.0.GA-redhat-00003/bin/windup-cli
-
 * Code location: /projects/workshop/coolstore
 
 Ensure "eap8" is select under "--target" 
@@ -41,7 +38,7 @@ To perform the code analysis, click on the start button as shown below
 
 image::mtr-vscode-3.png[migration,400]
 
-Once the analysis is complete, you should see a file hierachy in the left hand window.  CLicking on a file will open up the editor showing where the issues are with the file.
+Once the analysis is complete, you should see a file hierachy in the left hand window.  Clicking on a file will open up the editor showing where the issues are with the file.
 
 image::mtr-vscode-4.png[migration,800]
 
@@ -77,9 +74,7 @@ We can go through the changes as detailed in the report, or copy these files fro
 cp /projects/workshop/coolstore-eap8/pom.xml /projects/workshop/coolstore
 ----
 
-
 We can now deploy our {{ EAP8_VERSION }} application
-
 
 [source,sh,role="copypaste"]
 ----
@@ -97,7 +92,6 @@ mvn clean package
 ----
 
 Run the following command to deploy the application:
-
 
 [source,sh,role="copypaste"]
 ----
