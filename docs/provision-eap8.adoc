@@ -73,6 +73,11 @@ $EAP8_HOME/bin/jboss-cli.sh --connect --controller=127.0.0.1:10190
 
 [source,sh,role="copypaste"]
 ----
+reload
+----
+
+[source,sh,role="copypaste"]
+----
 /subsystem=datasources:installed-drivers-list
 ----
 
