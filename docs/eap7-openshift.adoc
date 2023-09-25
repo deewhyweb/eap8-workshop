@@ -2,7 +2,7 @@
 :experimental:
 :imagesdir: images
 
-We're now going to go through the process of deploying this application on OpenShift.  We're going to do this using the OpenShift console.  
+In this module we're going to go through the process of deploying a JBoss EAP 7.4 application application on OpenShift.  We're going to do this using the OpenShift console.  
 
 Before we deploy the application to OpenShift we need to verify the keycloak configuration and push our changes to out gitea account.
 
