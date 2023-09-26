@@ -29,6 +29,14 @@ unzip {{ SERVER_MIGRATION_ARCHIVE }}
 cd {{ SERVER_MIGRATION_DIR }}
 ----
 
+The workshop has two instances of JBoss EAP deployed.
+
+JBoss EAP 7.4 with a home directory of /shared/jboss-eap-7.4 stored in the EAP7_HOME environment variable
+
+{{ EAP8_VERSION }} with a home directory of /shared/{{ JBOSS8_DIR }} stored in the EAP8_HOME environment variable.
+
+Our JBoss 7.4 instance is using the "standalone_full.xml" configuration, so this is the only one we need to migrate from JBoss EAP 7.4 to {{ EAP8_VERSION }}.
+
 To run the server migration tool to migrate from our JBoss 7.4 instance to our {{ EAP8_VERSION }} instance, run the following command:
 
 [source,sh,role="copypaste"]
@@ -39,7 +47,7 @@ To run the server migration tool to migrate from our JBoss 7.4 instance to our {
 The server migration tool will ask a series of questions during the migration process:
 
 image::mig1.png[migration,1150]
-Choose <b>yes</b> to migrate the standalone configuration.
+Choose *yes.* to migrate the standalone configuration.
 
 image::mig2.png[migration,1150]
 Choose no. We want to select the configurations to migrate.
@@ -48,7 +56,7 @@ image::mig3.png[migration,1150]
 Choose no. We don't want to migrate standalone-full-ha.xml.
 
 image::mig4.png[migration,1150]
-Choose <b>yes</b>. We want to migrate standalone-full.xml
+Choose *yes.* We want to migrate standalone-full.xml
 
 image::mig5.png[migration,1150]
 Choose no. We don’t want to migrate standalone-ha.xml.
@@ -71,10 +79,14 @@ We can now connect to JBoss EAP 8 by running the following command
 $EAP8_HOME/bin/jboss-cli.sh --connect --controller=127.0.0.1:10190
 ----
 
+We will now trigger a reload of the {{ EAP8_VERSION }} server.
+
 [source,sh,role="copypaste"]
 ----
 reload
 ----
+
+And look at the list of installed drivers.
 
 [source,sh,role="copypaste"]
 ----

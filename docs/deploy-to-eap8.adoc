@@ -22,27 +22,36 @@ cd /shared
 unzip {{ MTR_CLI_ARCHIVE }} 
 ----
 
-Add the VS-Code Migration Toolkit for Runtimes extension 
-
-image::mtr-vscode.png[migration,800]
-
 Configure the MTR VS-Code extension as follows
 
 image::mtr-vscode-2.png[migration,800]
 
-* Code location: /projects/workshop/coolstore
-
-Ensure "eap8" is select under "--target" 
+* Set code location to "/projects/workshop/coolstore"
+* Ensure "eap8" is selected under "--target" 
 
 To perform the code analysis, click on the start button as shown below
 
 image::mtr-vscode-3.png[migration,400]
 
-Once the analysis is complete, you should see a file hierachy in the left hand window.  Clicking on a file will open up the editor showing where the issues are with the file.
+Once the analysis is complete, you should see a file hierachy in the left hand window.  
+
+At the top of the file hierarchy is a report icon (in greeen).  Click on this to view the HTML version of the report.
+
+image::mtr-report.png[mtr-report,800]
+
+Clicking on a file will open up the editor showing where the issues are with the file.
+
+Click on "coolstore" in the report, and then select the "Issues" tab to view the details of the migration.
+
+image::mtr-report-issues.png[mtr-report-issues,800]
+
+You can also select a file from the hierarchy examine in the issues in the code.
 
 image::mtr-vscode-4.png[migration,800]
 
-You can make the edits directly in the file as indicated, or in some cases you can right click on the file and select "Apply all quickfixes"
+You can make the edits directly in the file as indicated, or in most cases you can right click on the file and select "Apply all quickfixes"
+
+You can also apply all the quickfixes to the code base by right clicking on "workshop" at the top of the hierarchy and clicking on "Apply all guickfixes".
 
 image::mtr-vscode-5.png[migration,400]
 
@@ -63,9 +72,7 @@ to
 
 == Remaining file changes
 
-Other than the namespace changes, the migration toolkit for runtimes report identified changes in the following file:
-
-* pom.xml
+Other than the namespace changes, the migration toolkit for runtimes report identified changes in the pom.xml file.
 
 We can go through the changes as detailed in the report, or copy these files from a pre-prepared {{ EAP8_VERSION }} version of the app in the /projects//sample-app-eap8 folder by running the following commands.
 

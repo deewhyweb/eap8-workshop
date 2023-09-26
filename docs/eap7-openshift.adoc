@@ -53,7 +53,7 @@ Login with the following credentials:
 * *Username*: `{{ USER_ID }}`
 * *Password*: `{{ CHE_USER_PASSWORD }}`
 
-Switch to the project called "{{ USER_ID }}-project"
+*Switch to the project called "{{ USER_ID }}-project"*
 
 ## Deploy a PostgreSQL database
 
@@ -221,6 +221,8 @@ data:
   AMQ_JNDI: java:/eap74-amq7/ConnectionFactory
 ----
 
+This config map contains non-sensitive information relating to the PostgreSQL connection and AMQ broker connection.  
+
 We also need to create a service account with permissions to view the pods in the cluster, to enable clustering support.
 
 Click on the "Import YAML" button on the top right and paste the following:
@@ -254,7 +256,6 @@ subjects:
 - kind: ServiceAccount
   name: coolstoresa
 ----
-
 
 Finally, we can use the EAP Operator to deploy our EAP image.  Click on "+Add" again and then select "Operator Backed" from the Developer Catalog.  
 
@@ -300,11 +301,15 @@ spec:
           name: eap74-amq7-credentials-secret
 ----
 
+The sensitive credentials (username and password) are pulled from the postgresql and eap74-amq7-credentials-secret secrets in the WildFlyServer custom resource.
+
 Click on "Create" to create the WildFlyServer custom resource.
 
 Click on the "Topology" link on the left menu to view the deployed applications:
 
 image::topology-view.png[topology-view,800]
+
+*Note: The "eap74" application may take a few minutes to start-up, while the builds are completed. The application will be ready when the outer ring is dark blue*
 
 You should be able to view the application landing page by clicking on the external link icon.
 

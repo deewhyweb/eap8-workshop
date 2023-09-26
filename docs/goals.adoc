@@ -6,8 +6,8 @@
 This workshop will guide you through the migration of an application from JBoss EAP 7 to {{ EAP8_VERSION }} on traditional environments and OpenShift. The workshop makes use of tools to perform server configuration migration and code analysis.  The workshop covers the following areas:
 
 * Deployment of a sample application on JBoss EAP 7.4 
-* Deploy sample JBoss EAP 7.4 application on OpenShift
-* Provision {{ EAP8_VERSION }} server
+* Re-platform sample JBoss EAP 7.4 application on OpenShift
+* Provision {{ EAP8_VERSION }} server and migrate the server configuration from JBoss EAP 7.4 to {{ EAP8_VERSION }}
 * Perform code changes to migrate the application from EAP 7 to {{ EAP8_VERSION }}
 * Migrate {{ EAP8_VERSION }} application to OpenShift
 * Deploy {{ EAP8_VERSION }} application to OpenShift
