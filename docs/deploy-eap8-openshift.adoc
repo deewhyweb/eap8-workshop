@@ -243,3 +243,5 @@ Click on eap8-build-artifacts-1 to view the logs of the active build.
 Once the builds are complete, you will be able to click the Open URL icon of the eap8 deployment to view the running application.
 
 image::eap8-ocp.png[migration,800]
+
+We've now completed the migration of our {{ EAP8_VERSION }} application to OpenShift
