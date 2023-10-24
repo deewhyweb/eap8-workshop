@@ -15,12 +15,12 @@ Details of these instances are as follows.
 
 |JBoss EAP 7.4
 |/shared/jboss-eap-7.4
-|https://{{ USER_ID }}-jboss-workshop-eap7.{{ ROUTE_SUBDOMAIN }}:80[link, window="_blank"]
-|https://{{ USER_ID }}-jboss-workshop-eap7-console.{{ ROUTE_SUBDOMAIN }}:80[link, window="_blank"]
+|https://{{ USER_ID }}-jboss-workshop-eap7.{{ ROUTE_SUBDOMAIN }}[link, window="_blank"]
+|https://{{ USER_ID }}-jboss-workshop-eap7-console.{{ ROUTE_SUBDOMAIN }}[link, window="_blank"]
 |{{ EAP8_VERSION }}
 |/shared/{{ JBOSS8_DIR }}
-|https://{{ USER_ID }}-jboss-workshop-eap8.{{ ROUTE_SUBDOMAIN }}:80[link, window="_blank"]
-|https://{{ USER_ID }}-jboss-workshop-eap8-console.{{ ROUTE_SUBDOMAIN }}:80[link, window="_blank"]
+|https://{{ USER_ID }}-jboss-workshop-eap8.{{ ROUTE_SUBDOMAIN }}[link, window="_blank"]
+|https://{{ USER_ID }}-jboss-workshop-eap8-console.{{ ROUTE_SUBDOMAIN }}[link, window="_blank"]
 |=== 
 
 You will be able to login to the JBoss EAP Admin consoles with the credentials:
