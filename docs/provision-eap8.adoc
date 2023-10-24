@@ -155,13 +155,13 @@ A successful connection should result in the following response:
 }
 ----
 
-We can also login to the {{ EAP8_VERSION }} admin console http://{{ USER_ID }}-jboss-workshop-eap8-console.{{ ROUTE_SUBDOMAIN }}[here, window="_blank"]
+We can also login to the {{ EAP8_VERSION }} admin console https://{{ USER_ID }}-jboss-workshop-eap8-console.{{ ROUTE_SUBDOMAIN }}[here, window="_blank"]
 
 we should be able to see the postgresql datasource connection by navigating to "Configuration" -> "Subsystems" -> "Datasources & Drivers" -> "Datasources" -> "postgresql".  
 
 image::jboss8-console-datasource.png[datasource,800]
 
-We can also view the JMS topic we created by clicking http://{{ USER_ID }}-jboss-workshop-eap8-console.{{ ROUTE_SUBDOMAIN }}/console/index.html#messaging-server-destination;server=default[here, window="_blank"]
+We can also view the JMS topic we created by clicking https://{{ USER_ID }}-jboss-workshop-eap8-console.{{ ROUTE_SUBDOMAIN }}/console/index.html#messaging-server-destination;server=default[here, window="_blank"]
 
 and then selecting "JMS Topic".
 

@@ -105,7 +105,7 @@ Run the following command to deploy the application:
 deploy ./target/ROOT.war
 ----
 
-You will now be able to access the application by by clicking http://{{ USER_ID }}-jboss-workshop-eap8.{{ ROUTE_SUBDOMAIN }}[here, window="_blank"]
+You will now be able to access the application by by clicking https://{{ USER_ID }}-jboss-workshop-eap8.{{ ROUTE_SUBDOMAIN }}[here, window="_blank"]
 
 The coolstore application should load as follows
 

@@ -22,7 +22,7 @@ Access the terminal in dev spaces by clicking on "Menu" -> "Terminal" -> "New Te
 
 image::open-terminal.png[open-terminal,800]
 
-A JBoss 7.4 instance is already provisioned in the /shared/{{ JBOSS7_DIR }} folder and available at: http://{{ USER_ID }}-jboss-workshop-eap7.{{ ROUTE_SUBDOMAIN }}[here, window="_blank"]. An environment variable is defined pointing to this folder: EAP7_HOME
+A JBoss 7.4 instance is already provisioned in the /shared/{{ JBOSS7_DIR }} folder and available at: https://{{ USER_ID }}-jboss-workshop-eap7.{{ ROUTE_SUBDOMAIN }}[here, window="_blank"]. An environment variable is defined pointing to this folder: EAP7_HOME
 
 == Adding the PostgreSQL module, drivers and JMS topic
 
@@ -110,11 +110,11 @@ exit
 
 We can now check for these changes using the JBoss EAP admin console.
 
-Login to the http://{{ USER_ID }}-jboss-workshop-eap7-console.{{ ROUTE_SUBDOMAIN }}[JBoss EAP 7.4 Admin console, window="_blank"]. We should be able to see the postgresql datasource connection by navigating to "Configuration" -> "Subsystems" -> "Datasources & Drivers" -> "Datasources" -> "postgresql".  
+Login to the https://{{ USER_ID }}-jboss-workshop-eap7-console.{{ ROUTE_SUBDOMAIN }}[JBoss EAP 7.4 Admin console, window="_blank"]. We should be able to see the postgresql datasource connection by navigating to "Configuration" -> "Subsystems" -> "Datasources & Drivers" -> "Datasources" -> "postgresql".  
 
 image::jboss7-console-datasource.png[datasource,800]
 
-We can also view the JMS topic we created by clicking http://{{ USER_ID }}-jboss-workshop-eap7-console.{{ ROUTE_SUBDOMAIN }}/console/index.html#messaging-server-destination;server=default[here, window="_blank"]
+We can also view the JMS topic we created by clicking https://{{ USER_ID }}-jboss-workshop-eap7-console.{{ ROUTE_SUBDOMAIN }}/console/index.html#messaging-server-destination;server=default[here, window="_blank"]
 
 and then selecting "JMS Topic".
 
@@ -159,7 +159,7 @@ $EAP7_HOME/bin/jboss-cli.sh --connect --controller=127.0.0.1:10090
 deploy ./target/ROOT.war
 ----
 
-You will now be able to access the coolstore application http://{{ USER_ID }}-jboss-workshop-eap7.{{ ROUTE_SUBDOMAIN }}[here, window="_blank"]
+You will now be able to access the coolstore application https://{{ USER_ID }}-jboss-workshop-eap7.{{ ROUTE_SUBDOMAIN }}[here, window="_blank"]
 
 The coolstore application should load as follows:
 
