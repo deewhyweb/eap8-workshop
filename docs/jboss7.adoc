@@ -182,7 +182,7 @@ You can login to SSO with the credentials
 
 Before we move onto deploying to {{ EAP8_VERSION }} we're going to undeploy the coolstore application
 
-Switch back to the second terminal and enter the following commands.
+Switch back to the terminal and enter the following commands.
 
 
 [source,sh,role="copypaste"]

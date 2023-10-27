@@ -28,4 +28,20 @@ You will be able to login to the JBoss EAP Admin consoles with the credentials:
 * username: admin
 * password: password
 
-Take some time to access these urls, and login to the admin consoles for both instances. 
+You can also access these JBoss instances using the JBoss CLI.  
+
+For JBoss EAP 7.4 run the following from the dev spaces terminal:
+
+[source,sh,role="copypaste"]
+----
+$EAP7_HOME/bin/jboss-cli.sh --connect --controller=127.0.0.1:10090
+----
+
+For {{ EAP8_VERSION }} run the following from the dev spaces terminal:
+
+[source,sh,role="copypaste"]
+----
+$EAP8_HOME/bin/jboss-cli.sh --connect --controller=127.0.0.1:10190
+----
+
+Take some time to access these urls,try the jboss-cli connection, and login to the admin consoles for both instances. 
