@@ -63,6 +63,25 @@ cat << EOF > $EAP7_HOME/modules/org/postgresql/main/module.xml
 EOF
 ----
 
+We're going to use a vault to store our database password, to do this, follow these steps:
+
+[source,sh,role="copypaste"]
+----
+mkdir $EAP7_HOME/vault/
+----
+
+[source,sh,role="copypaste"]
+----
+keytool -genseckey -alias vault -storetype jceks -keyalg AES -keysize 128 -storepass vault22 -keypass vault22 -validity 730 -keystore $EAP7_HOME/vault/vault.keystore
+----
+
+Add our databse password to the vault
+
+[source,sh,role="copypaste"]
+----
+$EAP7_HOME/bin/vault.sh --keystore $EAP7_HOME/vault/vault.keystore --keystore-password vault22 --alias vault --vault-block vb --attribute dbpass --sec-attr postgresPW --enc-dir $EAP7_HOME/vault/ --iteration 120 --salt 1234abcd
+----
+
 We're going to make the remaining changes using the jboss-cli.
 
 Enter the following commands to launch the jboss-cli and connect to JBoss 7.4
@@ -72,6 +91,13 @@ Enter the following commands to launch the jboss-cli and connect to JBoss 7.4
  $EAP7_HOME/bin/jboss-cli.sh --connect --controller=127.0.0.1:10090
 ----
 
+Add the vault to JBoss EAP
+
+[source,sh,role="copypaste"]
+----
+/core-service=vault:add(vault-options=[("KEYSTORE_URL" => "/shared/jboss-eap-7.4/vault/vault.keystore"),("KEYSTORE_PASSWORD" => "MASK-5dOaAVafCSd"),("KEYSTORE_ALIAS" => "vault"),("SALT" => "1234abcd"),("ITERATION_COUNT" => "120"),("ENC_FILE_DIR" => "/shared/jboss-eap-7.4/vault/")])
+----
+
 Run the following commands in the JBoss CLI to add the postgreSQL datsource and connection information:
 
 [source,sh,role="copypaste"]
@@ -79,9 +105,11 @@ Run the following commands in the JBoss CLI to add the postgreSQL datsource and 
 /subsystem=datasources/jdbc-driver=postgresql:add(driver-name=postgresql,driver-module-name=org.postgresql)
 ----
 
+Add the data source pulling the password from the vault.
+
 [source,sh,role="copypaste"]
 ----
-data-source add --name=postgresql --jndi-name=java:jboss/datasources/CoolstoreDS --driver-name=postgresql --connection-url=jdbc:postgresql://127.0.0.1:5432/postgresDB --user-name=postgresUser --password=postgresPW
+data-source add --name=postgresql --jndi-name=java:jboss/datasources/CoolstoreDS --driver-name=postgresql --connection-url=jdbc:postgresql://127.0.0.1:5432/postgresDB --user-name=postgresUser --password=${VAULT::vb::dbpass::1}
 ----
 
 Our application uses message driven beans which require a jms topic and the activemq messaging subsystem enabled.  To configure these, enter the following commands.
