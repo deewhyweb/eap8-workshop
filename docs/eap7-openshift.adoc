@@ -4,7 +4,18 @@
 
 In this module we're going to go through the process of deploying a JBoss EAP 7.4 application application on OpenShift.  We're going to do this using the OpenShift console.  
 
-Before we deploy the application to OpenShift we need to verify the keycloak configuration and push our changes to out gitea account.
+Red Hat have developed a lot of tools to provision Red Hat Application services and dependencies on OpenShift.  These tools include:
+
+* JBoss EAP Helm chart to configure and build JBoss EAP applications for OpenShift
+* JBoss EAP Operator to deploy JBoss EAP applications on OpenShift
+* AMQ Broker Operator to deploy and configure AMQ Broker instances and topics on OpenShift
+* Red Hat SSO Operator to deploy and configure Red Hat SSO instances on OpenShift
+
+In this lab, we're going to use these tools to simplify the deployment of our application on OpenShift.
+
+== Red Hat SSO configuration
+
+We've already deployed an instance of Red Hat SSO using the operator, this is configured and ready to use. Before we deploy the application to OpenShift we need to verify the Red Hat SSO configuration and push our changes to our individual gitea account.
 
 In the IDE, open the file: coolstore/src/main/webapp/keycloak.json and ensure the contents are as follows:
 
@@ -109,10 +120,9 @@ spec:
 
 Next, we're going to create an "AMQ Artemis Address"
 
-Click on "+Add" again, select "Operator Backed" and then choose "AMQ Artermis Address"
+Click on "+Add" again, select "Operator Backed" and then choose "AMQ Artemis Address"
 
 From the next screen, click on "Create" and then paste the following YAML into the "YAML view" editor
-
 
 [source,yaml,role="copypaste"]
 ----
@@ -128,9 +138,9 @@ spec:
 
 ## Deploying the application to OpenShift
 
-When we deploy our EAP application on OpenShift we need to add the PostgreSQL datasource and driver as we did in the previous exercise.  In this example we're going to make use the of the https://github.com/jbossas/eap-datasources-galleon-pack[Eap datasources galleon feature pack^]  .  This feature pack provides a "postgresql-datasource" layer which will install and configure the postgreSQL datasource for us.
+When we deploy our EAP application on OpenShift we need to add the PostgreSQL datasource and driver. In this example we're going to make use the of the https://github.com/jbossas/eap-datasources-galleon-pack[Eap datasources galleon feature pack^]. This feature pack provides a "postgresql-datasource" layer which will install and configure the postgreSQL datasource for us.
 
-We're going to use Helm to build our OpenShift EAP Image.  Within the Helm config we're going to you you'll notice build environment variables defining the following
+We're going to use Helm to build our OpenShift EAP Image.  Within the Helm config you'll notice build environment variables defining the following
 
 * GALLEON_PROVISION_FEATURE_PACKS: org.jboss.eap:eap-datasources-galleon-pack:7.4.0.GA-redhat-00003
 
@@ -138,7 +148,7 @@ This adds the eap-datasources galleaon pack for EAP 7.4
 
 * GALLEON_PROVISION_LAYERS: cloud-server,web-clustering,postgresql-datasource,ejb
 
-This adds the required layers to support our application including the postgres-datasource, web-clustering, and ejb layers
+This adds the required layers to support our application including the postgresql-datasource, web-clustering, and ejb layers
 
 * POSTGRESQL_DRIVER_VERSION: 42.6.0
 
@@ -197,7 +207,26 @@ Click on "Create" and then select "Builds" from the left menu.  You should see t
 
 image::build-configs.png[build-configs,800]
 
-It will take a few minutes for these builds to complete.  While this is happening we can go ahead and create a config map and then deploy using the EAP Operator.
+=== eap74-build-artifacts build
+
+This build uses the eap74-openjdk11-openshift-rhel8 image to perform the following steps:
+
+* Deploy an instance of JBoss EAP
+* Run build-time scripts to configure the sub-systems to support the target application
+* Perform a maven build of application using the source code 
+* Deploy the target application
+
+=== eap74 build
+
+This build uses the eap74-openjdk11-runtime-openshift-rhel8 image to perform the following steps:
+
+* Copy the deployed JBoss EAP instance and deployed image from the previous build
+* Run any runtime configuration scripts, e.g. configure database connections
+* Run the JBoss EAP instance
+
+It will take a few minutes for these builds to complete.  While this is happening we can go ahead and create a config map containing runtime variables and then deploy using the EAP Operator.  
+
+This config map contains non-sensitive information relating to the PostgreSQL connection and AMQ broker connection such as the database service host and database name, the AMQ broker service host and topic names.  Sensitive information such as username / password will be pulled from the secrets created when these services where deployed.
 
 To create the config map, click on "ConfigMaps" on the left menu and click on "Create ConfigMap".  From the "Create ConfigMap" page, select "YAML view" and paste the following text:
 
@@ -212,7 +241,6 @@ data:
   POSTGRESQL_DATABASE: postgresDB
   POSTGRESQL_DATASOURCE: CoolstoreDS
   POSTGRESQL_SERVICE_HOST: postgresql
-
   # Configuration to connect to AMQ Broker
   MQ_SERVICE_PREFIX_MAPPING: eap74-amq7=MQ
   EAP74_AMQ_TCP_SERVICE_HOST: eap74-amq7-hdls-svc
@@ -221,9 +249,7 @@ data:
   AMQ_JNDI: java:/eap74-amq7/ConnectionFactory
 ----
 
-This config map contains non-sensitive information relating to the PostgreSQL connection and AMQ broker connection.  
-
-We also need to create a service account with permissions to view the pods in the cluster, to enable clustering support.
+Because our application requires clustering support, we also need to create a service account with permissions to view the pods in the cluster.
 
 Click on the "Import YAML" button on the top right and paste the following:
 
@@ -301,7 +327,7 @@ spec:
           name: eap74-amq7-credentials-secret
 ----
 
-The sensitive credentials (username and password) are pulled from the postgresql and eap74-amq7-credentials-secret secrets in the WildFlyServer custom resource.
+As we mentioned above,the sensitive credentials (username and password) are pulled from the postgresql and eap74-amq7-credentials-secret secrets in the WildFlyServer custom resource, while the non-sensitive credentials are pulled form the config map we created.
 
 Click on "Create" to create the WildFlyServer custom resource.
 
