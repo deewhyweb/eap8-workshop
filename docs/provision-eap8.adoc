@@ -88,9 +88,7 @@ You will now see the list of entries in the credential store.
 Credential store contains following aliases: vb::dbpass vb::dbusername
 ----
 
-
 For fields like username it is not possible to reference the credential store as credential stores specifically handle the storage of credentials not general purpose strings.  For this reason we're going to reference the username as an encrypted expression.  To do this we will first need to add a SecretKey to the credential store.
-
 
 [source,sh,role="copypaste"]
 ----
@@ -106,30 +104,35 @@ You should get the following response from the command:
 Alias "secret" has been successfully stored
 ----
 
-We now need to add the credential store and expression resolver to the server.
+We now need to add the credential store and expression resolver to the server. Login to the via the JBoss CLI
 
 [source,sh,role="copypaste"]
 ----
 $EAP7_HOME/bin/jboss-cli.sh --connect --controller=127.0.0.1:10090
 ----
 
+Create a credential store called exampleKeyStoreCredentialStore
+
 [source,sh,role="copypaste"]
 ----
+
 /subsystem=elytron/credential-store=exampleKeyStoreCredentialStore:add(relative-to=jboss.server.config.dir,modifiable=true,location=my_vault_converted.cred_store,implementation-properties={"keyStoreType"=>"JCEKS"},credential-reference={clear-text="MASK-5dOaAVafCSd;1234abcd;120"})
+
 ----
+
+Define an expression resolver using the secret we created above.
 
 [source,sh,role="copypaste"]
 ----
 /subsystem=elytron/expression=encryption:add(default-resolver=converted, resolvers=[{name=converted, credential-store=exampleKeyStoreCredentialStore, secret-key=secret}])
-
 ----
 
+Test the credential store aliases
 
 [source,sh,role="copypaste"]
 ----
 /subsystem=elytron/credential-store=exampleKeyStoreCredentialStore:read-aliases()
 ----
-
 
 [source,sh]
 ----
@@ -143,15 +146,21 @@ $EAP7_HOME/bin/jboss-cli.sh --connect --controller=127.0.0.1:10090
 }
 ----
 
+Remove the password attribure from the postgresql data-source
+
 [source,sh,role="copypaste"]
 ----
 /subsystem=datasources/data-source=postgresql:undefine-attribute(name=password)
 ----
 
+Reload the server configuration
+
 [source,sh,role="copypaste"]
 ----
 reload
 ----
+
+Create a credential-reference attribute for the postgresql data-source to provide the password form the exampleKeyStoreCredentialStore credential store.
 
 [source,sh,role="copypaste"]
 ----
@@ -160,7 +169,7 @@ reload
 
 exit from CLI
 
-Run the following to encrypt an existing entry in the credential store
+Run the following to create an ecrypted token from the value of vb::dbusername in the credential store
 
 [source,sh,role="copypaste"]
 ----
@@ -176,31 +185,41 @@ You should now see the encrypted token e.g.
 Clear text encrypted to token 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx=' using alias 'secret'.
 ----
 
-We can now add use this token as our user-name
+We can now add use this token as our user-name attribute on the postgresql data-source.
+
+Login to the JBoss CLI
 
 [source,sh,role="copypaste"]
 ----
 $EAP7_HOME/bin/jboss-cli.sh --connect --controller=127.0.0.1:10090
 ----
 
+Remove the previous user-name attribute from the postresql data-source
+
 [source,sh,role="copypaste"]
 ----
 /subsystem=datasources/data-source=postgresql:undefine-attribute(name=user-name)
 ----
 
-Run the following command to use the token for user-name, replacing "xxxx" with the token produced previous step
+Run the following command to use a token for user-name, replacing "xxxx" with the token produced previous step
 [source,sh,role="copypaste"]
 ----
 /subsystem=datasources/data-source=postgresql:write-attribute(name=user-name, value="${ENC::xxxx}")
 ----
+
+Remove the legacy vault from JBoss EAP 7.4.0
 
 [source,sh,role="copypaste"]
 ----
 /core-service=vault:remove
 ----
 
-RELOAD
+Reload the JBoss configuration
 
+[source,sh,role="copypaste"]
+----
+reload
+----
 
 No we can re-run the server migration tool
 
@@ -224,10 +243,10 @@ image::mig4.png[migration,1150]
 Choose *yes.* We want to migrate standalone-full.xml
 
 image::mig5.png[migration,1150]
-Choose no. We don’t want to migrate standalone-ha.xml.
+Choose no. We don't want to migrate standalone-ha.xml.
 
 image::mig6.png[migration,1150]
-Choose no. We don’t want to migrate standalone-load-balancer.xml.
+Choose no. We don't want to migrate standalone-load-balancer.xml.
 
 image::mig7.png[migration,1150] 
 Choose no. We don't want to migrate standalone.xml.
