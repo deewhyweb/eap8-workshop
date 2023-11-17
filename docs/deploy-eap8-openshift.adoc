@@ -190,7 +190,7 @@ Paste the following YAML:
 build:
  uri: 'http://simple-gitea.gitea.svc.cluster.local:3000/{{ USER_ID }}/workshop.git'
  ref: main
- contextDir: coolstore
+ contextDir: coolstore-eap8
  env:
    - name: POSTGRESQL_DRIVER_VERSION
      value: '42.6.0'
