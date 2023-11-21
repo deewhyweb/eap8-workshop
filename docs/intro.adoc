@@ -32,7 +32,7 @@ Simply click once and the whole block is copied to your clipboard, ready to be p
 
 There are also Linux shell commands that can also be copied and pasted into a Terminal in your Development Environment.
 
-*Note: To paste into the terminal in your development environment use kbd:[CTRL+SHIFT+V]*
+NOTE:To paste into the terminal in your development environment use kbd:[CTRL+SHIFT+V]
 
 [source,sh,role="copypaste"]
 ----

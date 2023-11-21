@@ -104,6 +104,13 @@ Enter the following commands to launch the jboss-cli and connect to JBoss 7.4.
  $EAP7_HOME/bin/jboss-cli.sh --connect --controller=127.0.0.1:10090
 ----
 
+Once you're connected via the JBoss CLI you should see:
+
+[source,sh]
+----
+[standalone@127.0.0.1:10090 /] 
+----
+
 Add the vault to JBoss EAP 7.4.
 
 [source,sh,role="copypaste"]

@@ -205,7 +205,10 @@ Remove the previous user-name attribute from the postresql data-source
 /subsystem=datasources/data-source=postgresql:undefine-attribute(name=user-name)
 ----
 
-Run the following command to use a token for user-name, replacing "xxxx" with the token produced previous step
+Run the following command to use a token for user-name, replacing "xxxx" with the token produced previous step.
+
+NOTE: You you will need to use kbd:[CTRL+SHIFT+C] to copy the encrypted token.
+
 [source,sh,role="copypaste"]
 ----
 /subsystem=datasources/data-source=postgresql:write-attribute(name=user-name, value="${ENC::xxxx}")

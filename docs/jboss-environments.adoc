@@ -44,4 +44,4 @@ For {{ EAP8_VERSION }} run the following from the dev spaces terminal:
 $EAP8_HOME/bin/jboss-cli.sh --connect --controller=127.0.0.1:10190
 ----
 
-Take some time to access these urls,try the jboss-cli connection, and login to the admin consoles for both instances. 
+Take some time to access these urls, try the jboss-cli connection, and login to the admin consoles for both instances. 
