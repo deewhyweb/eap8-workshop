@@ -30,7 +30,9 @@ public class CopyMeDirectly {
 
 Simply click once and the whole block is copied to your clipboard, ready to be pasted with kbd:[CTRL+V] (or kbd:[Command+V] on Mac OS).
 
-There are also Linux shell commands that can also be copied and pasted into a Terminal in your Development Environment:
+There are also Linux shell commands that can also be copied and pasted into a Terminal in your Development Environment.
+
+*Note: To paste into the terminal in your development environment use kbd:[CTRL+SHIFT+V]*
 
 [source,sh,role="copypaste"]
 ----
