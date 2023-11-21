@@ -3,8 +3,13 @@
 :imagesdir: images
 
 == Workshop goals
-This workshop will guide you through the migration of an application from JBoss EAP 7 to {{ EAP8_VERSION }} on OpenShift.   The workshop covers the following areas:
+This workshop will guide you through the steps to re-platform applications running on a traditional JBoss EAP environment to OpenShift. 
+By following the steps in this workshop you'll learn about the tools available to streamline the building and deployment of JBoss EAP applications on OpenShift.  You'll also learn about the improvements in tooling provided by {{ EAP8_VERSION }}.
 
-* Deploy sample JBoss EAP 7.4 application on OpenShift
-* Migrate {{ EAP8_VERSION }} application to OpenShift
-* Deploy {{ EAP8_VERSION }} application to OpenShift
+The workshop covers the following areas:
+
+* Deploy dependent services i.e. AMQ Broker instances and PostgreSQL databases
+* Build sample JBoss EAP 7.4 application for OpenShift using Helm and S2I
+* Deploy sample JBoss EAP 7.4 application to OpenShift using the EAP operator
+* Configuration of the JBoss EAP Maven plugin for {{ EAP8_VERSION }} applications
+* Build and deploy {{ EAP8_VERSION }} application for OpenShift using Helm and S2I
