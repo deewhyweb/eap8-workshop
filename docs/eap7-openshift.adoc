@@ -2,7 +2,7 @@
 :experimental:
 :imagesdir: images
 
-In this module we're going to go through the process of deploying a JBoss EAP 7.4 application application on OpenShift.  We're going to do this using the OpenShift console.  
+In this module we're going to go through the process of deploying a JBoss EAP 7.4 application on OpenShift.  We're going to do this using the OpenShift console.  
 
 Red Hat have developed a lot of tools to provision Red Hat Application services and dependencies on OpenShift.  These tools include:
 
@@ -15,7 +15,7 @@ In this lab, we're going to use these tools to simplify the deployment of our ap
 
 == Red Hat SSO configuration
 
-We've already deployed an instance of Red Hat SSO using the operator, this is configured and ready to use. Before we deploy the application to OpenShift we need to verify the Red Hat SSO configuration and push our changes to our individual gitea account.
+We've already deployed an instance of Red Hat SSO using the Red Hat SSO operator, this is configured and ready to use. Before we deploy the application to OpenShift we need to verify the Red Hat SSO configuration and push our changes to our individual gitea account.
 
 In the IDE, open the file: coolstore/src/main/webapp/keycloak.json and ensure the contents are as follows:
 

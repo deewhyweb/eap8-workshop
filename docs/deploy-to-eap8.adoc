@@ -2,7 +2,7 @@
 :experimental:
 :imagesdir: images
 
-{{ EAP8_VERSION }} requires code changes to applications written for JBoss EAP 7.4. Due to the move from Jakarta 8 to Jakarta 10.  
+{{ EAP8_VERSION }} requires code changes to applications written for JBoss EAP 7.4. Due to the move from Jakarta 8 to Jakarta 10 (e.g., converting from the “javax” namespace to “jakarta” namespace). These changes are documented in this https://access.redhat.com/articles/6980265[article, window="_blank"]. 
 
 == Using the Migration Toolkit for Runtimes VS Code extension
 
@@ -72,9 +72,9 @@ to
 
 == Remaining file changes
 
-Other than the namespace changes, the migration toolkit for runtimes report identified changes in the pom.xml file.
+Other than the namespace changes, the Migration Toolkit for Runtimes report identified changes in the pom.xml file.
 
-We can go through the changes as detailed in the report, or copy these files from a pre-prepared {{ EAP8_VERSION }} version of the app in the /projects//sample-app-eap8 folder by running the following commands.
+We can go through the changes as detailed in the report, or copy these files from a pre-prepared {{ EAP8_VERSION }} version of the app in the /projects/sample-app-eap8 folder by running the following commands.
 
 [source,sh,role="copypaste"]
 ----

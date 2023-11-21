@@ -3,8 +3,16 @@
 :imagesdir: images
 
 == Workshop goals
-This workshop will guide you through the migration of an application from JBoss EAP 7 to {{ EAP8_VERSION }} on traditional environments. The workshop makes use of tools to perform server configuration migration and code analysis.  The workshop covers the following areas:
+{{ EAP8_VERSION }} adds exciting new functionality in the areas of provisioning, cloud tooling, security, and Jakarta EE 10 compliance. The move to Jakarta EE 10 introduced some changes which will require customers to update their JBoss EAP 7.x applications to enable them to run on JBoss EAP 8.0.
 
+In this lab you will be guided through these changes, working through the migration of a typical JBoss EAP 7.0 application to JBoss EAP 8.0 on traditional environments and OpenShift. In addition to the changes introduced with Jakarta EE 10, this lab will also cover the migration from lagacy vaults to Elytron credential stores.
+
+* Configure a JBoss EAP 7.4 server with the following:
+** PostgreSQL database drivers and modules
+** Use legacy vault to store database credentials
+** Create JMS topic
 * Deployment of a sample application on JBoss EAP 7.4 
-* Provision {{ EAP8_VERSION }} server
+* Use the server migration tool to migrate server configuration from JBoss EAP 7.4 to {{ EAP8_VERSION }}
+* Migrate credentials from legacy vault to credential store
 * Perform code changes to migrate the application from EAP 7 to {{ EAP8_VERSION }}
+* Deployment of the sample application on {{ EAP8_VERSION }} 

@@ -24,7 +24,7 @@ Access the terminal in dev spaces by clicking on "Menu" -> "Terminal" -> "New Te
 
 image::open-terminal.png[open-terminal,800]
 
-A JBoss 7.4 instance is already provisioned in the /shared/{{ JBOSS7_DIR }} folder and available at: https://{{ USER_ID }}-jboss-workshop-eap7.{{ ROUTE_SUBDOMAIN }}[here, window="_blank"]. An environment variable is defined pointing to this folder: EAP7_HOME
+A JBoss 7.4 instance is already provisioned in the /shared/{{ JBOSS7_DIR }} folder and available at: https://{{ USER_ID }}-jboss-workshop-eap7.{{ ROUTE_SUBDOMAIN }}[here, window="_blank"]. An environment variable is defined pointing to this folder: $EAP7_HOME
 
 We're going to go through the steps to manually add the PostgreSQL jdbc drivers and module to JBoss EAP.  
 

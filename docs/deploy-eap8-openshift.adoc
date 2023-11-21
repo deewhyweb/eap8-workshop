@@ -2,6 +2,14 @@
 :experimental:
 :imagesdir: images
 
+{{ EAP8_VERSION }} introduced changes to the provisioning and configuration of JBoss EAP application images on Red Hat OpenShift. The process adopted the JBoss EAP Maven plugin, which provides significant improvements that make configuring JBoss EAP on OpenShift easier and more flexible.
+
+When building a JBoss EAP 7.x image for OpenShift, the OpenShift builder image provisioned the JBoss EAP server instance. The configuration was provided by a combination of runtime variables, configuration snippets, and JBoss CLI scripts.
+
+With {{ EAP8_VERSION }}, the JBoss EAP Maven plugin provisions the server and deploys the packaged application during the Maven execution. All the configuration for this build process is maintained in the Maven pom.xml file. This allows developers and operations teams to control and test their EAP deployments in their local environments, which provides significant benefits.
+
+The JBoss EAP Maven plugin uses https://github.com/wildfly/galleon#overview[Galleon^] to provision a JBoss EAP server configured with the minimum set of features to support the deployed application. Galleon is a provisioning tool for working with Maven repositories. Galleon automatically retrieves released JBoss EAP Maven artifacts to compose a software distribution of a JBoss EAP-based application server according to a user's configuration.
+
 To build and deploy this application on OpenShift, the only change we need to make is to the Maven pom.xml file. This involves adding the eap-maven-plugin, which takes care of all the provisioning and configuration required to build an instance of {{ EAP8_VERSION }} to run our application.
 
 Add this after the repositories tag
@@ -110,13 +118,14 @@ Open the pom.xml file and add the following before the closing tag:
 
 If we examine the pom.xml snippet, we can see the inclusion of three feature packs:
 
-* wildfly-ee-galleon-pack: The wildfly-ee-galleon-pack contains the features required to build an instance of JBoss EAP. This feature pack contains several layers (e.g., jaxrs-server and cloud-server).
-* eap-cloud-galleon-pack: You can find more information about this feature pack. The main features are as follows:
+* https://github.com/jbossas/eap-cloud-galleon-pack/blob/main/doc/index.md[wildfly-ee-galleon-pack]: The wildfly-ee-galleon-pack contains the features required to build an instance of JBoss EAP. This feature pack contains several layers (e.g., jaxrs-server and cloud-server).
+* https://github.com/jbossas/eap-cloud-galleon-pack/blob/main/doc/index.md[eap-cloud-galleon-pack]: The org.jboss.eap.cloud:eap-cloud-galleon-pack Galleon feature-pack provisions a set of additional features allowing you to configure an
+EAP server to run on the cloud. The main features are as follows:
 ** Server startup scripts: When starting an EAP server that was provisioned by the cloud feature-pack, a set of bash scripts are executed in order to adjust the server configuration. These scripts configure a range of server functions such as clustering, security, logging, messaging, tracing, and config management. Read more on this.
 ** Adjustment of WildFly Galleon layers to tune for deployment on OpenShift, for example, disabling the management console. Read more on this.
 ** Automatic provisioning of the health subsystem allows for server state monitoring and provides liveness and readiness probes.
 ** Automatic routing of server logs to the console to ensure they are visible in the pod logs in the OpenShift console.
-* eap-datasources-galleon-pack: This feature pack for JBoss EAP and JBoss EAP Expansion Pack provides JDBC drivers and data sources for the following databases:
+* https://github.com/jbossas/eap-datasources-galleon-pack[eap-datasources-galleon-pack]: This feature pack for JBoss EAP and JBoss EAP Expansion Pack provides JDBC drivers and data sources for the following databases:
 ** Microsoft SQL Server
 ** Oracle
 ** PostgreSQL
