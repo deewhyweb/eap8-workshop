@@ -12,7 +12,7 @@ The JBoss EAP Maven plugin uses https://github.com/wildfly/galleon#overview[Gall
 
 To build and deploy this application on OpenShift, the only change we need to make is to the Maven pom.xml file. This involves adding the eap-maven-plugin, which takes care of all the provisioning and configuration required to build an instance of {{ EAP8_VERSION }} to run our application.
 
-Add this after the repositories tag
+First step is to add the Red Hat plugin repositories for GA and early access software. Add this after the repositories tag
 
 [source,xml,role="copypaste"]
 ----
