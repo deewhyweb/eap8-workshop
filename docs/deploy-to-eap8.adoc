@@ -111,3 +111,29 @@ The coolstore application should load as follows
 image::coolstore.png[public-endpoint,800]
 
 We've now successfully deployed our sample application to {{ EAP8_VERSION }} connecting to an external PostgreSQL database.
+
+before we move on, we need to push our code changes to our gitea repository.
+
+*Step 13:* Click on the "Source Control" icon in the IDE, you should see the following:
+
+image::git-eap8-1.png[source-contol]
+
+*Step 14:* Enter a commit message in the message field and click on the "Commit" button.
+
+You will be prompted to stage files to the commit
+
+image::git-2.png[stage-files]
+
+*Step 15:* Click on "Yes" and then click on "Sync Changes" to push your changes to gitea
+
+You will be prompted to enter a username:
+
+image::git-3.png[git-username]
+
+*Step 16:* Enter `{{ USER_ID }}`
+
+You will then be prompted for a password:
+
+*Step 17:* Enter `{{ CHE_USER_PASSWORD }}`
+
+Your changes will be pushed to gitea.

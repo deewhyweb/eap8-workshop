@@ -141,9 +141,11 @@ The addition of datasources feature pack and postgresql-datasource layer will in
 
 == Deploy the application to OpenShift
 
+We need to push our code changes to our gitea repository.
+
 *Step 3:* Click on the "Source Control" icon in the IDE, you should see the following:
 
-image::git-eap8-1.png[source-contol]
+image::gitea-eap8-ocp.png[source-contol]
 
 *Step 4:* Enter a commit message in the message field and click on the "Commit" button.
 
@@ -197,7 +199,7 @@ image::helm-charts.png[migration,800]
 [source,yaml,role="copypaste"]
 ----
 build:
- uri: 'http://simple-gitea.gitea.svc.cluster.local:3000/{{ USER_ID }}/workshop.git'
+ uri: 'http://gitea.gitea.svc.cluster.local:3000/{{ USER_ID }}/workshop.git'
  ref: main
  contextDir: coolstore-eap8
  env:

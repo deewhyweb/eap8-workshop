@@ -173,7 +173,7 @@ image:
 build:
   enabled: true
   mode: s2i
-  uri: 'http://simple-gitea.gitea.svc.cluster.local:3000/{{ USER_ID }}/workshop.git'
+  uri: 'http://gitea.gitea.svc.cluster.local:3000/{{ USER_ID }}/workshop.git'
   ref: main
   contextDir: coolstore
   output:
