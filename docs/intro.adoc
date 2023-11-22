@@ -75,7 +75,9 @@ IMPORTANT: You will need to clone your personal git repository before you procee
 
 image::git-start.png[git-start, 100%]
 
-Click on "Clone Git Repository"
+Click on "Clone Git Repository..."
+
+NOTE: If you don't see a "Clone Git Repository..." link, click on kbd:[CTRL+SHIFT+P] to enter the command pallate, and then enter "Git clone".
 
 You will see the following at the top of your dev workspace:
 
