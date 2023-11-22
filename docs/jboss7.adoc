@@ -28,21 +28,21 @@ A JBoss 7.4 instance is already provisioned in the /shared/{{ JBOSS7_DIR }} fold
 
 We're going to go through the steps to manually add the PostgreSQL jdbc drivers and module to JBoss EAP.  
 
-Make a folder structure in EAP_HOME/modules with command:
+*Step 1* Make a folder structure in EAP_HOME/modules with command:
 
 [source,sh,role="copypaste"]
 ----
 mkdir -p $EAP7_HOME/modules/org/postgresql/main
 ----
 
-Copy the postgreSQL driver from the shared folder to the new modules folder.
+*Step 2* Copy the postgreSQL driver from the shared folder to the new modules folder.
 
 [source,sh,role="copypaste"]
 ----
 cp /shared/postgresql-42.6.0.jar $EAP7_HOME/modules/org/postgresql/main
 ----
 
-Create  a modules.xml file in $EAP_HOME/modules/org/postgresql/main referencing the postgreSQL driver.  This will create a module called "org.postgresql" which uses the jdbc driver we just copied over.
+*Step 3* Create  a modules.xml file in $EAP_HOME/modules/org/postgresql/main referencing the postgreSQL driver.  This will create a module called "org.postgresql" which uses the jdbc driver we just copied over.
 
 [source,sh,role="copypaste"]
 ----
@@ -67,28 +67,28 @@ EOF
 
 We're going to use a vault to store our database password, to do this, follow these steps.
 
-Create a folder to store the vault data.
+*Step 4* Create a folder to store the vault data.
 
 [source,sh,role="copypaste"]
 ----
 mkdir $EAP7_HOME/vault/
 ----
 
-Create the SecretKey used by the Vault and store in a Keystore
+*Step 5* Create the SecretKey used by the Vault and store in a Keystore
 
 [source,sh,role="copypaste"]
 ----
 keytool -genseckey -alias vault -storetype jceks -keyalg AES -keysize 128 -storepass vault22 -keypass vault22 -validity 730 -keystore $EAP7_HOME/vault/vault.keystore
 ----
 
-Add the database username to the vault referenced by the attribute dbusername
+*Step 6* Add the database username to the vault referenced by the attribute dbusername
 
 [source,sh,role="copypaste"]
 ----
 $EAP7_HOME/bin/vault.sh --keystore $EAP7_HOME/vault/vault.keystore --keystore-password vault22 --alias vault --vault-block vb --attribute dbusername --sec-attr postgresUser --enc-dir $EAP7_HOME/vault/ --iteration 120 --salt 1234abcd
 ----
 
-Add the database password to the vault referenced by the attribute dbpass
+*Step 7* Add the database password to the vault referenced by the attribute dbpass
 
 [source,sh,role="copypaste"]
 ----
@@ -97,7 +97,7 @@ $EAP7_HOME/bin/vault.sh --keystore $EAP7_HOME/vault/vault.keystore --keystore-pa
 
 We're going to add the valut to JBoss EAP 7.4 using the jboss-cli.
 
-Enter the following commands to launch the jboss-cli and connect to JBoss 7.4.
+*Step 8* Enter the following commands to launch the jboss-cli and connect to JBoss 7.4.
 
 [source,sh,role="copypaste"]
 ----
@@ -111,7 +111,7 @@ Once you're connected via the JBoss CLI you should see:
 [standalone@127.0.0.1:10090 /] 
 ----
 
-Add the vault to JBoss EAP 7.4.
+*Step 9* Add the vault to JBoss EAP 7.4.
 
 [source,sh,role="copypaste"]
 ----
@@ -120,14 +120,14 @@ Add the vault to JBoss EAP 7.4.
 
 == Configure JBoss EAP 7.4 to pull database credentials from the vault
 
-Run the following commands in the JBoss CLI to add the postgreSQL datsource and connection information:
+*Step 10* Run the following commands in the JBoss CLI to add the postgreSQL datsource and connection information:
 
 [source,sh,role="copypaste"]
 ----
 /subsystem=datasources/jdbc-driver=postgresql:add(driver-name=postgresql,driver-module-name=org.postgresql)
 ----
 
-Add the data source pulling the username and password from the vault.
+*Step 11* Add the data source pulling the username and password from the vault.
 
 [source,sh,role="copypaste"]
 ----
@@ -136,27 +136,19 @@ data-source add --name=postgresql --jndi-name=java:jboss/datasources/CoolstoreDS
 
 == JMS topic setup and configuration
 
-Our application uses message driven beans which require a jms topic and the activemq messaging subsystem enabled.  To configure these, enter the following commands.
+*Step 12* Our application uses message driven beans which require a jms topic and the activemq messaging subsystem enabled.  To configure these, enter the following commands.
 
 [source,sh,role="copypaste"]
 ----
 jms-topic add --topic-address=topic.orders --entries=/orders
-----
-
-[source,sh,role="copypaste"]
-----
 /subsystem=messaging-activemq/server=default:write-attribute(name=cluster-password, value=password)
 ----
 
-We will now reload JBoss EAP, to ensure these changes take effect.
+*Step 13* We will now reload JBoss EAP, to ensure these changes take effect.
 
 [source,sh,role="copypaste"]
 ----
 reload
-----
-
-[source,sh,role="copypaste"]
-----
 exit
 ----
 
@@ -164,11 +156,11 @@ exit
 
 We can now check for these changes using the JBoss EAP admin console.
 
-Login to the https://{{ USER_ID }}-jboss-workshop-eap7-console.{{ ROUTE_SUBDOMAIN }}[JBoss EAP 7.4 Admin console, window="_blank"] with the credentials admin/password. We should be able to see the postgresql datasource connection by navigating to "Configuration" -> "Subsystems" -> "Datasources & Drivers" -> "Datasources" -> "postgresql".  
+*Step 14* Login to the https://{{ USER_ID }}-jboss-workshop-eap7-console.{{ ROUTE_SUBDOMAIN }}[JBoss EAP 7.4 Admin console, window="_blank"] with the credentials admin/password. We should be able to see the postgresql datasource connection by navigating to "Configuration" -> "Subsystems" -> "Datasources & Drivers" -> "Datasources" -> "postgresql".  
 
 image::jboss7-console-datasource.png[datasource,800]
 
-We can also view the JMS topic we created by clicking https://{{ USER_ID }}-jboss-workshop-eap7-console.{{ ROUTE_SUBDOMAIN }}/console/index.html#messaging-server-destination;server=default[here, window="_blank"]
+*Step 15* We can also view the JMS topic we created by clicking https://{{ USER_ID }}-jboss-workshop-eap7-console.{{ ROUTE_SUBDOMAIN }}/console/index.html#messaging-server-destination;server=default[here, window="_blank"]
 
 and then selecting "JMS Topic".
 
@@ -176,7 +168,7 @@ image::jboss7-console-jms.png[jms,800]
 
 == SSO configuration
 
-Next, we need to set the url of our Red Hat SSO application.  In the IDE, open the file: coolstore/src/main/webapp/keycloak.json and edit the contents so they look like the following:
+*Step 16* Next, we need to set the url of our Red Hat SSO application.  In the IDE, open the file: coolstore/src/main/webapp/keycloak.json and edit the contents so they look like the following:
 
 [source,json,role="copypaste"]
 ----
@@ -192,25 +184,21 @@ Next, we need to set the url of our Red Hat SSO application.  In the IDE, open t
 
 == Build and deploy the application
 
-We are now ready to build and deploy our JBoss EAP 7.4 application, run the following commands to build the application:
+*Step 17* We are now ready to build and deploy our JBoss EAP 7.4 application, run the following commands to build the application:
 
 [source,sh,role="copypaste"]
 ----
-cd /projects/workshop/coolstore
+cd /projects/workshop/coolstore & mvn clean package
 ----
 
-[source,sh,role="copypaste"]
-----
-mvn clean package
-----
-
-Run the following commands to deploy the application:
+*Step 18* Login to the JBoss CLI:
 
 [source,sh,role="copypaste"]
 ----
 $EAP7_HOME/bin/jboss-cli.sh --connect --controller=127.0.0.1:10090
 ----
 
+*Step 19* Run the following command to deploy the application:
 
 [source,sh,role="copypaste"]
 ----
@@ -242,17 +230,11 @@ You can login to SSO with the credentials
 
 == Undeploy the application
 
-Before we move onto deploying to {{ EAP8_VERSION }} we're going to undeploy the coolstore application
-
-Switch back to the terminal and enter the following commands.
+*Step 20*  Before we move onto deploying to {{ EAP8_VERSION }} we're going to undeploy the coolstore application. Switch back to the terminal and enter the following commands.
 
 
 [source,sh,role="copypaste"]
 ----
 undeploy ROOT.war
-----
-
-[source,sh,role="copypaste"]
-----
 exit
 ----

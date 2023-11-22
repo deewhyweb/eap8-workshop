@@ -98,6 +98,12 @@ mvn clean package
 $EAP8_HOME/bin/jboss-cli.sh --connect --controller=127.0.0.1:10190
 ----
 
+You will be prompted to enter the {{ EAP8_VERSION }} admin credentials.  
+
+username: admin
+password: password
+
+
 Run the following command to deploy the application:
 
 [source,sh,role="copypaste"]

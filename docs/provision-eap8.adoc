@@ -12,21 +12,11 @@ In this section we're going to use the JBoss EAP Server Migration tool migrate t
 
 When we deployed our application to JBoss EAP 7.4, we made some changes to the server configuration to add a module and driver to connect to PostgreSQL and to configure the message queue. We must ensure these modules and drivers are in place and working correctly in our {{ EAP8_VERSION }} server. We can use the JBoss EAP server migration tool to perform this migration for us.  
 
-We have provided a distribution archive for the server migration tool in the /shared folder.  To extract this, follow these steps:
+*Step 1* We have provided a distribution archive for the server migration tool in the /shared folder.  To extract this, follow these steps:
 
 [source,sh,role="copypaste"]
 ----
-cd /shared
-----
-
-[source,sh,role="copypaste"]
-----
-unzip {{ SERVER_MIGRATION_ARCHIVE }}
-----
-
-[source,sh,role="copypaste"]
-----
-cd {{ SERVER_MIGRATION_DIR }}
+cd /shared & unzip {{ SERVER_MIGRATION_ARCHIVE }} & cd {{ SERVER_MIGRATION_DIR }}
 ----
 
 The workshop has two instances of JBoss EAP deployed.
@@ -37,7 +27,7 @@ JBoss EAP 7.4 with a home directory of /shared/jboss-eap-7.4 stored in the EAP7_
 
 Our JBoss 7.4 instance is using the "standalone_full.xml" configuration, so this is the only one we need to migrate from JBoss EAP 7.4 to {{ EAP8_VERSION }}.
 
-To run the server migration tool to migrate from our JBoss 7.4 instance to our {{ EAP8_VERSION }} instance, run the following command:
+*Step 2* To run the server migration tool to migrate from our JBoss 7.4 instance to our {{ EAP8_VERSION }} instance, run the following command:
 
 [source,sh,role="copypaste"]
 ----
@@ -47,16 +37,16 @@ To run the server migration tool to migrate from our JBoss 7.4 instance to our {
 The server migration tool will ask a series of questions during the migration process:
 
 image::mig1.png[migration,1150]
-Choose *yes.* to migrate the standalone configuration.
+*Step 3* Choose *yes.* to migrate the standalone configuration.
 
 image::mig2.png[migration,1150]
-Choose no. We want to select the configurations to migrate.
+*Step 4* Choose no. We want to select the configurations to migrate.
 
 image::mig3.png[migration,1150]
-Choose no. We don't want to migrate standalone-full-ha.xml.
+*Step 5* Choose no. We don't want to migrate standalone-full-ha.xml.
 
 image::mig4.png[migration,1150]
-Choose *yes.* We want to migrate standalone-full.xml
+*Step 6* Choose *yes.* We want to migrate standalone-full.xml
 
 The server migration tool will now report an error:
 
@@ -67,14 +57,14 @@ The server migration tool will now report an error:
 So we need to migrate our vault base password store to Elytron credential store before we can run the server migration.
 So let's do this on our JBoss 7 cluster first before we continue.
 
-Run the following command to migrate the legacy vault to a credential store called "my_vault_converted.cred_store" located in "$EAP7_HOME/standalone/configuration/".
+*Step 7* Run the following command to migrate the legacy vault to a credential store called "my_vault_converted.cred_store" located in "$EAP7_HOME/standalone/configuration/".
 
 [source,sh,role="copypaste"]
 ----
 $EAP7_HOME/bin/elytron-tool.sh vault --keystore $EAP7_HOME/vault/vault.keystore --keystore-password vault22 --enc-dir $EAP7_HOME/vault/ --salt 1234abcd --iteration 120 --alias vault --location $EAP7_HOME/standalone/configuration/my_vault_converted.cred_store
 ----
 
-We should now be able to list the entries in the new credential store
+*Step 8* We should now be able to list the entries in the new credential store
 
 [source,sh,role="copypaste"]
 ----
@@ -90,7 +80,7 @@ You will now see the list of entries in the credential store.
 Credential store contains following aliases: vb::dbpass vb::dbusername
 ----
 
-For fields like username it is not possible to reference the credential store as credential stores specifically handle the storage of credentials not general purpose strings.  For this reason we're going to reference the username as an encrypted expression.  To do this we will first need to add a SecretKey to the credential store.
+*Step 9* For fields like username it is not possible to reference the credential store as credential stores specifically handle the storage of credentials not general purpose strings.  For this reason we're going to reference the username as an encrypted expression.  To do this we will first need to add a SecretKey to the credential store.
 
 [source,sh,role="copypaste"]
 ----
@@ -106,35 +96,35 @@ You should get the following response from the command:
 Alias "secret" has been successfully stored
 ----
 
-We now need to add the credential store and expression resolver to the server. Login to the via the JBoss CLI
+*Step 10* We now need to add the credential store and expression resolver to the server. Login to the via the JBoss CLI
 
 [source,sh,role="copypaste"]
 ----
 $EAP7_HOME/bin/jboss-cli.sh --connect --controller=127.0.0.1:10090
 ----
 
-Create a credential store called exampleKeyStoreCredentialStore using the credential store "my_vault_converted.cred_store" located in "$EAP7_HOME/standalone/configuration/"(jboss.server.config.dir)
+*Step 11* Create a credential store called exampleKeyStoreCredentialStore using the credential store "my_vault_converted.cred_store" located in "$EAP7_HOME/standalone/configuration/"(jboss.server.config.dir)
 
 [source,sh,role="copypaste"]
 ----
-
 /subsystem=elytron/credential-store=exampleKeyStoreCredentialStore:add(relative-to=jboss.server.config.dir,modifiable=true,location=my_vault_converted.cred_store,implementation-properties={"keyStoreType"=>"JCEKS"},credential-reference={clear-text="MASK-5dOaAVafCSd;1234abcd;120"})
-
 ----
 
-Define an expression resolver using the secret we created previously.
+*Step 12* Define an expression resolver using the secret we created previously.
 
 [source,sh,role="copypaste"]
 ----
 /subsystem=elytron/expression=encryption:add(default-resolver=converted, resolvers=[{name=converted, credential-store=exampleKeyStoreCredentialStore, secret-key=secret}])
 ----
 
-Test the credential store aliases
+*Step 13* Test the credential store aliases
 
 [source,sh,role="copypaste"]
 ----
 /subsystem=elytron/credential-store=exampleKeyStoreCredentialStore:read-aliases()
 ----
+
+You should see three results listed as follows:
 
 [source,sh]
 ----
@@ -148,30 +138,30 @@ Test the credential store aliases
 }
 ----
 
-Remove the password attribure from the postgresql data-source
+*Step 14* Now that we have a working credential store, we can use this for our database credentials. First,
+remove the password attribute from the postgresql data-source.  Still in the JBoss CLI enter:
 
 [source,sh,role="copypaste"]
 ----
 /subsystem=datasources/data-source=postgresql:undefine-attribute(name=password)
 ----
 
-Reload the server configuration
-
-[source,sh,role="copypaste"]
-----
-reload
-----
-
-Create a credential-reference attribute for the postgresql data-source to provide the password form the exampleKeyStoreCredentialStore credential store.
+*Step 15* Create a credential-reference attribute for the postgresql data-source to provide the password form the exampleKeyStoreCredentialStore credential store.
 
 [source,sh,role="copypaste"]
 ----
 /subsystem=datasources/data-source=postgresql:write-attribute(name=credential-reference,value={store=exampleKeyStoreCredentialStore,alias=vb::dbpass})
 ----
 
-exit from CLI
+*Step 16* Then reload the server configuration and exit
 
-Run the following to create an ecrypted token from the value of vb::dbusername in the credential store.  
+[source,sh,role="copypaste"]
+----
+reload
+exit
+----
+
+*Step 17* Run the following to create an ecrypted token from the value of vb::dbusername in the credential store.  
 
 NOTE: We're using the elytron-tool.sh located in $EAP8_HOME, the --entry flag feature was implemented in JBoss EAP 8-Beta.
 
@@ -189,23 +179,23 @@ You should now see the encrypted token e.g.
 Clear text encrypted to token 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx=' using alias 'secret'.
 ----
 
-We can now add use this token as our user-name attribute on the postgresql data-source.
+IMPORTANT: We will need use this token as our user-name attribute on the postgresql data-source in a later step below.
 
-Login to the JBoss CLI
+*Step 18* Login to the JBoss CLI
 
 [source,sh,role="copypaste"]
 ----
 $EAP7_HOME/bin/jboss-cli.sh --connect --controller=127.0.0.1:10090
 ----
 
-Remove the previous user-name attribute from the postresql data-source
+*Step 19* Remove the previous user-name attribute from the postresql data-source
 
 [source,sh,role="copypaste"]
 ----
 /subsystem=datasources/data-source=postgresql:undefine-attribute(name=user-name)
 ----
 
-Run the following command to use a token for user-name, replacing "xxxx" with the token produced previous step.
+*Step 20* Run the following command to use a token for user-name, replacing "xxxx" with the token produced in step 17.
 
 NOTE: You you will need to use kbd:[CTRL+SHIFT+C] to copy the encrypted token.
 
@@ -214,21 +204,22 @@ NOTE: You you will need to use kbd:[CTRL+SHIFT+C] to copy the encrypted token.
 /subsystem=datasources/data-source=postgresql:write-attribute(name=user-name, value="${ENC::xxxx}")
 ----
 
-Remove the legacy vault from JBoss EAP 7.4.0
+*Step 21* Remove the legacy vault from JBoss EAP 7.4.0
 
 [source,sh,role="copypaste"]
 ----
 /core-service=vault:remove
 ----
 
-Reload the JBoss configuration
+*Step 22* Reload the JBoss configuration end exit
 
 [source,sh,role="copypaste"]
 ----
 reload
+exit
 ----
 
-No we can re-run the server migration tool
+*Step 23* No we can re-run the server migration tool
 
 [source,sh,role="copypaste"]
 ----
@@ -238,53 +229,58 @@ No we can re-run the server migration tool
 The server migration tool will ask a series of questions during the migration process:
 
 image::mig1.png[migration,1150]
-Choose *yes.* to migrate the standalone configuration.
+*Step 24* Choose *yes.* to migrate the standalone configuration.
 
 image::mig2.png[migration,1150]
-Choose no. We want to select the configurations to migrate.
+*Step 25* Choose no. We want to select the configurations to migrate.
 
 image::mig3.png[migration,1150]
-Choose no. We don't want to migrate standalone-full-ha.xml.
+*Step 26* Choose no. We don't want to migrate standalone-full-ha.xml.
 
 image::mig4.png[migration,1150]
-Choose *yes.* We want to migrate standalone-full.xml
+*Step 27* Choose *yes.* We want to migrate standalone-full.xml
 
 image::mig5.png[migration,1150]
-Choose no. We don't want to migrate standalone-ha.xml.
+*Step 28* Choose no. We don't want to migrate standalone-ha.xml.
 
 image::mig6.png[migration,1150]
-Choose no. We don't want to migrate standalone-load-balancer.xml.
+*Step 29* Choose no. We don't want to migrate standalone-load-balancer.xml.
 
 image::mig7.png[migration,1150] 
-Choose no. We don't want to migrate standalone.xml.
+*Step 30* Choose no. We don't want to migrate standalone.xml.
 
 image::mig8.png[migration,1150]
-Choose no. We are not using a managed domain.
+*Step 31* Choose no. We are not using a managed domain.
 
 image::mig9.png[migration,1150]
 
-The server migration is now complete, we need to copy the credential store from EAP 7.
+*Step 32* The server migration is now complete, we need to copy the credential store from EAP 7 to {{ EAP8_VERSION }}
 
 [source,sh,role="copypaste"]
 ----
 cp /shared/jboss-eap-7.4/standalone/configuration/my_vault_converted.cred_store /shared/jboss-eap-8.0/standalone/configuration/
 ----
 
-We can now connect to JBoss EAP 8 by running the following command
+*Step 33* We can now connect to JBoss EAP 8 by running the following command
 
 [source,sh,role="copypaste"]
 ----
 $EAP8_HOME/bin/jboss-cli.sh --connect --controller=127.0.0.1:10190
 ----
 
-We will now trigger a reload of the {{ EAP8_VERSION }} server.
+*Step 34* We will now trigger a reload of the {{ EAP8_VERSION }} server.
 
 [source,sh,role="copypaste"]
 ----
 reload
 ----
 
-Look at the credential store aliases
+You will be prompted to enter the {{ EAP8_VERSION }} admin credentials.  
+
+username: admin
+password: password
+
+*Step 35* Look at the credential store aliases
 
 [source,sh,role="copypaste"]
 ----
@@ -303,7 +299,7 @@ Look at the credential store aliases
 }
 ----
 
-And look at the list of installed drivers.
+*Step 36* And look at the list of installed drivers.
 
 [source,sh,role="copypaste"]
 ----
@@ -353,7 +349,7 @@ The output should show the PostgreSQL driver as follows:
 }
 ----
 
-And test our datasource connection with the following JBoss CLI command:
+*Step 37* And test our datasource connection with the following JBoss CLI command:
 
 [source,sh,role="copypaste"]
 ----
@@ -372,7 +368,24 @@ A successful connection should result in the following response:
 }
 ----
 
+*Step 38* We're going to add our hostname to the list of allowed-origins to avoid CORS issues.
+
+[source,sh,role="copypaste"]
+----
+/core-service=management/management-interface=http-interface:list-add(name=allowed-origins,value=https://{{ USER_ID }}-jboss-workshop-eap8-console.{{ ROUTE_SUBDOMAIN }})
+----
+
+*Step 39* Finally, reload the server configuration:
+
+[source,sh,role="copypaste"]
+----
+reload
+----
+
 We can also login to the {{ EAP8_VERSION }} admin console https://{{ USER_ID }}-jboss-workshop-eap8-console.{{ ROUTE_SUBDOMAIN }}[here, window="_blank"]
+
+username: admin
+password: password
 
 We should be able to see the postgresql datasource connection by navigating to "Configuration" -> "Subsystems" -> "Datasources & Drivers" -> "Datasources" -> "postgresql".  
 
