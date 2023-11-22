@@ -73,7 +73,7 @@ Click on "Yes, I trust these authors"
 
 IMPORTANT: You will need to clone your personal git repository before you proceed with the workshop.
 
-image::anim.gif[git-clone-animation, 600]
+image::git-start.png[git-start, 800]
 
 Click on "Clone Git Repository"
 
@@ -91,7 +91,12 @@ http://gitea.gitea.svc.cluster.local:3000/{{ USER_ID }}/workshop.git
 
 Click on "Clone from url: \http://gitea.gitea.svc.cluster.local:3000/{{ USER_ID }}/workshop.git"
 
-Enter "/projects" in the "Choose a folder to clone \http://gitea.gitea.svc.cluster.local:3000/{{ USER_ID }}/workshop.git  into"
+You will be asked to choose a folder, enter: 
+
+[source,sh,role="copypaste"]
+----
+/projects
+----
 
 Click on "OK"
 
