@@ -255,4 +255,4 @@ image::eap8-builds.png[migration,800]
 
 image::eap8-ocp.png[migration,800]
 
-We've now completed the migration of our {{ EAP8_VERSION }} application to OpenShift
+We've now completed the migration of our {{ EAP8_VERSION }} application to OpenShift.

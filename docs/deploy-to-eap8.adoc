@@ -110,9 +110,7 @@ The coolstore application should load as follows
 
 image::coolstore.png[public-endpoint,800]
 
-We've now successfully deployed our sample application to {{ EAP8_VERSION }} connecting to an external PostgreSQL database.
-
-before we move on, we need to push our code changes to our gitea repository.
+Before we move on, we need to push our code changes to our gitea repository.
 
 *Step 13:* Click on the "Source Control" icon in the IDE, you should see the following:
 
@@ -137,3 +135,5 @@ You will then be prompted for a password:
 *Step 17:* Enter `{{ CHE_USER_PASSWORD }}`
 
 Your changes will be pushed to gitea.
+
+We've now successfully migrated our sample application from JBoss EAP 7.4 to {{ EAP8_VERSION }} connecting to an external PostgreSQL database.
