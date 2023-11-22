@@ -110,6 +110,8 @@ The coolstore application should load as follows
 
 image::coolstore.png[public-endpoint,800]
 
+== Push our changes to Gitea
+
 Before we move on, we need to push our code changes to our gitea repository.
 
 *Step 13:* Click on the "Source Control" icon in the IDE, you should see the following:
