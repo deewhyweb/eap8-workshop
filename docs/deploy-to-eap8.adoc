@@ -10,46 +10,41 @@ To perform the required code changes, we're going to use the Migration Toolkit f
 
 We have provided a zip distribution of the CLI tool in the "/shared" folder
 
-First we need to unzip the Migration Toolkit for Runtimes CLI tool
+*Step 1:* First we need to unzip the Migration Toolkit for Runtimes CLI tool
 
 [source,sh,role="copypaste"]
 ----
-cd /shared
+cd /shared & unzip {{ MTR_CLI_ARCHIVE }} 
 ----
 
-[source,sh,role="copypaste"]
-----
-unzip {{ MTR_CLI_ARCHIVE }} 
-----
-
-Configure the MTR VS-Code extension as follows
+*Step 2:* Configure the MTR VS-Code extension as follows
 
 image::mtr-vscode-2.png[migration,800]
 
 * Set code location to "/projects/workshop/coolstore"
 * Ensure "eap8" is selected under "--target" 
 
-To perform the code analysis, click on the start button as shown below
+*Step 3:* To perform the code analysis, click on the start button as shown below
 
 image::mtr-vscode-3.png[migration,400]
 
 Once the analysis is complete, you should see a file hierachy in the left hand window.  
 
-At the top of the file hierarchy is a report icon (in greeen).  Click on this to view the HTML version of the report.
+*Step 4:* At the top of the file hierarchy is a report icon (in greeen).  Click on this to view the HTML version of the report.
 
 image::mtr-report.png[mtr-report,800]
 
 Clicking on a file will open up the editor showing where the issues are with the file.
 
-Click on "coolstore" in the report, and then select the "Issues" tab to view the details of the migration.
+*Step 5:* Click on "coolstore" in the report, and then select the "Issues" tab to view the details of the migration.
 
 image::mtr-report-issues.png[mtr-report-issues,800]
 
-You can also select a file from the hierarchy examine in the issues in the code.
+*Step 6:* You can also select a file from the hierarchy examine in the issues in the code.
 
 image::mtr-vscode-4.png[migration,800]
 
-You can make the edits directly in the file as indicated, or in most cases you can right click on the file and select "Apply all quickfixes"
+*Step 7:* You can make the edits directly in the file as indicated, or in most cases you can right click on the file and select "Apply all quickfixes"
 
 You can also apply all the quickfixes to the code base by right clicking on "workshop" at the top of the hierarchy and clicking on "Apply all guickfixes".
 
@@ -57,7 +52,7 @@ image::mtr-vscode-5.png[migration,400]
 
 Once you've completed the namespace changes, there is one more minor code change to make:
 
-Open "/projects/workshop/coolstore/src/main/java/com/redhat/coolstore/service/OrderServiceMDB.java/OrderServiceMDB.java" and change
+*Step 8:* Open "/projects/workshop/coolstore/src/main/java/com/redhat/coolstore/service/OrderServiceMDB.java/OrderServiceMDB.java" and change
 
 [source,java]
 ----
@@ -74,24 +69,21 @@ to
 
 Other than the namespace changes, the Migration Toolkit for Runtimes report identified changes in the pom.xml file.
 
-We can go through the changes as detailed in the report, or copy these files from a pre-prepared {{ EAP8_VERSION }} version of the app in the /projects/sample-app-eap8 folder by running the following commands.
+*Step 9:* We can go through the changes as detailed in the report, or copy these files from a pre-prepared {{ EAP8_VERSION }} version of the app in the /projects/sample-app-eap8 folder by running the following commands.
 
 [source,sh,role="copypaste"]
 ----
 cp /projects/workshop/coolstore-eap8/pom.xml /projects/workshop/coolstore
 ----
 
-We can now deploy our {{ EAP8_VERSION }} application
+*Step 10:* We can now build our {{ EAP8_VERSION }} application
 
 [source,sh,role="copypaste"]
 ----
-cd /projects/workshop/coolstore
+cd /projects/workshop/coolstore  mvn clean package
 ----
 
-[source,sh,role="copypaste"]
-----
-mvn clean package
-----
+*Step 11:* Login to the JBoss CLI
 
 [source,sh,role="copypaste"]
 ----
@@ -103,6 +95,7 @@ You will be prompted to enter the {{ EAP8_VERSION }} admin credentials.
 username: admin
 password: password
 
+*Step 12:* We can now deploy our {{ EAP8_VERSION }} application
 
 Run the following command to deploy the application:
 

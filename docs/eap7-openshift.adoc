@@ -17,7 +17,7 @@ In this lab, we're going to use these tools to simplify the deployment of our ap
 
 We've already deployed an instance of Red Hat SSO using the Red Hat SSO operator, this is configured and ready to use. Before we deploy the application to OpenShift we need to verify the Red Hat SSO configuration and push our changes to our individual gitea account.
 
-In the IDE, open the file: coolstore/src/main/webapp/keycloak.json and ensure the contents are as follows:
+*Step 1:* In the IDE, open the file: coolstore/src/main/webapp/keycloak.json and ensure the contents are as follows:
 
 [source,json,role="copypaste"]
 ----
@@ -31,25 +31,25 @@ In the IDE, open the file: coolstore/src/main/webapp/keycloak.json and ensure th
 }
 ----
 
-Click on the "Source Control" icon in the IDE, you should see the following:
+*Step 2:* Click on the "Source Control" icon in the IDE, you should see the following:
 
 image::git-1.png[source-contol]
 
 Enter a commit message in the message field and click on the "Commit" button.
 
-You will be prompted to stage files to the commit
+*Step 2:* You will be prompted to stage files to the commit
 
 image::git-2.png[stage-files]
 
 Click on "Yes" and then click on "Sync Changes" to push your changes to gitea
 
-You will be prompted to enter a username:
+*Step 3:* You will be prompted to enter a username:
 
 image::git-3.png[git-username]
 
 Enter `{{ USER_ID }}`
 
-You will then be prompted for a password:
+*Step 4:* You will then be prompted for a password:
 
 Enter `{{ CHE_USER_PASSWORD }}`
 
@@ -57,20 +57,20 @@ Your changes will be pushed to gitea.
 
 ## Deploying on OpenShift
 
-Access the OpenShift console by clicking on the following {{ CONSOLE_URL }}[link^] 
+*Step 5:* Access the OpenShift console by clicking on the following {{ CONSOLE_URL }}[link^] 
 
 Login with the following credentials:
 
 * *Username*: `{{ USER_ID }}`
 * *Password*: `{{ CHE_USER_PASSWORD }}`
 
-*Switch to the project called "{{ USER_ID }}-project"*
+*Step 6: Switch to the project called "{{ USER_ID }}-project"*
 
 ## Deploy a PostgreSQL database
 
-Within this project, add a PostgreSQL database by Clicking on "+Add" and selecting "Database" from the Developer catalog.
+*Step 7:* Within this project, add a PostgreSQL database by Clicking on "+Add" and selecting "Database" from the Developer catalog.
 
-From the Developer catalog, select the "PostgreSQL" template and fill out the form details as shown below.
+*Step 8:* From the Developer catalog, select the "PostgreSQL" template and fill out the form details as shown below.
 
 image::postgresql-template.png[postgresql-template,800]
 [source,sh]
@@ -80,19 +80,19 @@ image::postgresql-template.png[postgresql-template,800]
 * Database name: postgresDB
 ----
 
-Click on "Create" to create the postgreSQL database instance.
+*Step 9:* Click on "Create" to create the postgreSQL database instance.
 
 ## Deploy an AMQ broker instance
 
 Our application will require an external message queue.  We'll use the AMQ Broker operator to deploy and configure an AMQ broker instance
 
-Click on "+Add" and select "Operator Backed"
+*Step 10:* Click on "+Add" and select "Operator Backed"
 
 From the list below, select "ActiveMQ Artemis"
 
 image::operator-backed.png[operator-backed,800]
 
-From the next screen, click on "Create" and then paste the following YAML into the "YAML view" editor
+*Step 11:* From the next screen, click on "Create" and then paste the following YAML into the "YAML view" editor
 
 [source,yaml,role="copypaste"]
 ----
@@ -120,9 +120,9 @@ spec:
 
 Next, we're going to create an "AMQ Artemis Address"
 
-Click on "+Add" again, select "Operator Backed" and then choose "AMQ Artemis Address"
+*Step 12:* Click on "+Add" again, select "Operator Backed" and then choose "AMQ Artemis Address"
 
-From the next screen, click on "Create" and then paste the following YAML into the "YAML view" editor
+*Step 13:* From the next screen, click on "Create" and then paste the following YAML into the "YAML view" editor
 
 [source,yaml,role="copypaste"]
 ----
@@ -162,7 +162,7 @@ image::helm-charts.png[helm-charts,800]
 
 Click on "JBoss EAP 7.4", and click on "Create"
 
-From the "Create Helm Release" page, select the "YAML view"
+*Step 14:* From the "Create Helm Release" page, select the "YAML view"
 
 Paste the following YAML to create the EAP 7.4 builds.
 
@@ -203,7 +203,7 @@ deploy:
   enabled: false
 ----
 
-Click on "Create" and then select "Builds" from the left menu.  You should see two builds created as shown below:
+*Step 15:* Click on "Create" and then select "Builds" from the left menu.  You should see two builds created as shown below:
 
 image::build-configs.png[build-configs,800]
 
@@ -228,7 +228,7 @@ It will take a few minutes for these builds to complete.  While this is happenin
 
 This config map contains non-sensitive information relating to the PostgreSQL connection and AMQ broker connection such as the database service host and database name, the AMQ broker service host and topic names.  Sensitive information such as username / password will be pulled from the secrets created when these services where deployed.
 
-To create the config map, click on "ConfigMaps" on the left menu and click on "Create ConfigMap".  From the "Create ConfigMap" page, select "YAML view" and paste the following text:
+*Step 16:* To create the config map, click on "ConfigMaps" on the left menu and click on "Create ConfigMap".  From the "Create ConfigMap" page, select "YAML view" and paste the following text:
 
 [source,yaml,role="copypaste"]
 ----
@@ -251,7 +251,7 @@ data:
 
 Because our application requires clustering support, we also need to create a service account with permissions to view the pods in the cluster.
 
-Click on the "Import YAML" button on the top right and paste the following:
+*Step 17:* Click on the "Import YAML" button on the top right and paste the following:
 
 [source,yaml,role="copypaste"]
 ----
@@ -283,11 +283,11 @@ subjects:
   name: coolstoresa
 ----
 
-Finally, we can use the EAP Operator to deploy our EAP image.  Click on "+Add" again and then select "Operator Backed" from the Developer Catalog.  
+*Step 18:* Finally, we can use the EAP Operator to deploy our EAP image.  Click on "+Add" again and then select "Operator Backed" from the Developer Catalog.  
 
 image::operator-backed.png[operator-backed,800]
 
-From the list of operator backed options, click on "WildFlyServer", and click on "Create".  From the "Create WildFlyServer" page, select "YAML view" and paste the following:
+*Step 19:* From the list of operator backed options, click on "WildFlyServer", and click on "Create".  From the "Create WildFlyServer" page, select "YAML view" and paste the following:
 
 [source,yaml,role="copypaste"]
 ----
@@ -331,13 +331,13 @@ As we mentioned above,the sensitive credentials (username and password) are pull
 
 Click on "Create" to create the WildFlyServer custom resource.
 
-Click on the "Topology" link on the left menu to view the deployed applications:
+*Step 20:* Click on the "Topology" link on the left menu to view the deployed applications:
 
 image::topology-view.png[topology-view,800]
 
 *Note: The "eap74" application may take a few minutes to start-up, while the builds are completed. The application will be ready when the outer ring is dark blue*
 
-You should be able to view the application landing page by clicking on the external link icon.
+*Step 21:* You should be able to view the application landing page by clicking on the external link icon.
 
 image::coolstore.png[kitchen-sink,800]
 

@@ -12,7 +12,7 @@ The JBoss EAP Maven plugin uses https://github.com/wildfly/galleon#overview[Gall
 
 To build and deploy this application on OpenShift, the only change we need to make is to the Maven pom.xml file. This involves adding the eap-maven-plugin, which takes care of all the provisioning and configuration required to build an instance of {{ EAP8_VERSION }} to run our application.
 
-First step is to add the Red Hat plugin repositories for GA and early access software. Add this after the repositories tag
+*Step 1:* First step is to add the Red Hat plugin repositories for GA and early access software. Add this after the repositories tag
 
 [source,xml,role="copypaste"]
 ----
@@ -54,7 +54,7 @@ First step is to add the Red Hat plugin repositories for GA and early access sof
     </pluginRepositories>
 ----
 
-Open the pom.xml file and add the following before the closing tag:
+*Step 2:* Open the pom.xml file and add the following before the closing tag:
 
 [source,xml,role="copypaste"]
 ----
@@ -141,58 +141,58 @@ The addition of datasources feature pack and postgresql-datasource layer will in
 
 == Deploy the application to OpenShift
 
-Click on the "Source Control" icon in the IDE, you should see the following:
+*Step 3:* Click on the "Source Control" icon in the IDE, you should see the following:
 
 image::git-eap8-1.png[source-contol]
 
-Enter a commit message in the message field and click on the "Commit" button.
+*Step 4:* Enter a commit message in the message field and click on the "Commit" button.
 
 You will be prompted to stage files to the commit
 
 image::git-2.png[stage-files]
 
-Click on "Yes" and then click on "Sync Changes" to push your changes to gitea
+*Step 5:* Click on "Yes" and then click on "Sync Changes" to push your changes to gitea
 
 You will be prompted to enter a username:
 
 image::git-3.png[git-username]
 
-Enter `{{ USER_ID }}`
+*Step 6:* Enter `{{ USER_ID }}`
 
 You will then be prompted for a password:
 
-Enter `{{ CHE_USER_PASSWORD }}`
+*Step 7:* Enter `{{ CHE_USER_PASSWORD }}`
 
 Your changes will be pushed to gitea.
 
 We can now deploy our {{ EAP8_VERSION }} application with Helm.
 
-Access the OpenShift console by clicking on the following {{ CONSOLE_URL }}[link^] 
+*Step 8:* Access the OpenShift console by clicking on the following {{ CONSOLE_URL }}[link^] 
 
 Login with the following credentials:
 
 * *Username*: `{{ USER_ID }}`
 * *Password*: `{{ CHE_USER_PASSWORD }}`
 
-Switch to the project called "{{ USER_ID }}-project"
+*Step 9:* Switch to the project called "{{ USER_ID }}-project"
 
-Click on Add+.
+*Step 10:* Click on Add+.
 
-Select Helm Chart from the developer catalog.
+*Step 11:* Select Helm Chart from the developer catalog.
 
-Enter eap in the Filter by keyword field as shown below:
+*Step 12:* Enter eap in the Filter by keyword field as shown below:
 
 image::helm-charts.png[migration,800]
 
-Select the JBoss EAP 8 Helm chart from the catalog.
+*Step 13:* Select the JBoss EAP 8 Helm chart from the catalog.
 
-Click on "Create".
+*Step 14:* Click on "Create".
 
-Switch to YAML view.
+*Step 16:* Switch to YAML view.
 
-Delete the existing content.
+*Step 17:* Delete the existing content.
 
-Paste the following YAML:
+*Step 18:* Paste the following YAML:
 
 [source,yaml,role="copypaste"]
 ----
@@ -239,17 +239,17 @@ Two build-configs are created by this Helm chart: an artifacts build and a runti
 
 It will take a while to build and deploy the application. To monitor the progress, follow these steps.
 
-Go to Builds. 
+*Step 19:* Go to Builds. 
 
 image::eap8-builds.png[migration,800]
 
-Select eap8-build-artifacts.
+*Step 20:* Select eap8-build-artifacts.
 
-Choose the Builds tab.
+*Step 21:* Choose the Builds tab.
 
-Click on eap8-build-artifacts-1 to view the logs of the active build.
+*Step 22:* Click on eap8-build-artifacts-1 to view the logs of the active build.
 
-Once the builds are complete, you will be able to click the Open URL icon of the eap8 deployment to view the running application.
+*Step 23:* Once the builds are complete, you will be able to click the Open URL icon of the eap8 deployment to view the running application.
 
 image::eap8-ocp.png[migration,800]
 
