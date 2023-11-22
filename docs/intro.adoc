@@ -45,11 +45,11 @@ You will be using Red Hat OpenShift Dev Spaces. **Changes to files are auto-save
 
 To get started, {{ CHE_URL }}[access the Red Hat OpenShift Dev Spaces^] you will be presented with an option to login with your OpenShift credentials
 
-image::openshift-login.png[openshift-login,800]
+image::openshift-login.png[openshift-login,100%]
 
 Click on "Login with OpenShift"
 
-image::openshift-username.png[openshift-username,800]
+image::openshift-username.png[openshift-username,100%]
 
 and log in using the username and password you've been assigned:
 
@@ -61,25 +61,25 @@ You will be promted to Authorize access to the devspaces client to access your a
 Once you log in, you’ll be placed on your personal dashboard. 
 
 
-image::devspaces-dashboard.png[devspaces-dashboard, 800]
+image::devspaces-dashboard.png[devspaces-dashboard, 100%]
 
 After a minute or two, you’ll be placed in the workspace.  
 
 When the workspace first loads you will be prompted to with a message "Do you trust the authors of the files in this workspace?" 
 
-image::trust.png[trust, 400]
+image::trust.png[trust, 50%]
 
 Click on "Yes, I trust these authors"
 
 IMPORTANT: You will need to clone your personal git repository before you proceed with the workshop.
 
-image::git-start.png[git-start, 800]
+image::git-start.png[git-start, 100%]
 
 Click on "Clone Git Repository"
 
 You will see the following at the top of your dev workspace:
 
-image::git-url.png[clone-repo, 600]
+image::git-url.png[clone-repo, 80%]
 
 In the url bar enter the name of your personal git repository:
 
@@ -102,13 +102,13 @@ Click on "OK"
 
 You will see the following message box:
 
-image::git-workspace.png[git-workspace, 600]
+image::git-workspace.png[git-workspace, 100%]
 
 Click on "Open"
 
 Your window will refresh and you should see:
 
-image::devspaces-start.png[devspaces-start, 800]
+image::devspaces-start.png[devspaces-start, 100%]
 
 Users of Eclipse, IntelliJ IDEA or Visual Studio Code will see a familiar layout: a project/file browser on the left, a code editor on the right, and a terminal at the bottom. You'll use all of these during the course of this workshop, so keep this browser tab open throughout. **If things get weird, you can simply reload the browser tab to refresh the view.**
 
@@ -118,7 +118,7 @@ Throughout this workshop you will be running commands in the integrated terminal
 
 Access the terminal in dev spaces by clicking on "Menu" -> "Terminal" -> "New Terminal"
 
-image::open-terminal.png[open-terminal,800]
+image::open-terminal.png[open-terminal,100%]
 
 === Configuring GIT
 
