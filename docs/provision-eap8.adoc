@@ -29,6 +29,8 @@ Our JBoss 7.4 instance is using the "standalone_full.xml" configuration, so this
 
 *Step 2:* To run the server migration tool to migrate from our JBoss 7.4 instance to our {{ EAP8_VERSION }} instance, run the following command:
 
+IMPORTANT: This tool will fail and report an error, this is expected behavior and part of the workshop.
+
 [source,sh,role="copypaste"]
 ----
 ./jboss-server-migration.sh -s $EAP7_HOME -t $EAP8_HOME
