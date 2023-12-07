@@ -81,6 +81,13 @@ mkdir $EAP7_HOME/vault/
 keytool -genseckey -alias vault -storetype jceks -keyalg AES -keysize 128 -storepass vault22 -keypass vault22 -validity 730 -keystore $EAP7_HOME/vault/vault.keystore
 ----
 
+You will see a response similar to:
+
+```
+Warning:
+The JCEKS keystore uses a proprietary format. It is recommended to migrate to PKCS12 which is an industry standard format using "keytool -importkeystore -srckeystore /shared/jboss-eap-7.4/vault/vault.keystore -destkeystore /shared/jboss-eap-7.4/vault/vault.keystore -deststoretype pkcs12".
+```
+
 *Step 6:* Add the database username to the vault referenced by the attribute dbusername
 
 [source,sh,role="copypaste"]
@@ -88,12 +95,78 @@ keytool -genseckey -alias vault -storetype jceks -keyalg AES -keysize 128 -store
 $EAP7_HOME/bin/vault.sh --keystore $EAP7_HOME/vault/vault.keystore --keystore-password vault22 --alias vault --vault-block vb --attribute dbusername --sec-attr postgresUser --enc-dir $EAP7_HOME/vault/ --iteration 120 --salt 1234abcd
 ----
 
+You will see a response similar to:
+
+```
+=========================================================================
+
+  JBoss Vault
+
+  JBOSS_HOME: /shared/jboss-eap-7.4
+
+  JAVA: /usr/lib/jvm/java-11-openjdk/bin/java
+
+=========================================================================
+
+Dec 07, 2023 2:59:44 PM org.picketbox.plugins.vault.PicketBoxSecurityVault init
+INFO: PBOX00361: Default Security Vault Implementation Initialized and Ready
+WFLYSEC0047: Secured attribute value has been stored in Vault.
+Please make note of the following:
+********************************************
+Vault Block:vb
+Attribute Name:dbusername
+Configuration should be done as follows:
+VAULT::vb::dbusername::1
+********************************************
+WFLYSEC0048: Vault Configuration commands in WildFly for CLI:
+********************************************
+For standalone mode:
+/core-service=vault:add(vault-options=[("KEYSTORE_URL" => "/shared/jboss-eap-7.4/vault/vault.keystore"),("KEYSTORE_PASSWORD" => "MASK-xxxxxx"),("KEYSTORE_ALIAS" => "vault"),("SALT" => "1234abcd"),("ITERATION_COUNT" => "120"),("ENC_FILE_DIR" => "/shared/jboss-eap-7.4/vault/")])
+********************************************
+For domain mode:
+/host=the_host/core-service=vault:add(vault-options=[("KEYSTORE_URL" => "/shared/jboss-eap-7.4/vault/vault.keystore"),("KEYSTORE_PASSWORD" => "MASK-xxxxxx"),("KEYSTORE_ALIAS" => "vault"),("SALT" => "1234abcd"),("ITERATION_COUNT" => "120"),("ENC_FILE_DIR" => "/shared/jboss-eap-7.4/vault/")])
+********************************************
+```
+
 *Step 7:* Add the database password to the vault referenced by the attribute dbpass
 
 [source,sh,role="copypaste"]
 ----
 $EAP7_HOME/bin/vault.sh --keystore $EAP7_HOME/vault/vault.keystore --keystore-password vault22 --alias vault --vault-block vb --attribute dbpass --sec-attr postgresPW --enc-dir $EAP7_HOME/vault/ --iteration 120 --salt 1234abcd
 ----
+
+You will see a response similar to:
+
+```
+=========================================================================
+
+  JBoss Vault
+
+  JBOSS_HOME: /shared/jboss-eap-7.4
+
+  JAVA: /usr/lib/jvm/java-11-openjdk/bin/java
+
+=========================================================================
+
+Dec 07, 2023 3:01:29 PM org.picketbox.plugins.vault.PicketBoxSecurityVault init
+INFO: PBOX00361: Default Security Vault Implementation Initialized and Ready
+WFLYSEC0047: Secured attribute value has been stored in Vault.
+Please make note of the following:
+********************************************
+Vault Block:vb
+Attribute Name:dbpass
+Configuration should be done as follows:
+VAULT::vb::dbpass::1
+********************************************
+WFLYSEC0048: Vault Configuration commands in WildFly for CLI:
+********************************************
+For standalone mode:
+/core-service=vault:add(vault-options=[("KEYSTORE_URL" => "/shared/jboss-eap-7.4/vault/vault.keystore"),("KEYSTORE_PASSWORD" => "MASK-xxxxxx"),("KEYSTORE_ALIAS" => "vault"),("SALT" => "1234abcd"),("ITERATION_COUNT" => "120"),("ENC_FILE_DIR" => "/shared/jboss-eap-7.4/vault/")])
+********************************************
+For domain mode:
+/host=the_host/core-service=vault:add(vault-options=[("KEYSTORE_URL" => "/shared/jboss-eap-7.4/vault/vault.keystore"),("KEYSTORE_PASSWORD" => "MASK-xxxxxx"),("KEYSTORE_ALIAS" => "vault"),("SALT" => "1234abcd"),("ITERATION_COUNT" => "120"),("ENC_FILE_DIR" => "/shared/jboss-eap-7.4/vault/")])
+********************************************
+```
 
 We're going to add the valut to JBoss EAP 7.4 using the jboss-cli.
 
@@ -106,10 +179,9 @@ We're going to add the valut to JBoss EAP 7.4 using the jboss-cli.
 
 Once you're connected via the JBoss CLI you should see:
 
-[source,sh]
-----
+```
 [standalone@127.0.0.1:10090 /] 
-----
+```
 
 *Step 9:* Add the vault to JBoss EAP 7.4.
 
@@ -117,6 +189,12 @@ Once you're connected via the JBoss CLI you should see:
 ----
 /core-service=vault:add(vault-options=[("KEYSTORE_URL" => "/shared/jboss-eap-7.4/vault/vault.keystore"),("KEYSTORE_PASSWORD" => "MASK-5dOaAVafCSd"),("KEYSTORE_ALIAS" => "vault"),("SALT" => "1234abcd"),("ITERATION_COUNT" => "120"),("ENC_FILE_DIR" => "/shared/jboss-eap-7.4/vault/")])
 ----
+
+You should see a response:
+
+```
+{"outcome" => "success"}
+```
 
 == Configure JBoss EAP 7.4 to pull database credentials from the vault
 
@@ -126,6 +204,12 @@ Once you're connected via the JBoss CLI you should see:
 ----
 /subsystem=datasources/jdbc-driver=postgresql:add(driver-name=postgresql,driver-module-name=org.postgresql)
 ----
+
+You should see a response:
+
+```
+{"outcome" => "success"}
+```
 
 *Step 11:* Add the data source pulling the username and password from the vault.
 
@@ -143,6 +227,18 @@ data-source add --name=postgresql --jndi-name=java:jboss/datasources/CoolstoreDS
 jms-topic add --topic-address=topic.orders --entries=/orders
 /subsystem=messaging-activemq/server=default:write-attribute(name=cluster-password, value=password)
 ----
+
+You will see a response similar to:
+
+```
+{
+    "outcome" => "success",
+    "response-headers" => {
+        "operation-requires-reload" => true,
+        "process-state" => "reload-required"
+    }
+}
+```
 
 *Step 13:* We will now reload JBoss EAP, to ensure these changes take effect.
 
@@ -227,6 +323,8 @@ You can login to SSO with the credentials
 
 * *Username*: `{{ USER_ID }}`
 * *Password*: openshift
+
+NOTE: Once you're signed-in, the "Sign In" button will be replaced with a user icon and profile menu.
 
 == Undeploy the application
 

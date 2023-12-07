@@ -21,7 +21,7 @@ cd /shared && unzip {{ MTR_CLI_ARCHIVE }}
 
 image::mtr-vscode-2.png[migration,80%]
 
-* Set code location to "/projects/workshop/coolstore"
+* Set code location to `/projects/workshop/coolstore`
 * Ensure "eap8" is selected under "--target" 
 
 *Step 3:* To perform the code analysis, click on the start button as shown below
@@ -32,7 +32,7 @@ Once the analysis is complete, you should see a file hierachy in the left hand w
 
 *Step 4:* At the top of the file hierarchy is a report icon (in greeen).  Click on this to view the HTML version of the report.
 
-image::mtr-report.png[mtr-report,80%]
+image::mtr-report.png[mtr-results,80%]
 
 Clicking on a file will open up the editor showing where the issues are with the file.
 
@@ -52,7 +52,7 @@ image::mtr-vscode-5.png[migration,400]
 
 Once you've completed the namespace changes, there is one more minor code change to make:
 
-*Step 8:* Open "/projects/workshop/coolstore/src/main/java/com/redhat/coolstore/service/OrderServiceMDB.java/OrderServiceMDB.java" and change
+*Step 8:* Open `/projects/workshop/coolstore/src/main/java/com/redhat/coolstore/service/OrderServiceMDB.java/OrderServiceMDB.java` and change
 
 [source,java]
 ----
@@ -76,11 +76,28 @@ Other than the namespace changes, the Migration Toolkit for Runtimes report iden
 cp /projects/workshop/coolstore-eap8/pom.xml /projects/workshop/coolstore
 ----
 
+Before we build our app, we're going to make a small update to the ui.
+
+Open the file `/projects/workshop/coolstore/src/main/webapp/partials/header.html` 
+
+Change line 43 from:
+
+[source,java]
+----
+<a ng-href="#/" class="active">EAP7 Cool Store</a>
+----
+
+to 
+[source,java,role="copypaste"]
+----
+<a ng-href="#/" class="active">EAP8 Cool Store</a>
+----
+
 *Step 10:* We can now build our {{ EAP8_VERSION }} application
 
 [source,sh,role="copypaste"]
 ----
-cd /projects/workshop/coolstore  mvn clean package
+cd /projects/workshop/coolstore && mvn clean package
 ----
 
 *Step 11:* Login to the JBoss CLI
@@ -108,7 +125,7 @@ You will now be able to access the application by by clicking https://{{ USER_ID
 
 The coolstore application should load as follows
 
-image::coolstore.png[public-endpoint,80%]
+image::coolstore-eap8.png[public-endpoint,80%]
 
 == Push our changes to Gitea
 
@@ -116,7 +133,7 @@ Before we move on, we need to push our code changes to our gitea repository.
 
 *Step 13:* Click on the "Source Control" icon in the IDE, you should see the following:
 
-image::git-eap8-1.png[source-contol]
+image::git-eap8-push.png[source-contol]
 
 *Step 14:* Enter a commit message in the message field and click on the "Commit" button.
 
