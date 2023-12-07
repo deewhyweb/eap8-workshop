@@ -391,13 +391,13 @@ password: password
 
 We should be able to see the postgresql datasource connection by navigating to "Configuration" -> "Subsystems" -> "Datasources & Drivers" -> "Datasources" -> "postgresql".  
 
-image::jboss8-console-datasource.png[datasource,800]
+image::jboss8-console-datasource.png[datasource,80%]
 
 We can also view the JMS topic we created by clicking https://{{ USER_ID }}-jboss-workshop-eap8-console.{{ ROUTE_SUBDOMAIN }}/console/index.html#messaging-server-destination;server=default[here, window="_blank"]
 
 and then selecting "JMS Topic".
   
-image::jboss8-console-jms.png[jms,800]
+image::jboss8-console-jms.png[jms,80%]
 
 We can now be confident our application will have the required drivers and data sources present.
 

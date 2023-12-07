@@ -22,7 +22,7 @@ First, we're going to configure a connection to the PostgreSQL database. We're g
 
 Access the terminal in dev spaces by clicking on "Menu" -> "Terminal" -> "New Terminal"
 
-image::open-terminal.png[open-terminal,800]
+image::open-terminal.png[open-terminal,80%]
 
 A JBoss 7.4 instance is already provisioned in the /shared/{{ JBOSS7_DIR }} folder and available at: https://{{ USER_ID }}-jboss-workshop-eap7.{{ ROUTE_SUBDOMAIN }}[here, window="_blank"]. An environment variable is defined pointing to this folder: $EAP7_HOME
 
@@ -158,17 +158,17 @@ We can now check for these changes using the JBoss EAP admin console.
 
 *Step 14:* Login to the https://{{ USER_ID }}-jboss-workshop-eap7-console.{{ ROUTE_SUBDOMAIN }}[JBoss EAP 7.4 Admin console, window="_blank"] with the credentials admin/password. We should be able to see the postgresql datasource connection by navigating to "Configuration" -> "Subsystems" -> "Datasources & Drivers" -> "Datasources" -> "postgresql".  
 
-image::jboss7-console-datasource.png[datasource,800]
+image::jboss7-console-datasource.png[datasource,80%]
 
 *Step 15:* We can also view the JMS topic we created by clicking https://{{ USER_ID }}-jboss-workshop-eap7-console.{{ ROUTE_SUBDOMAIN }}/console/index.html#messaging-server-destination;server=default[here, window="_blank"]
 
 and then selecting "JMS Topic".
 
-image::jboss7-console-jms.png[jms,800]
+image::jboss7-console-jms.png[jms,80%]
 
 == SSO configuration
 
-*Step 16:* Next, we need to set the url of our Red Hat SSO application.  In the IDE, open the file: coolstore/src/main/webapp/keycloak.json and edit the contents so they look like the following:
+*Step 16:* Next, we need to set the url of our Red Hat SSO application.  In the IDE, open the file: `coolstore/src/main/webapp/keycloak.json` and edit the contents so they look like the following:
 
 [source,json,role="copypaste"]
 ----
@@ -211,17 +211,17 @@ You will now be able to access the coolstore application https://{{ USER_ID }}-j
 
 The coolstore application should load as follows:
 
-image::coolstore.png[coolstore,800]
+image::coolstore.png[coolstore,80%]
 
 We've now successfully deployed our sample application to JBoss EAP 7.4 connecting to an external PostgreSQL database.
 
 You can test the SSO integration by clicking on the "Sign In" button on the top right hand corner of the screen.
 
-image::sign-in.png[sign-in,800]
+image::sign-in.png[sign-in,80%]
 
 You should see the Red Hat SSO login screen
 
-image::rhsso-login.png[rhsso-login,800]
+image::rhsso-login.png[rhsso-login,80%]
 
 You can login to SSO with the credentials
 

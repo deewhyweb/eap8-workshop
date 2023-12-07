@@ -14,7 +14,7 @@ To build and deploy this application on OpenShift, the only change we need to ma
 
 IMPORTANT: For this module we're going to use the "coolstore-eap8" folder.
 
-*Step 1:* First step is to add the Red Hat plugin repositories for GA and early access software. Open the file `coolstore-eap8\pom.xml` and add this after the repositories tag.
+*Step 1:* First step is to add the Red Hat plugin repositories for GA and early access software. Open the file `coolstore-eap8/pom.xml` and add this after the repositories tag.
 
 [source,xml,role="copypaste"]
 ----
@@ -186,7 +186,7 @@ Login with the following credentials:
 
 *Step 12:* Enter eap in the Filter by keyword field as shown below:
 
-image::helm-charts.png[migration,800]
+image::helm-charts.png[migration,80%]
 
 *Step 13:* Select the JBoss EAP 8 Helm chart from the catalog.
 
@@ -245,7 +245,7 @@ It will take a while to build and deploy the application. To monitor the progres
 
 *Step 19:* Go to Builds. 
 
-image::eap8-builds.png[migration,800]
+image::eap8-builds.png[migration,80%]
 
 *Step 20:* Select eap8-build-artifacts.
 
@@ -255,6 +255,6 @@ image::eap8-builds.png[migration,800]
 
 *Step 23:* Once the builds are complete, you will be able to click the Open URL icon of the eap8 deployment to view the running application.
 
-image::eap8-ocp.png[migration,800]
+image::eap8-ocp.png[migration,80%]
 
 We've now completed the migration of our {{ EAP8_VERSION }} application to OpenShift.

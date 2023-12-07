@@ -72,7 +72,7 @@ Login with the following credentials:
 
 *Step 8:* From the Developer catalog, select the "PostgreSQL" template and fill out the form details as shown below.
 
-image::postgresql-template.png[postgresql-template,800]
+image::postgresql-template.png[postgresql-template,80%]
 [source,sh]
 ----
 * User name: postgresUser
@@ -90,7 +90,7 @@ Our application will require an external message queue.  We'll use the AMQ Broke
 
 From the list below, select "ActiveMQ Artemis"
 
-image::operator-backed.png[operator-backed,800]
+image::operator-backed.png[operator-backed,80%]
 
 *Step 11:* From the next screen, click on "Create" and then paste the following YAML into the "YAML view" editor
 
@@ -158,7 +158,7 @@ Click on "+Add" again and this time select "Helm Chart" from the Developer Catal
 
 Filter by "eap" to locate the "JBoss EAP 7.4" Helm chart.
 
-image::helm-charts.png[helm-charts,800]
+image::helm-charts.png[helm-charts,80%]
 
 Click on "JBoss EAP 7.4", and click on "Create"
 
@@ -205,7 +205,7 @@ deploy:
 
 *Step 15:* Click on "Create" and then select "Builds" from the left menu.  You should see two builds created as shown below:
 
-image::build-configs.png[build-configs,800]
+image::build-configs.png[build-configs,80%]
 
 === eap74-build-artifacts build
 
@@ -285,7 +285,7 @@ subjects:
 
 *Step 18:* Finally, we can use the EAP Operator to deploy our EAP image.  Click on "+Add" again and then select "Operator Backed" from the Developer Catalog.  
 
-image::operator-backed.png[operator-backed,800]
+image::operator-backed.png[operator-backed,80%]
 
 *Step 19:* From the list of operator backed options, click on "WildFlyServer", and click on "Create".  From the "Create WildFlyServer" page, select "YAML view" and paste the following:
 
@@ -333,12 +333,12 @@ Click on "Create" to create the WildFlyServer custom resource.
 
 *Step 20:* Click on the "Topology" link on the left menu to view the deployed applications:
 
-image::topology-view.png[topology-view,800]
+image::topology-view.png[topology-view,80%]
 
 *Note: The "eap74" application may take a few minutes to start-up, while the builds are completed. The application will be ready when the outer ring is dark blue*
 
 *Step 21:* You should be able to view the application landing page by clicking on the external link icon.
 
-image::coolstore.png[kitchen-sink,800]
+image::coolstore.png[kitchen-sink,80%]
 
 Our application is now successfully deployed on OpenShift.  Next, we're going to deploy an instance of JBoss EAP 8 and migrate our application.

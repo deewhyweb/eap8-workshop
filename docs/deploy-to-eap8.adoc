@@ -19,7 +19,7 @@ cd /shared & unzip {{ MTR_CLI_ARCHIVE }}
 
 *Step 2:* Configure the MTR VS-Code extension as follows
 
-image::mtr-vscode-2.png[migration,800]
+image::mtr-vscode-2.png[migration,80%]
 
 * Set code location to "/projects/workshop/coolstore"
 * Ensure "eap8" is selected under "--target" 
@@ -32,17 +32,17 @@ Once the analysis is complete, you should see a file hierachy in the left hand w
 
 *Step 4:* At the top of the file hierarchy is a report icon (in greeen).  Click on this to view the HTML version of the report.
 
-image::mtr-report.png[mtr-report,800]
+image::mtr-report.png[mtr-report,80%]
 
 Clicking on a file will open up the editor showing where the issues are with the file.
 
 *Step 5:* Click on "coolstore" in the report, and then select the "Issues" tab to view the details of the migration.
 
-image::mtr-report-issues.png[mtr-report-issues,800]
+image::mtr-report-issues.png[mtr-report-issues,80%]
 
 *Step 6:* You can also select a file from the hierarchy examine in the issues in the code.
 
-image::mtr-vscode-4.png[migration,800]
+image::mtr-vscode-4.png[migration,80%]
 
 *Step 7:* You can make the edits directly in the file as indicated, or in most cases you can right click on the file and select "Apply all quickfixes"
 
@@ -108,7 +108,7 @@ You will now be able to access the application by by clicking https://{{ USER_ID
 
 The coolstore application should load as follows
 
-image::coolstore.png[public-endpoint,800]
+image::coolstore.png[public-endpoint,80%]
 
 == Push our changes to Gitea
 
