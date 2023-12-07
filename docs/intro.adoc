@@ -1,4 +1,4 @@
-= JBoss EAP 7 to JBoss EAP 8 migration workshop
+= JBoss EAP 7.4 to JBoss EAP 8 migration workshop
 :experimental:
 :imagesdir: images
 

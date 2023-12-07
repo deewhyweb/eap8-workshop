@@ -2,7 +2,7 @@
 :experimental:
 :imagesdir: images
 
-The release of {{ EAP8_VERSION }} provides support for https://jakarta.ee/release/10/[Jakarta EE 10, window="_blank"]. Jakarta EE 10 brings a change to Jakarta EE APIs compared to the Jakarta EE 8 specifications supported by EAP 7. 
+The release of {{ EAP8_VERSION }} provides support for https://jakarta.ee/release/10/[Jakarta EE 10, window="_blank"]. Jakarta EE 10 brings a change to Jakarta EE APIs compared to the Jakarta EE 8 specifications supported by EAP 7.4. 
 
 Moving applications from JBoss EAP 7.4 to {{ EAP8_VERSION }} will require code changes due to the move from Jakarta EE 8 to Jakarta EE 10 (e.g., converting from the “javax” namespace to “jakarta” namespace). These changes are documented in this https://access.redhat.com/articles/6980265[article, window="_blank"]. To help our customers with this migration effort we've updated our tools: the https://developers.redhat.com/products/mta/download[Migration Toolkit for Applications, window="_blank"], including the Migration Toolkit for Runtimes (MTR, for non-OpenShift projects) and the JBoss EAP Server Migration tool. 
 
@@ -206,7 +206,7 @@ NOTE: You you will need to use kbd:[CTRL+SHIFT+C] to copy the encrypted token.
 /subsystem=datasources/data-source=postgresql:write-attribute(name=user-name, value="${ENC::xxxx}")
 ----
 
-*Step 21:* Remove the legacy vault from JBoss EAP 7.4.0
+*Step 21:* Remove the legacy vault from JBoss EAP 7.4
 
 [source,sh,role="copypaste"]
 ----
@@ -256,7 +256,7 @@ image::mig8.png[migration,1150]
 
 image::mig9.png[migration,1150]
 
-*Step 32:* The server migration is now complete, we need to copy the credential store from EAP 7 to {{ EAP8_VERSION }}
+*Step 32:* The server migration is now complete, we need to copy the credential store from EAP 7.4 to {{ EAP8_VERSION }}
 
 [source,sh,role="copypaste"]
 ----
