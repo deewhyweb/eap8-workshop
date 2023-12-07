@@ -188,7 +188,7 @@ image::jboss7-console-jms.png[jms,80%]
 
 [source,sh,role="copypaste"]
 ----
-cd /projects/workshop/coolstore & mvn clean package
+cd /projects/workshop/coolstore && mvn clean package
 ----
 
 *Step 18:* Login to the JBoss CLI:

@@ -28,7 +28,11 @@ You will be able to login to the JBoss EAP Admin consoles with the credentials:
 * username: admin
 * password: password
 
-You can also access these JBoss instances using the JBoss CLI.  
+You can also access these JBoss instances using the JBoss CLI via the dev spaces terminal.  
+
+NOTE: Access the terminal in dev spaces by clicking on "Menu" -> "Terminal" -> "New Terminal"
+
+image::open-terminal.png[open-terminal,80%]
 
 For JBoss EAP 7.4 run the following from the dev spaces terminal:
 

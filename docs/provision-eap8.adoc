@@ -16,7 +16,7 @@ When we deployed our application to JBoss EAP 7.4, we made some changes to the s
 
 [source,sh,role="copypaste"]
 ----
-cd /shared & unzip {{ SERVER_MIGRATION_ARCHIVE }} & cd {{ SERVER_MIGRATION_DIR }}
+cd /shared && unzip {{ SERVER_MIGRATION_ARCHIVE }} & cd {{ SERVER_MIGRATION_DIR }}
 ----
 
 The workshop has two instances of JBoss EAP deployed.

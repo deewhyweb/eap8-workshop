@@ -14,7 +14,7 @@ We have provided a zip distribution of the CLI tool in the "/shared" folder
 
 [source,sh,role="copypaste"]
 ----
-cd /shared & unzip {{ MTR_CLI_ARCHIVE }} 
+cd /shared && unzip {{ MTR_CLI_ARCHIVE }} 
 ----
 
 *Step 2:* Configure the MTR VS-Code extension as follows
