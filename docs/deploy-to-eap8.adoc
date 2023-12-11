@@ -123,9 +123,11 @@ deploy ./target/ROOT.war
 
 You will now be able to access the application by by clicking https://{{ USER_ID }}-jboss-workshop-eap8.{{ ROUTE_SUBDOMAIN }}[here, window="_blank"]
 
-The coolstore application should load as follows
+The coolstore application should load as follows:
 
 image::coolstore-eap8.png[public-endpoint,80%]
+
+You should notice the update we made to "EAP8 Cool Store"
 
 == Push our changes to Gitea
 
