@@ -28,9 +28,9 @@ image::mtr-vscode-2.png[migration,80%]
 
 image::mtr-vscode-3.png[migration,400]
 
-Once the analysis is complete, you should see a file hierachy in the left hand window.  
+Once the analysis is complete, you should see a file hierarchy in the left hand window.  
 
-*Step 6.4:* At the top of the file hierarchy is a report icon (in greeen).  Click on this to view the HTML version of the report.
+*Step 6.4:* At the top of the file hierarchy is a report icon (in green).  Click on this to view the HTML version of the report.
 
 image::mtr-results.png[mtr-results,80%]
 
