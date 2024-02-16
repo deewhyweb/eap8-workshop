@@ -65,11 +65,210 @@ to
 @ActivationConfigProperty(propertyName = "destinationType", propertyValue = "jakarta.jms.Topic"),
 ----
 
-== Remaining file changes
+We can now run the code analysis again, 
 
-Other than the namespace changes, the Migration Toolkit for Runtimes report identified changes in the pom.xml file.
+*Step 6.9:* To perform the code analysis, click on the start button as shown below
 
-*Step 6.9:* We can go through the changes as detailed in the report, or copy these files from a pre-prepared {{ EAP8_VERSION }} version of the app in the /projects/sample-app-eap8 folder by running the following commands.
+image::mtr-vscode-3.png[migration,400]
+
+Once the analysis is complete, you should see a file hierarchy updated.  
+
+*Step 6.10:* At the top of the file hierarchy is a report icon (in green).  Click on this to view the HTML version of the report.
+
+image::mtr-results.png[mtr-results,80%]
+
+You should see the story points are now reduced to 15.
+
+In the Analysis results tree click on "persistence.xml".  
+
+Change
+
+[source,xml]
+----
+http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+----
+
+to 
+
+[source,xml,role="copypaste"]
+----
+https://jakarta.ee/xml/ns/persistence/persistence_3_0.xsd">
+----
+
+Open the pom.xml file and make the following changes
+
+Change 
+
+[source,xml]
+----
+        <dependency>
+            <groupId>org.jboss.spec.javax.jms</groupId>
+            <artifactId>jboss-jms-api_2.0_spec</artifactId>
+            <scope>provided</scope>
+        </dependency>
+----
+
+to
+
+[source,xml,role="copypaste"]
+----
+        <dependency>
+            <groupId>jakarta.jms</groupId>
+            <artifactId>jakarta.jms-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+----
+
+Change
+
+[source,xml]
+----
+            <dependency>
+                <groupId>org.jboss.bom</groupId>
+                <artifactId>jboss-eap-jakartaee8-with-tools</artifactId>
+                <version>${version.server.bom}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+----
+to 
+
+[source,xml,role="copypaste"]
+----
+            <dependency>
+                <groupId>org.jboss.bom</groupId>
+                <artifactId>jboss-eap-ee-with-tools</artifactId>
+                <version>${version.server.bom}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+----
+Change
+
+[source,xml]
+----
+
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-jpamodelgen</artifactId>
+            <scope>provided</scope>
+        </dependency>
+----
+
+to
+
+[source,xml,role="copypaste"]
+----
+        <dependency>
+            <groupId>org.hibernate.orm</groupId>
+            <artifactId>hibernate-jpamodelgen</artifactId>
+            <scope>provided</scope>
+        </dependency>
+----
+
+Change
+
+[source,xml]
+----
+
+        <dependency>
+            <groupId>org.jboss.spec.javax.ejb</groupId>
+            <artifactId>jboss-ejb-api_3.2_spec</artifactId>
+            <scope>provided</scope>
+        </dependency>
+----
+
+to
+
+[source,xml,role="copypaste"]
+----
+        <dependency>
+            <groupId>jakarta.ejb</groupId>
+            <artifactId>jakarta.ejb-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+----
+
+Change
+
+[source,xml]
+----
+
+        <dependency>
+            <groupId>org.jboss.spec.javax.annotation</groupId>
+            <artifactId>jboss-annotations-api_1.3_spec</artifactId>
+            <scope>provided</scope>
+        </dependency>
+----
+
+to
+
+[source,xml,role="copypaste"]
+----
+        <dependency>
+            <groupId>jakarta.annotation</groupId>
+            <artifactId>jakarta.annotation-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+----
+
+Change
+
+[source,xml]
+----
+
+        <dependency>
+            <groupId>org.jboss.spec.javax.ws.rs</groupId>
+            <artifactId>jboss-jaxrs-api_2.1_spec</artifactId>
+            <scope>provided</scope>
+        </dependency>
+----
+
+to
+
+[source,xml,role="copypaste"]
+----
+        <dependency>
+            <groupId>jakarta.ws.rs</groupId>
+            <artifactId>jakarta.ws.rs-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+----
+
+
+Change
+ 
+[source,xml]
+----
+<version.server.bom>7.4.0.GA</version.server.bom>
+----
+
+to
+
+[source,xml,role="copypaste"]
+----
+<version.server.bom>8.0.0.GA-redhat-00009</version.server.bom>
+----
+
+In the Analysis results tree click on "beans.xml
+".  
+
+Change
+
+[source,xml]
+----
+https://jakarta.ee/xml/ns/jakartaee/beans_1_1.xsd"
+----
+
+to 
+
+[source,xml,role="copypaste"]
+----
+https://jakarta.ee/xml/ns/jakartaee/beans_3_0.xsd"
+----
+
+
+*Step 6.9:* Alternatively you can copy these files from a pre-prepared {{ EAP8_VERSION }} version of the app in the /projects/sample-app-eap8 folder by running the following commands.
 
 [source,sh,role="copypaste"]
 ----
@@ -107,11 +306,6 @@ cd /projects/workshop/coolstore && mvn clean package
 $EAP8_HOME/bin/jboss-cli.sh --connect --controller=127.0.0.1:10190
 ----
 
-You will be prompted to enter the {{ EAP8_VERSION }} admin credentials.  
-
-username: admin
-password: password
-
 *Step 6.12:* We can now deploy our {{ EAP8_VERSION }} application
 
 Run the following command to deploy the application:
@@ -128,33 +322,5 @@ The coolstore application should load as follows:
 image::coolstore-eap8.png[public-endpoint,80%]
 
 You should notice the update we made to "EAP8 Cool Store"
-
-== Push our changes to Gitea
-
-Before we move on, we need to push our code changes to our gitea repository.
-
-*Step 6.13:* Click on the "Source Control" icon in the IDE, you should see the following:
-
-image::git-eap8-push.png[source-contol]
-
-*Step 6.14:* Enter a commit message in the message field and click on the "Commit" button.
-
-You will be prompted to stage files to the commit
-
-image::git-2.png[stage-files]
-
-*Step 6.15:* Click on "Yes" and then click on "Sync Changes" to push your changes to gitea
-
-You will be prompted to enter a username:
-
-image::git-3.png[git-username]
-
-Enter `{{ USER_ID }}`
-
-You will then be prompted for a password:
-
-Enter `{{ CHE_USER_PASSWORD }}`
-
-Your changes will be pushed to gitea.
 
 We've now successfully migrated our sample application from JBoss EAP 7.4 to {{ EAP8_VERSION }} connecting to an external PostgreSQL database.

@@ -14,7 +14,7 @@ To build and deploy this application on OpenShift, the only change we need to ma
 
 IMPORTANT: For this module we're going to use the "coolstore-eap8" folder.
 
-*Step 4.1:* First step is to add the Red Hat plugin repositories for GA and early access software. Open the file `coolstore-eap8/pom.xml` and add this after the repositories tag.
+*Step 4.1:* First step is to add the Red Hat plugin repositories for Red Hat GA software. Open the file `coolstore-eap8/pom.xml` and add this after the repositories tag.
 
 [source,xml,role="copypaste"]
 ----
@@ -45,11 +45,11 @@ IMPORTANT: For this module we're going to use the "coolstore-eap8" folder.
     </pluginRepositories>
 ----
 
-*Step 4.2:* Also in the pom.xml file and add the following before the closing tag replacing the existing <profiles> block:
+*Step 4.2:* Also in the pom.xml file and add the following before the closing tag inside the existing <profiles> block:
 
 [source,xml,role="copypaste"]
 ----
-<profiles>
+
     <profile>
         <id>openshift</id>
         <build>
@@ -97,7 +97,7 @@ IMPORTANT: For this module we're going to use the "coolstore-eap8" folder.
             </plugins>
         </build>
     </profile>
-</profiles>
+
 ----
 
 If we examine the pom.xml snippet, we can see the inclusion of three feature packs:

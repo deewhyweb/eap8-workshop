@@ -71,44 +71,44 @@ image::trust.png[trust, 50%]
 
 Click on "Yes, I trust these authors"
 
-IMPORTANT: You will need to clone your personal git repository before you proceed with the workshop.
+// IMPORTANT: You will need to clone your personal git repository before you proceed with the workshop.
 
-image::git-start.png[git-start, 80%]
+// image::git-start.png[git-start, 80%]
 
-Click on "Clone Git Repository..."
+// Click on "Clone Git Repository..."
 
-NOTE: If you don't see a "Clone Git Repository..." link, click on kbd:[CTRL+SHIFT+P] to enter the command pallate, and then enter "Git clone".
+// NOTE: If you don't see a "Clone Git Repository..." link, click on kbd:[CTRL+SHIFT+P] to enter the command pallate, and then enter "Git clone".
 
-You will see the following at the top of your dev workspace:
+// You will see the following at the top of your dev workspace:
 
-image::git-url.png[clone-repo, 80%]
+// image::git-url.png[clone-repo, 80%]
 
-In the url bar enter the name of your personal git repository:
+// In the url bar enter the name of your personal git repository:
 
-[source,sh,role="copypaste"]
-----
-http://gitea.gitea.svc.cluster.local:3000/{{ USER_ID }}/workshop.git
+// [source,sh,role="copypaste"]
+// ----
+// http://gitea.gitea.svc.cluster.local:3000/{{ USER_ID }}/workshop.git
 
-----
+// ----
 
-Click on "Clone from url: \http://gitea.gitea.svc.cluster.local:3000/{{ USER_ID }}/workshop.git"
+// Click on "Clone from url: \http://gitea.gitea.svc.cluster.local:3000/{{ USER_ID }}/workshop.git"
 
-You will be asked to choose a folder, enter: 
+// You will be asked to choose a folder, enter: 
 
-[source,sh,role="copypaste"]
-----
-/projects
-----
+// [source,sh,role="copypaste"]
+// ----
+// /projects
+// ----
 
-Click on "OK"
+// Click on "OK"
 
-You will see the following message box:
+// You will see the following message box:
 
-image::git-workspace.png[git-workspace, 80%]
+// image::git-workspace.png[git-workspace, 80%]
 
-Click on "Open"
+// Click on "Open"
 
-Your window will refresh and you should see:
+// Your window will refresh and you should see:
 
 image::devspaces-start.png[devspaces-start, 80%]
 
