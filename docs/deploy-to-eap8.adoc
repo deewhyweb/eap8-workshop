@@ -75,7 +75,7 @@ Once the analysis is complete, you should see a file hierarchy updated.
 
 *Step 6.10:* At the top of the file hierarchy is a report icon (in green).  Click on this to view the HTML version of the report.
 
-image::mtr-results.png[mtr-results,80%]
+image::mtr-results.png[mtr-results2,80%]
 
 You should see the story points are now reduced to 15.
 
@@ -313,6 +313,7 @@ Run the following command to deploy the application:
 [source,sh,role="copypaste"]
 ----
 deploy ./target/ROOT.war
+exit
 ----
 
 You will now be able to access the application by by clicking https://{{ USER_ID }}-jboss-workshop-eap8.{{ ROUTE_SUBDOMAIN }}[here, window="_blank"]
@@ -324,3 +325,12 @@ image::coolstore-eap8.png[public-endpoint,80%]
 You should notice the update we made to "EAP8 Cool Store"
 
 We've now successfully migrated our sample application from JBoss EAP 7.4 to {{ EAP8_VERSION }} connecting to an external PostgreSQL database.
+
+IMPORTANT: If we are moving on to the next module, we will need to discard our changes.
+
+To discard all changes, enter the following from the terminal.
+
+[source,sh,role="copypaste"]
+----
+git reset --hard
+----

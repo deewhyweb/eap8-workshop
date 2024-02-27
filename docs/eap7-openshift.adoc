@@ -331,13 +331,41 @@ As we mentioned above,the sensitive credentials (username and password) are pull
 
 Click on "Create" to create the WildFlyServer custom resource.
 
-*Step 3.20:* Click on the "Topology" link on the left menu to view the deployed applications:
+Finally we need to create a route to our application
+
+*Step 3.20:* Click on the "Import YAML" button on the top right and paste the following:
+
+[source,yaml,role="copypaste"]
+----
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: coolstore
+  namespace: {{ USER_ID }}-project
+  labels:
+    app.kubernetes.io/managed-by: eap-operator
+    app.kubernetes.io/name: eap74
+    app.openshift.io/runtime: eap
+    wildfly.org/operated-by-headless: active
+spec:
+  to:
+    kind: Service
+    name: eap74-headless
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: ''
+    destinationCACertificate: ''
+  port:
+    targetPort: http
+----
+
+*Step 3.21:* Click on the "Topology" link on the left menu to view the deployed applications:
 
 image::topology-view.png[topology-view,80%]
 
 *Note: The "eap74" application may take a few minutes to start-up, while the builds are completed. The application will be ready when the outer ring is dark blue*
 
-*Step 3.21:* You should be able to view the application landing page by clicking on the external link icon.
+*Step 3.22:* You should be able to view the application landing page by clicking on the external link icon.
 
 image::coolstore.png[kitchen-sink,80%]
 
