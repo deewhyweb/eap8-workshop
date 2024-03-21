@@ -14,7 +14,21 @@ To build and deploy this application on OpenShift, the only change we need to ma
 
 IMPORTANT: For this module we're going to use the "coolstore-eap8" folder.
 
-*Step 4.1:* First step is to add the Red Hat plugin repositories for Red Hat GA software. Open the file `coolstore-eap8/pom.xml` and add this after the repositories tag.
+In the IDE, open the file: coolstore-eap8/src/main/webapp/keycloak.json and ensure the contents are as follows:
+
+[source,json,role="copypaste"]
+----
+{
+  "realm": "eap",
+  "auth-server-url": "https://rhbk-rhbk.{{ ROUTE_SUBDOMAIN }}/",
+  "ssl-required": "external",
+  "resource": "eap-app",
+  "public-client": true,
+  "confidential-port": 0
+}
+----
+
+*Step 4.1:* Next step is to add the Red Hat plugin repositories for Red Hat GA software. Open the file `coolstore-eap8/pom.xml` and add this after the repositories tag.
 
 [source,xml,role="copypaste"]
 ----
@@ -151,7 +165,7 @@ You will then be prompted for a password:
 
 Your changes will be pushed to gitea.
 
-We can now deploy our {{ EAP8_VERSION }} application with Helm.
+We can now build our {{ EAP8_VERSION }} application with Helm.
 
 *Step 4.8:* Access the OpenShift console by clicking on the following {{ CONSOLE_URL }}[link^] 
 
@@ -190,11 +204,45 @@ build:
    - name: POSTGRESQL_DRIVER_VERSION
      value: '42.6.0'
 deploy:
- replicas: 1
- envFrom:
+ enabled: false
+----
+
+Note: There are a few things to point out in this Helm configuration. We have defined a build time variable POSTGRESQL_DRIVER_VERSION to determine how the PostgreSQL driver version is passed to the eap-maven-plugin when S2I builds the application image. Runtime environment variables (such as user credentials) are read from a secret created when the database is instantiated. So application configuration can be safely stored in Git without any sensitive information.
+
+Two build-configs are created by this Helm chart: an artifacts build and a runtime build. 
+
+It will take a while to build the application. To monitor the progress, follow these steps.
+
+*Step 4.19:* Go to Builds. 
+
+image::eap8-builds.png[migration,80%]
+
+*Step 4.20:* Select eap8-build-artifacts.
+
+*Step 4.21:* Choose the Builds tab.
+
+*Step 4.22:* Click on eap8-build-artifacts-1 to view the logs of the active build.
+
+*Step 4.23:* We can now use the EAP Operator to deploy our EAP image.  Click on "+Add" again and then select "Operator Backed" from the Developer Catalog.  
+
+image::operator-backed.png[operator-backed,80%]
+
+*Step 4.24:* From the list of operator backed options, click on "WildFlyServer", and click on "Create".  From the "Create WildFlyServer" page, select "YAML view" and paste the following:
+
+[source,yaml,role="copypaste"]
+----
+apiVersion: wildfly.org/v1alpha1
+kind: WildFlyServer
+metadata:
+  name: eap8
+spec:
+  serviceAccountName: coolstoresa
+  applicationImage: eap8:latest
+  replicas: 1
+  envFrom:
     - configMapRef:
         name: eap-config
- env:
+  env:
     # Credentials to connect to the PostgreSQL databases
     # and AMQ Broker are taken from their secrets
     - name: POSTGRESQL_PASSWORD
@@ -219,23 +267,39 @@ deploy:
           name: eap74-amq7-credentials-secret
 ----
 
-Note: There are a few things to point out in this Helm configuration. We have defined a build time variable POSTGRESQL_DRIVER_VERSION to determine how the PostgreSQL driver version is passed to the eap-maven-plugin when S2I builds the application image. Runtime environment variables (such as user credentials) are read from a secret created when the database is instantiated. So application configuration can be safely stored in Git without any sensitive information.
+The sensitive credentials (username and password) are pulled from the postgresql and eap74-amq7-credentials-secret secrets in the WildFlyServer custom resource, while the non-sensitive credentials are pulled form the config map we created.
 
-Two build-configs are created by this Helm chart: an artifacts build and a runtime build. When the second build is complete, the application will be deployed. The application is running when the pod donut around the JBoss EAP logo is dark blue (i.e., the pods are in a running state).
+Click on "Create" to create the WildFlyServer custom resource.
 
-It will take a while to build and deploy the application. To monitor the progress, follow these steps.
+Finally we need to create a route to our application
 
-*Step 4.19:* Go to Builds. 
+*Step 4.25:* Click on the "Import YAML" button on the top right and paste the following:
 
-image::eap8-builds.png[migration,80%]
+[source,yaml,role="copypaste"]
+----
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: coolstore8
+  namespace: {{ USER_ID }}-project
+  labels:
+    app.kubernetes.io/managed-by: eap-operator
+    app.kubernetes.io/name: eap8
+    app.openshift.io/runtime: eap
+    wildfly.org/operated-by-headless: active
+spec:
+  to:
+    kind: Service
+    name: eap8-headless
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: ''
+    destinationCACertificate: ''
+  port:
+    targetPort: http
+----
 
-*Step 4.20:* Select eap8-build-artifacts.
-
-*Step 4.21:* Choose the Builds tab.
-
-*Step 4.22:* Click on eap8-build-artifacts-1 to view the logs of the active build.
-
-*Step 4.23:* Once the builds are complete, you will be able to click the Open URL icon of the eap8 deployment to view the running application.
+Switching back to the topology view should show a screen similar to the following image.
 
 image::eap8-ocp.png[migration,80%]
 

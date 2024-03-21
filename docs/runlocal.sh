@@ -9,7 +9,7 @@ podman run -it -p 8080:8080 --rm -v /home/phayes/projects/eap8-workshop/docs:/ap
 -e LOG_TO_STDOUT='true' \
 -e MASTER_URL='https://api.cluster-z89w7.z89w7.sandbox3186.opentlc.com:6443' \
 -e OPENSHIFT_USER_PASSWORD='openshift' \
--e ROUTE_SUBDOMAIN='apps.cluster-p85pw.p85pw.sandbox833.opentlc.com' \
+-e ROUTE_SUBDOMAIN='apps.cluster-jccv9.dynamic.redhatworkshops.io' \
 -e WORKSHOPS_URLS="file:///app-data/_workshop_m2.yml" \
 -e EAP8_VERSION="JBoss EAP 8.0" \
 -e JBOSS7_ARCHIVE="jboss-eap-7.4.0.zip" \

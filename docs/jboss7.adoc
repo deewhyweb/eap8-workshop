@@ -4,7 +4,7 @@
 
 In this section we're going to deploy an application to JBoss EAP 7.4.  The sample application we're providing can be found in the IDE in the "workshop/coolstore" folder.
 
-The application requires two external dependencies, a connection to a PostgreSQL database and an instance of Red Hat SSO. The application also uses a message queue, for this example we will use the embedded message queue provided with JBoss EAP. For credential management we're going to use the legacy vault to store database credentials.
+The application requires two external dependencies, a connection to a PostgreSQL database and an instance of Red Hat Build of Keycloak. The application also uses a message queue, for this example we will use the embedded message queue provided with JBoss EAP. For credential management we're going to use the legacy vault to store database credentials.
 
 We've provisioned a database in your dev spaces environment with the following connection details.
 
@@ -14,7 +14,7 @@ We've provisioned a database in your dev spaces environment with the following c
 * Password: postgresPW
 * Database name: postgresDB
 
-We've also provisioned an instance of Red Hat SSO.  This instance is available https://keycloak-sso.{{ ROUTE_SUBDOMAIN }}[here, window="_blank"]
+We've also provisioned an instance of Red Hat Build of Keycloak.  This instance is available https://rhbk-rhbk.{{ ROUTE_SUBDOMAIN }}[here, window="_blank"]
 
 == Adding the PostgreSQL module and driver
 
@@ -262,19 +262,19 @@ and then selecting "JMS Topic".
 
 image::jboss7-console-jms.png[jms,80%]
 
-== SSO configuration
+== Red Hat Build of Keycloak configuration
 
-*Step 4.16:* Next, we need to set the url of our Red Hat SSO application.  In the IDE, open the file: `coolstore/src/main/webapp/keycloak.json` and edit the contents so they look like the following:
+*Step 4.16:* Next, we need to set the url of our Red Hat Build of Keycloak application.  In the IDE, open the file: `coolstore/src/main/webapp/keycloak.json` and edit the contents so they look like the following:
 
 [source,json,role="copypaste"]
 ----
 {
-    "realm": "eap",
-    "auth-server-url": "https://keycloak-sso.{{ ROUTE_SUBDOMAIN }}/auth",
-    "ssl-required": "external",
-    "resource": "eap-app",
-    "public-client": true,
-    "confidential-port": 0
+  "realm": "eap",
+  "auth-server-url": "https://rhbk-rhbk.{{ ROUTE_SUBDOMAIN }}/",
+  "ssl-required": "external",
+  "resource": "eap-app",
+  "public-client": true,
+  "confidential-port": 0
 }
 ----
 
@@ -311,18 +311,24 @@ image::coolstore.png[coolstore,80%]
 
 We've now successfully deployed our sample application to JBoss EAP 7.4 connecting to an external PostgreSQL database.
 
-You can test the SSO integration by clicking on the "Sign In" button on the top right hand corner of the screen.
+You can test the Keycloak integration by clicking on the "Sign In" button on the top right hand corner of the screen.
 
 image::sign-in.png[sign-in,80%]
 
-You should see the Red Hat SSO login screen
+You should see the Red Hat Build of Keycloak login screen
 
 image::rhsso-login.png[rhsso-login,80%]
 
-You can login to SSO with the credentials
+You can login to the Red Hat Build of Keycloak  with the credentials
 
 * *Username*: `{{ USER_ID }}`
 * *Password*: openshift
+
+IMPORTANT: Because the Red Hat Build of Keycloak deployment is deployed for development purposes (without using https certs) you may see the following warning:
+
+image::chrome-warning.png[chrome-warning,80%]
+
+You can ignore this warning and click on "Proceed".
 
 NOTE: Once you're signed-in, the "Sign In" button will be replaced with a user icon and profile menu.
 

@@ -9,25 +9,25 @@ Red Hat have developed a lot of tools to provision Red Hat Application services 
 * JBoss EAP Helm chart to configure and build JBoss EAP applications for OpenShift
 * JBoss EAP Operator to deploy JBoss EAP applications on OpenShift
 * AMQ Broker Operator to deploy and configure AMQ Broker instances and topics on OpenShift
-* Red Hat SSO Operator to deploy and configure Red Hat SSO instances on OpenShift
+* Red Hat Build of Keycloak Operator to deploy and configure Red Hat Build of Keycloak instances on OpenShift
 
 In this lab, we're going to use these tools to simplify the deployment of our application on OpenShift.
 
-== Red Hat SSO configuration
+== Red Hat Build of Keycloak configuration
 
-We've already deployed an instance of Red Hat SSO using the Red Hat SSO operator, this is configured and ready to use. Before we deploy the application to OpenShift we need to verify the Red Hat SSO configuration and push our changes to our individual gitea account.
+We've already deployed an instance of Red Hat Build of Keycloak using the Red Hat Build of Keycloak operator, this is configured and ready to use. Before we deploy the application to OpenShift we need to verify the Red Hat Build of Keycloak configuration and push our changes to our individual gitea account.
 
 *Step 3.1:* In the IDE, open the file: coolstore/src/main/webapp/keycloak.json and ensure the contents are as follows:
 
 [source,json,role="copypaste"]
 ----
 {
-    "realm": "eap",
-    "auth-server-url": "https://keycloak-sso.{{ ROUTE_SUBDOMAIN }}/auth",
-    "ssl-required": "external",
-    "resource": "eap-app",
-    "public-client": true,
-    "confidential-port": 0
+  "realm": "eap",
+  "auth-server-url": "https://rhbk-rhbk.{{ ROUTE_SUBDOMAIN }}/",
+  "ssl-required": "external",
+  "resource": "eap-app",
+  "public-client": true,
+  "confidential-port": 0
 }
 ----
 
