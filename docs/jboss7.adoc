@@ -168,7 +168,7 @@ For domain mode:
 ********************************************
 ```
 
-We're going to add the valut to JBoss EAP 7.4 using the jboss-cli.
+We're going to add the vault to JBoss EAP 7.4 using the jboss-cli.
 
 *Step 4.8:* Enter the following commands to launch the jboss-cli and connect to JBoss 7.4.
 
@@ -198,7 +198,7 @@ You should see a response:
 
 == Configure JBoss EAP 7.4 to pull database credentials from the vault
 
-*Step 4.10:* Run the following commands in the JBoss CLI to add the postgreSQL datsource and connection information:
+*Step 4.10:* Run the following command in the JBoss CLI to add the postgreSQL datsource and connection information:
 
 [source,sh,role="copypaste"]
 ----
@@ -217,6 +217,8 @@ You should see a response:
 ----
 data-source add --name=postgresql --jndi-name=java:jboss/datasources/CoolstoreDS --driver-name=postgresql --connection-url=jdbc:postgresql://127.0.0.1:5432/postgresDB --user-name=${VAULT::vb::dbusername::1} --password=${VAULT::vb::dbpass::1}
 ----
+
+NOTE:: This command does not return a response.
 
 == JMS topic setup and configuration
 
@@ -256,7 +258,7 @@ We can now check for these changes using the JBoss EAP admin console.
 
 image::jboss7-console-datasource.png[datasource,80%]
 
-*Step 4.15:* We can also view the JMS topic we created by clicking https://{{ USER_ID }}-jboss-workshop-eap7-console.{{ ROUTE_SUBDOMAIN }}/console/index.html#messaging-server-destination;server=default[here, window="_blank"]
+*Step 4.15:* We can also view the JMS topic we created *"topic.orders"* by navigating to Configuration⇒Subsystems⇒Messaging ⇒Server ⇒default  ⇒Destinations  or by clicking https://{{ USER_ID }}-jboss-workshop-eap7-console.{{ ROUTE_SUBDOMAIN }}/console/index.html#messaging-server-destination;server=default[here, window="_blank"]
 
 and then selecting "JMS Topic".
 
@@ -280,12 +282,22 @@ image::jboss7-console-jms.png[jms,80%]
 
 == Build and deploy the application
 
-*Step 4.17:* We are now ready to build and deploy our JBoss EAP 7.4 application, run the following commands to build the application:
+*Step 4.17:* We are now ready to build and deploy our JBoss EAP 7.4 application, run the following commands in the terminal to build the application:
 
 [source,sh,role="copypaste"]
 ----
 cd /projects/workshop/coolstore && mvn clean package
 ----
+
+Once this command completes you should see:
+
+[INFO] ------------------------------------------------------------------------ +
+[INFO] BUILD SUCCESS +
+[INFO] ------------------------------------------------------------------------ +
+[INFO] Total time:  1.920 s +
+[INFO] Finished at: 2024-04-15T15:30:48-04:00 +
+[INFO] ------------------------------------------------------------------------ 
+
 
 *Step 4.18:* Login to the JBoss CLI:
 
@@ -303,7 +315,9 @@ deploy ./target/ROOT.war
 
 == Testing the application
 
-You will now be able to access the coolstore application https://{{ USER_ID }}-jboss-workshop-eap7.{{ ROUTE_SUBDOMAIN }}[here, window="_blank"]
+You will now be able to access the coolstore application https://{{ USER_ID }}-jboss-workshop-eap7.{{ ROUTE_SUBDOMAIN }}/[here, window="_blank"]
+
+IMPORTANT:: If the coolstore application does not immediately appear, try refreshing the page.  It can take a few seconds to appear.
 
 The coolstore application should load as follows:
 

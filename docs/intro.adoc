@@ -56,7 +56,7 @@ and log in using the username and password you've been assigned:
 * *Username*: `{{ USER_ID }}`
 * *Password*: `{{ CHE_USER_PASSWORD }}`
 
-You will be promted to Authorize access to the devspaces client to access your acocunt.  Click on "Allow Selected Permissions"
+You will be promted to Authorize access to the devspaces client to access your account.  Click on "Allow Selected Permissions"
 
 Once you log in, you’ll be placed on your personal dashboard. 
 

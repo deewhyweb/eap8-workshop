@@ -42,10 +42,10 @@ image::mig1.png[migration,1150]
 *Step 5.3:* Choose *yes.* to migrate the standalone configuration.
 
 image::mig2.png[migration,1150]
-*Step 5.4:* Choose no. We want to select the configurations to migrate.
+*Step 5.4:* Choose *no.* We want to select the configurations to migrate.
 
 image::mig3.png[migration,1150]
-*Step 5.5:* Choose no. We don't want to migrate standalone-full-ha.xml.
+*Step 5.5:* Choose *no.* We don't want to migrate standalone-full-ha.xml.
 
 image::mig4.png[migration,1150]
 *Step 5.6:* Choose *yes.* We want to migrate standalone-full.xml
@@ -77,7 +77,7 @@ Vault (enc-dir="/shared/jboss-eap-7.4/vault/";keystore="/shared/jboss-eap-7.4/va
 $EAP7_HOME/bin/elytron-tool.sh credential-store --location=$EAP7_HOME/standalone/configuration/my_vault_converted.cred_store --aliases
 ----
 
-You will be prompted to enter the credential store password: enter "vault22"
+You will be prompted to enter the credential store password: enter "*vault22*"
 
 You will now see the list of entries in the credential store.
 
@@ -93,7 +93,7 @@ Credential store contains following aliases: vb::dbpass vb::dbusername
 $EAP7_HOME/bin/elytron-tool.sh credential-store --location=$EAP7_HOME/standalone/configuration/my_vault_converted.cred_store --generate-secret-key secret
 ----
 
-You will be prompted to enter the credential store password: enter "vault22"
+You will be prompted to enter the credential store password: enter "*vault22*"
 
 You should get the following response from the command:
 
@@ -174,7 +174,7 @@ You should see a response similar to:
 }
 ```
 
-*Step 5.15:* Create a credential-reference attribute for the postgresql data-source to provide the password form the exampleKeyStoreCredentialStore credential store.
+*Step 5.15:* Create a credential-reference attribute for the postgresql data-source to provide the password from the exampleKeyStoreCredentialStore credential store.
 
 [source,sh,role="copypaste"]
 ----
@@ -210,7 +210,7 @@ NOTE: We're using the elytron-tool.sh located in $EAP8_HOME, the --entry flag fe
 $EAP8_HOME/bin/elytron-tool.sh credential-store --location=$EAP7_HOME/standalone/configuration/my_vault_converted.cred_store --encrypt secret --entry vb::dbusername
 ----
 
-You will be prompted to enter the credential store password: enter "vault22"
+You will be prompted to enter the credential store password: enter "*vault22*"
 
 You should now see the encrypted token e.g.
 
@@ -219,7 +219,7 @@ You should now see the encrypted token e.g.
 Clear text encrypted to token 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx=' using alias 'secret'.
 ----
 
-IMPORTANT: We will need use this token as our user-name attribute on the postgresql data-source in a later step below.
+IMPORTANT: We will need to use this token as our user-name attribute on the postgresql data-source in a later step below.
 
 *Step 5.18:* Login to the JBoss CLI
 
@@ -247,7 +247,7 @@ You should see a response similar to:
 }
 ```
 
-*Step 5.20:* Run the following command to use a token for user-name, replacing "xxxx" with the token produced in step 17.
+*Step 5.20:* Run the following command to use a token for user-name, replacing "xxxx" with the token produced in step 5.17.
 
 NOTE: You you will need to use kbd:[CTRL+SHIFT+C] to copy the encrypted token.
 
@@ -305,25 +305,25 @@ image::mig1.png[migration,1150]
 *Step 5.24:* Choose *yes.* to migrate the standalone configuration.
 
 image::mig2.png[migration,1150]
-*Step 5.25:* Choose no. We want to select the configurations to migrate.
+*Step 5.25:* Choose *no.* We want to select the configurations to migrate.
 
 image::mig3.png[migration,1150]
-*Step 5.26:* Choose no. We don't want to migrate standalone-full-ha.xml.
+*Step 5.26:* Choose *no.* We don't want to migrate standalone-full-ha.xml.
 
 image::mig4.png[migration,1150]
 *Step 5.27:* Choose *yes.* We want to migrate standalone-full.xml
 
 image::mig5.png[migration,1150]
-*Step 5.28:* Choose no. We don't want to migrate standalone-ha.xml.
+*Step 5.28:* Choose *no.* We don't want to migrate standalone-ha.xml.
 
 image::mig6.png[migration,1150]
-*Step 5.29:* Choose no. We don't want to migrate standalone-load-balancer.xml.
+*Step 5.29:* Choose *no.* We don't want to migrate standalone-load-balancer.xml.
 
 image::mig7.png[migration,1150] 
-*Step 5.30:* Choose no. We don't want to migrate standalone.xml.
+*Step 5.30:* Choose *no.* We don't want to migrate standalone.xml.
 
 image::mig8.png[migration,1150]
-*Step 5.31:* Choose no. We are not using a managed domain.
+*Step 5.31:* Choose *no.* We are not using a managed domain.
 
 image::mig9.png[migration,1150]
 
@@ -451,7 +451,7 @@ reload
 exit
 ----
 
-Now that we have migrated from JBoss EAP 7.4 to {{ EAP8_VERSION }}, the defaul management realm has been updated to migration-defaultManagementRealm.  
+Now that we have migrated from JBoss EAP 7.4 to {{ EAP8_VERSION }}, the default management realm has been updated to migration-defaultManagementRealm.  
 
 Before we can login to the {{ EAP8_VERSION }} management console we need to create a username and password for this management realm.
 

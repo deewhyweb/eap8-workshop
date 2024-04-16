@@ -9,6 +9,8 @@ We've deployed two instances of JBoss EAP ready for you to deploy and migrate ap
 
 Details of these instances are as follows.
 
+NOTE::These urls will not be available until the OpenShift Dev Spaces workspace is started.
+
 [cols="1,1,1,1"]
 |===
 |Version|home directory|Front-end url|Admin console url

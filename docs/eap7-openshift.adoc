@@ -363,10 +363,10 @@ spec:
 
 image::topology-view.png[topology-view,80%]
 
-*Note: The "eap74" application may take a few minutes to start-up, while the builds are completed. The application will be ready when the outer ring is dark blue*
+*Note: The "eap74" application may take a few minutes to start-up, while the builds are completed, during this time you may notice the pod showing an error pulling the image. The application will be ready when the outer ring is dark blue*
 
 *Step 3.22:* You should be able to view the application landing page by clicking on the external link icon.
 
 image::coolstore.png[kitchen-sink,80%]
 
-Our application is now successfully deployed on OpenShift.  Next, we're going to deploy an instance of JBoss EAP 8 and migrate our application.
+Our application is now successfully deployed on OpenShift.  Next, we're going to deploy a JBoss EAP 8.0 version of the application.

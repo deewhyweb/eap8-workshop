@@ -19,6 +19,12 @@ cd /shared && unzip {{ MTR_CLI_ARCHIVE }}
 
 *Step 6.2:* Configure the MTR VS-Code extension as follows
 
+Select the plugin Icon:
+
+image::mtr-icon.png[migration,80%]
+
+You should see the configuration options.
+
 image::mtr-vscode-2.png[migration,80%]
 
 * Set code location to `/projects/workshop/coolstore`
@@ -52,7 +58,7 @@ image::mtr-vscode-5.png[migration,400]
 
 Once you've completed the namespace changes, there is one more minor code change to make:
 
-*Step 6.8:* Open `/projects/workshop/coolstore/src/main/java/com/redhat/coolstore/service/OrderServiceMDB.java/OrderServiceMDB.java` and change
+*Step 6.8:* Open `/projects/workshop/coolstore/src/main/java/com/redhat/coolstore/service/OrderServiceMDB.java` and change
 
 [source,java]
 ----
@@ -268,14 +274,14 @@ https://jakarta.ee/xml/ns/jakartaee/beans_3_0.xsd"
 ----
 
 
-*Step 6.9:* Alternatively you can copy these files from a pre-prepared {{ EAP8_VERSION }} version of the app in the /projects/sample-app-eap8 folder by running the following commands.
+*Step 6.9:* Alternatively you can copy a prepared pom.xml file from the /projects/sample-app-eap8 folder by running the following command.
 
 [source,sh,role="copypaste"]
 ----
 cp /projects/workshop/coolstore-eap8/pom.xml /projects/workshop/coolstore
 ----
 
-Before we build our app, we're going to make a small update to the ui.
+*Step 6.10:* Before we build our app, we're going to make a small update to the ui.
 
 Open the file `/projects/workshop/coolstore/src/main/webapp/partials/header.html` 
 
@@ -292,21 +298,21 @@ to
 <a ng-href="#/" class="active">EAP8 Cool Store</a>
 ----
 
-*Step 6.10:* We can now build our {{ EAP8_VERSION }} application
+*Step 6.11:* We can now build our {{ EAP8_VERSION }} application
 
 [source,sh,role="copypaste"]
 ----
 cd /projects/workshop/coolstore && mvn clean package
 ----
 
-*Step 6.11:* Login to the JBoss CLI
+*Step 6.12:* Login to the JBoss CLI
 
 [source,sh,role="copypaste"]
 ----
 $EAP8_HOME/bin/jboss-cli.sh --connect --controller=127.0.0.1:10190
 ----
 
-*Step 6.12:* We can now deploy our {{ EAP8_VERSION }} application
+*Step 6.13:* We can now deploy our {{ EAP8_VERSION }} application
 
 Run the following command to deploy the application:
 
