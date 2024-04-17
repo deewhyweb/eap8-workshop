@@ -83,7 +83,7 @@ Once the analysis is complete, you should see a file hierarchy updated.
 
 image::mtr-results2.png[mtr-results2,80%]
 
-You should see the story points are now reduced to 15.
+You should see the story points are now reduced to 15 points.
 
 In the Analysis results tree click on "persistence.xml".  
 
