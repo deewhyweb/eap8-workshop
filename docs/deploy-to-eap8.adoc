@@ -21,7 +21,7 @@ cd /shared && unzip {{ MTR_CLI_ARCHIVE }}
 
 Select the plugin Icon:
 
-image::mtr-icon.png[migration,80%]
+image::mtr-icon.png[migration]
 
 You should see the configuration options.
 
