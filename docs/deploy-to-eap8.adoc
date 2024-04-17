@@ -81,7 +81,7 @@ Once the analysis is complete, you should see a file hierarchy updated.
 
 *Step 6.10:* At the top of the file hierarchy is a report icon (in green).  Click on this to view the HTML version of the report.
 
-image::mtr-results.png[mtr-results2,80%]
+image::mtr-results2.png[mtr-results2,80%]
 
 You should see the story points are now reduced to 15.
 
